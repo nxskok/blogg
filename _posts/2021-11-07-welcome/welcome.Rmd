@@ -17,3 +17,5 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 Welcome to the new home for my blog. I have decided to move from blogdown to distill, since it seems to be easier to maintain this way. There will eventually be links to at least some of the old posts, and, I hope, some new ones.
+
+The old blog is still up (and will remain so) [here](http://ritsokiguess.site/docs/).
