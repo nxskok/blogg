@@ -89,6 +89,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <meta property="description" itemprop="description" content="The tidyverse way."/>
 
+<link rel="canonical" href="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
 
 <!--  https://schema.org/Article -->
 <meta property="article:published" itemprop="datePublished" content="2021-04-26"/>
@@ -99,6 +100,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:title" content="Ken&#39;s Blog: Correcting a dataframe"/>
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="The tidyverse way."/>
+<meta property="og:url" content="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Ken&#39;s Blog"/>
 
@@ -106,17 +108,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="twitter:card" content="summary"/>
 <meta property="twitter:title" content="Ken&#39;s Blog: Correcting a dataframe"/>
 <meta property="twitter:description" content="The tidyverse way."/>
+<meta property="twitter:url" content="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
 
+<!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
+<meta name="citation_title" content="Ken&#39;s Blog: Correcting a dataframe"/>
+<meta name="citation_fulltext_html_url" content="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
+<meta name="citation_online_date" content="2021/04/26"/>
+<meta name="citation_publication_date" content="2021/04/26"/>
+<meta name="citation_author" content="Ken Butler"/>
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Correcting a dataframe"]},{"type":"character","attributes":{},"value":["The tidyverse way."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg"]}]}]},{"type":"character","attributes":{},"value":["04-26-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Correcting a dataframe"]},{"type":"character","attributes":{},"value":["The tidyverse way."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg"]}]}]},{"type":"character","attributes":{},"value":["04-26-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["correcting-a-dataframe_files/anchor-4.2.2/anchor.min.js","correcting-a-dataframe_files/bowser-1.9.3/bowser.min.js","correcting-a-dataframe_files/distill-2.2.21/template.v2.js","correcting-a-dataframe_files/header-attrs-2.11/header-attrs.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.min.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.min.map","correcting-a-dataframe_files/popper-2.6.0/popper.min.js","correcting-a-dataframe_files/tippy-6.2.7/tippy-bundle.umd.min.js","correcting-a-dataframe_files/tippy-6.2.7/tippy-light-border.css","correcting-a-dataframe_files/tippy-6.2.7/tippy.css","correcting-a-dataframe_files/tippy-6.2.7/tippy.umd.min.js","correcting-a-dataframe_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["correcting-a-dataframe_files/anchor-4.2.2/anchor.min.js","correcting-a-dataframe_files/bowser-1.9.3/bowser.min.js","correcting-a-dataframe_files/distill-2.2.21/template.v2.js","correcting-a-dataframe_files/header-attrs-2.11/header-attrs.js","correcting-a-dataframe_files/htmlwidgets-1.5.4/htmlwidgets.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.min.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.min.map","correcting-a-dataframe_files/leaflet-1.3.1/images/layers-2x.png","correcting-a-dataframe_files/leaflet-1.3.1/images/layers.png","correcting-a-dataframe_files/leaflet-1.3.1/images/marker-icon-2x.png","correcting-a-dataframe_files/leaflet-1.3.1/images/marker-icon.png","correcting-a-dataframe_files/leaflet-1.3.1/images/marker-shadow.png","correcting-a-dataframe_files/leaflet-1.3.1/leaflet.css","correcting-a-dataframe_files/leaflet-1.3.1/leaflet.js","correcting-a-dataframe_files/leaflet-binding-2.0.4.1/leaflet.js","correcting-a-dataframe_files/leafletfix-1.0.0/leafletfix.css","correcting-a-dataframe_files/popper-2.6.0/popper.min.js","correcting-a-dataframe_files/proj4-2.6.2/proj4.min.js","correcting-a-dataframe_files/Proj4Leaflet-1.0.1/proj4leaflet.js","correcting-a-dataframe_files/rstudio_leaflet-1.3.1/images/1px.png","correcting-a-dataframe_files/rstudio_leaflet-1.3.1/rstudio_leaflet.css","correcting-a-dataframe_files/tippy-6.2.7/tippy-bundle.umd.min.js","correcting-a-dataframe_files/tippy-6.2.7/tippy-light-border.css","correcting-a-dataframe_files/tippy-6.2.7/tippy.css","correcting-a-dataframe_files/tippy-6.2.7/tippy.umd.min.js","correcting-a-dataframe_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2041,7 +2050,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!--/radix_placeholder_distill-->
   <script src="../../site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="../../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
   <script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <link href="../../site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+  <script src="../../site_libs/leaflet-1.3.1/leaflet.js"></script>
+  <link href="../../site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+  <script src="../../site_libs/proj4-2.6.2/proj4.min.js"></script>
+  <script src="../../site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+  <link href="../../site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+  <script src="../../site_libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="../../site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2075,6 +2092,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="nav-right">
 <a href="http://ritsokiguess.site/home/">Home</a>
 <a href="../../about.html">About</a>
+<a href="../../index.xml">
+<i class="fa fa-rss" aria-hidden="true"></i>
+</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2097,8 +2117,313 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <div class="d-article">
-<p>This is an old post that you can find <a href="http://ritsokiguess.site/docs/2021/04/26/correcting-a-dataframe-the-tidyverse-way/">here</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="packages">Packages</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/mtennekes/tmaptools'>tmaptools</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rstudio.github.io/leaflet/'>leaflet</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h2 id="introduction">Introduction</h2>
+<p>So I had a dataframe today, in which I wanted to make some small corrections. Specifically, I had this one:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_url</span> <span class='op'>&lt;-</span> <span class='st'>"http://ritsokiguess.site/datafiles/wisconsin.txt"</span>
+<span class='va'>wisc</span> <span class='op'>&lt;-</span> <span class='fu'>read_table</span><span class='op'>(</span><span class='va'>my_url</span><span class='op'>)</span>
+<span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>location</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 1
+   location     
+   &lt;chr&gt;        
+ 1 Appleton     
+ 2 Beloit       
+ 3 Fort.Atkinson
+ 4 Madison      
+ 5 Marshfield   
+ 6 Milwaukee    
+ 7 Monroe       
+ 8 Superior     
+ 9 Wausau       
+10 Dubuque      
+11 St.Paul      
+12 Chicago      </code></pre>
+</div>
+<p>These are mostly, but not all, cities in Wisconsin, and I want to draw them on a map. To do that, though, I need to affix their states to them, and I thought a good starting point was to start by pretending that they were all in Wisconsin, and then correct the ones that aren’t:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>location</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"WI"</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
+<span class='va'>wisc</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 2
+   location      state
+   &lt;chr&gt;         &lt;chr&gt;
+ 1 Appleton      WI   
+ 2 Beloit        WI   
+ 3 Fort.Atkinson WI   
+ 4 Madison       WI   
+ 5 Marshfield    WI   
+ 6 Milwaukee     WI   
+ 7 Monroe        WI   
+ 8 Superior      WI   
+ 9 Wausau        WI   
+10 Dubuque       WI   
+11 St.Paul       WI   
+12 Chicago       WI   </code></pre>
+</div>
+<p>The last three cities are in the wrong state: Dubuque is in Iowa (IA), St. Paul in Minnesota (MN), and Chicago is in Illinois (IL). I know how to fix this in base R: I write something like</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span><span class='op'>$</span><span class='va'>state</span><span class='op'>[</span><span class='fl'>12</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"IL"</span>
+</code></pre>
+</div>
+</div>
+<p>but how do you do this the Tidyverse way?</p>
+<h2 id="a-better-way">A better way</h2>
+<p>The first step is to make a small dataframe with the cities that need to be corrected, and the states they are actually in:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>corrections</span> <span class='op'>&lt;-</span> <span class='fu'>tribble</span><span class='op'>(</span>
+  <span class='op'>~</span><span class='va'>location</span>, <span class='op'>~</span><span class='va'>state</span>,
+  <span class='st'>"Dubuque"</span>, <span class='st'>"IA"</span>,
+  <span class='st'>"St.Paul"</span>, <span class='st'>"MN"</span>,
+  <span class='st'>"Chicago"</span>, <span class='st'>"IL"</span>
+<span class='op'>)</span>
+<span class='va'>corrections</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 3 × 2
+  location state
+  &lt;chr&gt;    &lt;chr&gt;
+1 Dubuque  IA   
+2 St.Paul  MN   
+3 Chicago  IL   </code></pre>
+</div>
+<p>Note that the columns of this dataframe have the <em>same names</em> as the ones in the original dataframe <code>wisc</code>.</p>
+<p>So, I was thinking, this is a lookup table (of a sort), and so joining this to <code>wisc</code> might yield something helpful. We want to look up locations and <em>not</em> match states, since we want to have these three cities have their correct state as a possibility. So what does this do?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>corrections</span>, by <span class='op'>=</span> <span class='st'>"location"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 3
+   location      state.x state.y
+   &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;  
+ 1 Appleton      WI      &lt;NA&gt;   
+ 2 Beloit        WI      &lt;NA&gt;   
+ 3 Fort.Atkinson WI      &lt;NA&gt;   
+ 4 Madison       WI      &lt;NA&gt;   
+ 5 Marshfield    WI      &lt;NA&gt;   
+ 6 Milwaukee     WI      &lt;NA&gt;   
+ 7 Monroe        WI      &lt;NA&gt;   
+ 8 Superior      WI      &lt;NA&gt;   
+ 9 Wausau        WI      &lt;NA&gt;   
+10 Dubuque       WI      IA     
+11 St.Paul       WI      MN     
+12 Chicago       WI      IL     </code></pre>
+</div>
+<p>Now, we have <em>two</em> states for each city. The first one is always Wisconsin, and the second one is usually missing, but where the state in <code>state.y</code> has a value, <em>that</em> is the true state of the city. So, the thought process is that the actual <code>state</code> should be:</p>
+<ul>
+<li>if <code>state.y</code> is not missing, use that</li>
+<li>else, use the value in <code>state.x</code>.</li>
+</ul>
+<p>I had an idea that there was a function that would do exactly this, only I couldn’t remember its name, so I couldn’t really search for it. My first thought was <a href="https://dplyr.tidyverse.org/reference/na_if.html"><code>na_if</code></a>. What this does is every time it sees a certain value, it replaces it with NA. This, though, is the opposite way from what I wanted. So I looked at the See Also, and saw <a href="https://tidyr.tidyverse.org/reference/replace_na.html"><code>replace_na</code></a>. This replaces NAs with a given value. Not quite right, but closer.</p>
+<p>In the See Also for <code>replace_na</code>, I saw one more thing: <a href="https://dplyr.tidyverse.org/reference/coalesce.html"><code>coalesce</code></a>, “replace NAs with values from other vectors”. Was that what I was thinking of? It was. The way it works is that you feed it several vectors, and the first one that is not missing gives its value to the result. Hence, what I needed was this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>corrections</span>, by <span class='op'>=</span> <span class='st'>"location"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>state<span class='op'>=</span><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>state.y</span>, <span class='va'>state.x</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 4
+   location      state.x state.y state
+   &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;
+ 1 Appleton      WI      &lt;NA&gt;    WI   
+ 2 Beloit        WI      &lt;NA&gt;    WI   
+ 3 Fort.Atkinson WI      &lt;NA&gt;    WI   
+ 4 Madison       WI      &lt;NA&gt;    WI   
+ 5 Marshfield    WI      &lt;NA&gt;    WI   
+ 6 Milwaukee     WI      &lt;NA&gt;    WI   
+ 7 Monroe        WI      &lt;NA&gt;    WI   
+ 8 Superior      WI      &lt;NA&gt;    WI   
+ 9 Wausau        WI      &lt;NA&gt;    WI   
+10 Dubuque       WI      IA      IA   
+11 St.Paul       WI      MN      MN   
+12 Chicago       WI      IL      IL   </code></pre>
+</div>
+<p>Where <code>state.y</code> has a value, it is used; if it’s missing, the value in <code>state.x</code> is used instead.</p>
+<h2 id="the-best-way">The best way</h2>
+<p>I was quite pleased with myself for coming up with this, but I had missed the actual best way of doing this. In SQL, there is UPDATE, and what that does is to take a table of keys to look up and some new values for other columns to replace the ones in the original table. Because <code>dplyr</code> has a lot of things in common with SQL, it is perhaps no surprise that there is a <a href="https://dplyr.tidyverse.org/reference/rows.html"><code>rows_update</code></a>, and for this job it is as simple as this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>rows_update</span><span class='op'>(</span><span class='va'>corrections</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
+<span class='va'>wisc</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 2
+   location      state
+   &lt;chr&gt;         &lt;chr&gt;
+ 1 Appleton      WI   
+ 2 Beloit        WI   
+ 3 Fort.Atkinson WI   
+ 4 Madison       WI   
+ 5 Marshfield    WI   
+ 6 Milwaukee     WI   
+ 7 Monroe        WI   
+ 8 Superior      WI   
+ 9 Wausau        WI   
+10 Dubuque       IA   
+11 St.Paul       MN   
+12 Chicago       IL   </code></pre>
+</div>
+<p>The values to look up (the “keys”) are by default in the first column, which is where they are in <code>corrections</code>. If they had not been, I would have used a <code>by</code> in the same way as with a join.</p>
+<p>Mind. Blown. (Well, my mind was, anyway.)</p>
+<h2 id="geocoding">Geocoding</h2>
+<p>I said I wanted to draw a map with these cities on it. For that, I need to look up the longitude and latitude of these places, and for <em>that</em>, I need to glue the state onto the name of each city, to make sure I don’t look up the wrong one. It is perhaps easy to forget that <code>unite</code> is the cleanest way of doing this, particularly if you don’t want the individual columns any more:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>unite</span><span class='op'>(</span><span class='va'>where</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>location</span>, <span class='va'>state</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
+<span class='va'>wisc</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 1
+   where           
+   &lt;chr&gt;           
+ 1 Appleton WI     
+ 2 Beloit WI       
+ 3 Fort.Atkinson WI
+ 4 Madison WI      
+ 5 Marshfield WI   
+ 6 Milwaukee WI    
+ 7 Monroe WI       
+ 8 Superior WI     
+ 9 Wausau WI       
+10 Dubuque IA      
+11 St.Paul MN      
+12 Chicago IL      </code></pre>
+</div>
+<p>The function <code>geocode_OSM</code> from <code>tmaptools</code> will find the longitude and latitude of a place. It expects <em>one</em> place as input, not a vector of placenames, so we will work <code>rowwise</code> to geocode one at a time. (Using <code>map</code> from <code>purrr</code> is also an option.) The geocoder returns a list, which contains, buried a little deeply, the longitudes and latitudes:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>rowwise</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>ll <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/tmaptools/man/geocode_OSM.html'>geocode_OSM</a></span><span class='op'>(</span><span class='va'>where</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
+<span class='va'>wisc</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 2
+# Rowwise: 
+   where            ll              
+   &lt;chr&gt;            &lt;list&gt;          
+ 1 Appleton WI      &lt;named list [3]&gt;
+ 2 Beloit WI        &lt;named list [3]&gt;
+ 3 Fort.Atkinson WI &lt;named list [3]&gt;
+ 4 Madison WI       &lt;named list [3]&gt;
+ 5 Marshfield WI    &lt;named list [3]&gt;
+ 6 Milwaukee WI     &lt;named list [3]&gt;
+ 7 Monroe WI        &lt;named list [3]&gt;
+ 8 Superior WI      &lt;named list [3]&gt;
+ 9 Wausau WI        &lt;named list [3]&gt;
+10 Dubuque IA       &lt;named list [3]&gt;
+11 St.Paul MN       &lt;named list [3]&gt;
+12 Chicago IL       &lt;named list [3]&gt;</code></pre>
+</div>
+<p>The column <code>ll</code> is a list-column, and the usual way to handle these is to <code>unnest</code>, but that isn’t quite right here:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>unnest</span><span class='op'>(</span><span class='va'>ll</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 36 × 2
+   where            ll          
+   &lt;chr&gt;            &lt;named list&gt;
+ 1 Appleton WI      &lt;chr [1]&gt;   
+ 2 Appleton WI      &lt;dbl [2]&gt;   
+ 3 Appleton WI      &lt;bbox [4]&gt;  
+ 4 Beloit WI        &lt;chr [1]&gt;   
+ 5 Beloit WI        &lt;dbl [2]&gt;   
+ 6 Beloit WI        &lt;bbox [4]&gt;  
+ 7 Fort.Atkinson WI &lt;chr [1]&gt;   
+ 8 Fort.Atkinson WI &lt;dbl [2]&gt;   
+ 9 Fort.Atkinson WI &lt;bbox [4]&gt;  
+10 Madison WI       &lt;chr [1]&gt;   
+# … with 26 more rows</code></pre>
+</div>
+<p>Unnesting a list of three things produces <em>three</em> rows for each city. It would make more sense to have the unnesting go to the right and produce a new <em>column</em> for each thing in the list. The new <code>tidyr</code> has a variant called <code>unnest_wider</code> that does this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>unnest_wider</span><span class='op'>(</span><span class='va'>ll</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 4
+   where            query            coords    bbox      
+   &lt;chr&gt;            &lt;chr&gt;            &lt;list&gt;    &lt;list&gt;    
+ 1 Appleton WI      Appleton WI      &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 2 Beloit WI        Beloit WI        &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 3 Fort.Atkinson WI Fort.Atkinson WI &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 4 Madison WI       Madison WI       &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 5 Marshfield WI    Marshfield WI    &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 6 Milwaukee WI     Milwaukee WI     &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 7 Monroe WI        Monroe WI        &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 8 Superior WI      Superior WI      &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+ 9 Wausau WI        Wausau WI        &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+10 Dubuque IA       Dubuque IA       &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+11 St.Paul MN       St.Paul MN       &lt;dbl [2]&gt; &lt;bbox [4]&gt;
+12 Chicago IL       Chicago IL       &lt;dbl [2]&gt; &lt;bbox [4]&gt;</code></pre>
+</div>
+<p>The longitudes and latitudes we want are still hidden in a list-column, the one called <code>coords</code>, so with luck, if we unnest that wider as well, we should be in business:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>unnest_wider</span><span class='op'>(</span><span class='va'>ll</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>unnest_wider</span><span class='op'>(</span><span class='va'>coords</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
+<span class='va'>wisc</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 12 × 5
+   where            query                x     y bbox      
+   &lt;chr&gt;            &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;    
+ 1 Appleton WI      Appleton WI      -88.4  44.3 &lt;bbox [4]&gt;
+ 2 Beloit WI        Beloit WI        -89.0  42.5 &lt;bbox [4]&gt;
+ 3 Fort.Atkinson WI Fort.Atkinson WI -88.8  42.9 &lt;bbox [4]&gt;
+ 4 Madison WI       Madison WI       -89.4  43.1 &lt;bbox [4]&gt;
+ 5 Marshfield WI    Marshfield WI    -90.2  44.7 &lt;bbox [4]&gt;
+ 6 Milwaukee WI     Milwaukee WI     -87.9  43.0 &lt;bbox [4]&gt;
+ 7 Monroe WI        Monroe WI        -89.6  42.6 &lt;bbox [4]&gt;
+ 8 Superior WI      Superior WI      -92.1  46.6 &lt;bbox [4]&gt;
+ 9 Wausau WI        Wausau WI        -89.6  45.0 &lt;bbox [4]&gt;
+10 Dubuque IA       Dubuque IA       -90.7  42.5 &lt;bbox [4]&gt;
+11 St.Paul MN       St.Paul MN       -93.1  44.9 &lt;bbox [4]&gt;
+12 Chicago IL       Chicago IL       -87.6  41.9 &lt;bbox [4]&gt;</code></pre>
+</div>
+<p>And now we are. <code>x</code> contains the longitudes (negative for degrees west), and <code>y</code> the latitudes (positive for degrees north).</p>
+<h2 id="making-a-map-with-these-on-them">Making a map with these on them</h2>
+<p>The most enjoyable way to make a map in R is to use the <code>leaflet</code> package. Making a map is a three-step process:</p>
+<ul>
+<li><code>leaflet()</code> with the name of the dataframe</li>
+<li><code>addTiles()</code> to get map tiles to draw the map with</li>
+<li>add some kind of markers to show where the points are. I use circle markers here; there are also markers (from <code>addMarkers</code>) that look like Google map pins. Here also you associate the longs and lats with the columns they are in in your dataframe:</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/leaflet/man/leaflet.html'>leaflet</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>wisc</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/leaflet/man/map-layers.html'>addTiles</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/pkg/leaflet/man/map-layers.html'>addCircleMarkers</a></span><span class='op'>(</span>lng <span class='op'>=</span> <span class='op'>~</span><span class='va'>x</span>, lat <span class='op'>=</span> <span class='op'>~</span><span class='va'>y</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<div id="htmlwidget-a2b7a91d8f324505c6e5" style="width:624px;height:384px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a2b7a91d8f324505c6e5">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addCircleMarkers","args":[[44.2613967,42.5083272,42.9288944,43.074761,44.6688524,43.0349931,42.6018298,46.623324,44.9596017,42.5006217,44.9497487,41.8755616],[-88.4069744,-89.031784,-88.8370509,-89.3837613,-90.1717987,-87.922497,-89.6392396,-92.117435,-89.6298239,-90.6647967,-93.0931028,-87.6244212],10,null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"#03F","fillOpacity":0.2},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[41.8755616,46.623324],"lng":[-93.0931028,-87.6244212]}},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>The nice thing about Leaflet maps is that you can zoom, pan and generally move about in them. For example, you can zoom in to find out which city each circle represents.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2110,7 +2435,18 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
 <!--radix_placeholder_appendices-->
-<div class="appendix-bottom"></div>
+<div class="appendix-bottom">
+  <h3 id="citation">Citation</h3>
+  <p>For attribution, please cite this work as</p>
+  <pre class="citation-appendix short">Butler (2021, April 26). Ken's Blog: Correcting a dataframe. Retrieved from http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/</pre>
+  <p>BibTeX citation</p>
+  <pre class="citation-appendix long">@misc{butler2021correcting,
+  author = {Butler, Ken},
+  title = {Ken's Blog: Correcting a dataframe},
+  url = {http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/},
+  year = {2021}
+}</pre>
+</div>
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
 <!--/radix_placeholder_navigation_after_body-->

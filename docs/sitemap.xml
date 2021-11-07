@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" version="1.0">
+  <url>
+    <loc>http://ritsokiguess.site/blogg/about.html</loc>
+    <lastmod>2021-11-07T14:03:50-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://ritsokiguess.site/blogg/</loc>
+    <lastmod>2021-11-07T12:15:33-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://ritsokiguess.site/blogg/posts/2021-11-07-welcome/</loc>
+    <lastmod>2021-11-07T12:21:34-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://ritsokiguess.site/blogg/posts/2021-11-07-density-plots/</loc>
+    <lastmod>2021-11-07T16:21:39-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/</loc>
+    <lastmod>2021-11-07T16:25:51-05:00</lastmod>
+  </url>
+  <url>
+    <loc>http://ritsokiguess.site/blogg/posts/2021-11-07-sampling-locations-in-a-city/</loc>
+    <lastmod>2021-11-07T17:39:14-05:00</lastmod>
+  </url>
+</urlset>

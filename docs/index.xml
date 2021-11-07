@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Ken's Blog</title>
+    <link>http://ritsokiguess.site/blogg/</link>
+    <atom:link href="http://ritsokiguess.site/blogg/index.xml" rel="self" type="application/rss+xml"/>
+    <description>Ken's Blog
+</description>
+    <generator>Distill</generator>
+    <lastBuildDate>Sun, 07 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Welcome</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2021-11-07-welcome</link>
+      <description>The new home of my blog</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-welcome</guid>
+      <pubDate>Sun, 07 Nov 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Density plots</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2021-11-07-density-plots</link>
+      <description>An alternative to histograms and boxplots</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-density-plots</guid>
+      <pubDate>Sat, 16 Oct 2021 00:00:00 +0000</pubDate>
+      <media:content url="http://ritsokiguess.site/blogg/posts/2021-11-07-density-plots/density-plots_files/figure-html5/unnamed-chunk-3-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Correcting a dataframe</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe</link>
+      <description>The tidyverse way.</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe</guid>
+      <pubDate>Mon, 26 Apr 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Sampling locations in a city</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2021-11-07-sampling-locations-in-a-city</link>
+      <description>with the aim of getting an aerial map of that location.</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-sampling-locations-in-a-city</guid>
+      <pubDate>Sat, 10 Oct 2020 00:00:00 +0000</pubDate>
+    </item>
+  </channel>
+</rss>
