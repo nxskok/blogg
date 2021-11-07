@@ -1,0 +1,16 @@
+---
+title: "Density plots"
+description: |
+  An alternative to histograms and boxplots
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blogg
+date: 10-16-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+This is an old post that you can find [here](http://ritsokiguess.site/docs/2021/10/16/density-plots-an-alternative-to-histograms-and-boxplots/).
+

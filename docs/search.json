@@ -5,15 +5,15 @@
       "title": "About this blog",
       "description": "Some additional details about the blog",
       "author": [],
-      "contents": "\n\n\n\n",
-      "last_modified": "2021-11-07T13:31:18-05:00"
+      "contents": "\nI will eventually put something here.\n\n\n\n",
+      "last_modified": "2021-11-07T14:06:40-05:00"
     },
     {
       "path": "index.html",
       "title": "Ken's Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-11-07T13:31:19-05:00"
+      "last_modified": "2021-11-07T14:06:40-05:00"
     }
   ],
   "collections": ["posts/posts.json"]

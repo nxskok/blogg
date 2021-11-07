@@ -15,5 +15,39 @@
     "preview": {},
     "last_modified": "2021-11-07T12:21:34-05:00",
     "input_file": {}
+  },
+  {
+    "path": "posts/2021-11-07-density-plots/",
+    "title": "Density plots",
+    "description": "An alternative to histograms and boxplots",
+    "author": [
+      {
+        "name": "Ken Butler",
+        "url": "http://ritsokiguess.site/blogg"
+      }
+    ],
+    "date": "2021-10-16",
+    "categories": [],
+    "contents": "\nThis is an old post that you can find here.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-11-07T14:05:25-05:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-11-07-correcting-a-dataframe/",
+    "title": "Correcting a dataframe",
+    "description": "The tidyverse way.",
+    "author": [
+      {
+        "name": "Ken Butler",
+        "url": "http://ritsokiguess.site/blogg"
+      }
+    ],
+    "date": "2021-04-26",
+    "categories": [],
+    "contents": "\nThis is an old post that you can find here.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-11-07T14:04:49-05:00",
+    "input_file": {}
   }
 ]
