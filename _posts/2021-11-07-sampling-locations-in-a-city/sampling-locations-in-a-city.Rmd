@@ -4,11 +4,12 @@ description: |
   with the aim of getting an aerial map of that location.
 author:
   - name: Ken Butler
-    url: http://ritsokiguess.site/blog
+    url: http://ritsokiguess.site/blogg
 date: 10-10-2020
 output:
   distill::distill_article:
     self_contained: false
+preview: "Screenshot_2020-10-10_12-40-39.png"
 ---
 
 ## Introduction
