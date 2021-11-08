@@ -23,7 +23,7 @@
       <description>An alternative to histograms and boxplots</description>
       <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-density-plots</guid>
       <pubDate>Sat, 16 Oct 2021 00:00:00 +0000</pubDate>
-      <media:content url="http://ritsokiguess.site/blogg/posts/2021-11-07-density-plots/density-plots_files/figure-html5/unnamed-chunk-3-1.png" medium="image" type="image/png" width="1248" height="768"/>
+      <media:content url="http://ritsokiguess.site/blogg/posts/2021-11-07-density-plots/density-plots_files/figure-html5/unnamed-chunk-12-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
       <title>Correcting a dataframe</title>
@@ -40,6 +40,23 @@
       <description>with the aim of getting an aerial map of that location.</description>
       <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-sampling-locations-in-a-city</guid>
       <pubDate>Sat, 10 Oct 2020 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Another tidying problem</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2021-11-07-another-tidying-problem</link>
+      <description>that ends up with a matched pairs test after tidying.</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-another-tidying-problem</guid>
+      <pubDate>Thu, 09 Jul 2020 00:00:00 +0000</pubDate>
+      <media:content url="http://ritsokiguess.site/blogg/posts/2021-11-07-another-tidying-problem/another-tidying-problem_files/figure-html5/unnamed-chunk-12-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Understanding the result of a chi-square test</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2021-11-07-httpritsokiguesssitedocs20200314understanding-the-result-of-a-chisquare-test</link>
+      <description>Going beyond the chi-square statistic and its P-value</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2021-11-07-httpritsokiguesssitedocs20200314understanding-the-result-of-a-chisquare-test</guid>
+      <pubDate>Sat, 14 Mar 2020 00:00:00 +0000</pubDate>
     </item>
   </channel>
 </rss>

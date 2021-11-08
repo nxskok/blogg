@@ -154,7 +154,7 @@ The most enjoyable way to make a map in R is to use the `leaflet` package. Makin
 
 
 
-```{r}
+```{r, preview = TRUE}
 leaflet(data = wisc) %>% 
   addTiles() %>% 
   addCircleMarkers(lng = ~x, lat = ~y) 

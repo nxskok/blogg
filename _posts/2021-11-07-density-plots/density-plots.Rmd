@@ -112,7 +112,7 @@ ggplot(athletes, aes(x = Wt, fill = Sex)) + geom_density()
 
 This is not quite as we want: the upper tail of the weight distribution for the female athletes has disappeared behind the male ones, so we don't know how high the female athletes' weights go. To make it so that we can see both, we need to make the density curves partly transparent. In `ggplot`, you can make anything transparent by using a parameter `alpha`; a value of 1 means completely opaque (ie. like this), and a value of 0 means completely transparent (ie. invisible). So we can try this:
 
-```{r}
+```{r, preview = TRUE}
 ggplot(athletes, aes(x = Wt, fill = Sex)) + geom_density(alpha = 0.5)
 ```
 
