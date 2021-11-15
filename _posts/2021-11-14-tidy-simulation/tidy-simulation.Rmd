@@ -1,0 +1,150 @@
+---
+title: "Tidy simulation"
+description: |
+  Using rowwise to save calculation, estimate power or test size, bootstrap distributions
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blog
+date: 2021-11-14
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+## Packages
+
+```{r}
+library(tidyverse)
+```
+
+## Introduction
+
+To see what might happen when a process is repeated many times, we can calculate. Or we can physically re-run the process many times, and count up the results: simulation of the process.
+
+I want my simulations here to be reproducible, so I will set the random number seed first:
+
+```{r}
+set.seed(457299)
+```
+
+
+## Tossing a coin
+
+Imagine we toss a fair coin 10 times. How likely are we to get 8 or more heads? If you remember the binomial distribution, you can work it out. But if you don't? Make a virtual coin, toss it 10 times, count the number of heads, repeat many times, see how many of those are 8 or greater.
+
+Let's set up our virtual coin first:
+
+```{r}
+coin <- c("H", "T")
+```
+
+and, since getting a head on one toss doesn't prevent a head on others, ten coin tosses would be a sample of size 10 with replacement from this coin:
+
+```{r}
+sample(coin, 10, replace = TRUE)
+```
+
+Seven heads this time.
+
+I have a mechanism I use for "tidy simulation":
+
+- set up a dataframe with a column called `sim` to label the simulations
+- work `rowwise`
+- for each `sim`, do one copy of the thing you'll be doing many times (in this case, simulating 10 coin tosses)
+- calculate whatever you want to calculate for each `sim`
+- summarize the results
+
+
+For this problem, the code looks like this:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(coin, 10, replace = TRUE))) %>% 
+  mutate(heads = sum(my_sample == "H")) %>% 
+  count(heads >= 8)
+```
+
+It is probably a good idea to run this one line at a time (to see what it does, and later as you develop your own).
+
+In this case, 54 of the 1000 simulated sets of 10 coin tosses gave at least 8 heads, so our estimate of the probability of getting 8 or more heads in 10 tosses of a fair coin is 0.054.
+
+Some notes about the code:
+
+- I am using 1000 simulations as my "many" repeats of tossing a coin 10 times. A larger number would give a more accurate answer, but would take longer to run.^[I will need to knit the multiple simulations in this blog post before I put it up, so I am sticking with 1000, but you may be more patient than I am.]
+- working `rowwise` allows us to treat each row of the dataframe we are building as an independent entity. This makes the coding in the two `mutate`s that follow much easier to follow, because our mental model only has to work one row at a time.
+- `my_sample` behaves like *one* sample of 10 coin tosses, though in fact it is a whole column of samples of 10 coin tosses. It is a vector of length 10, so to get it into one cell of our dataframe, we wrap it in `list`, making the whole column a list-column.
+- Once again thinking of `my_sample` as a single sample, we then count the number of heads in it. I could use `count`, or `table`, but I don't want to get by samples with no heads or no tails. This way counts 1 for each H in the sample, then adds up the counts.^[My base R heritage sometimes shows through.]
+- Finally, count up the number of simulated sets of 10 coin tosses that had 8 or more heads. `count` accepts a logical condition as well as a column. (Behind the scenes it constructs a column of `TRUE` and `FALSE` first, and then counts that.)
+
+
+In this case, we know the right answer:^[The 7 is because using `lower.tail = FALSE` gives  a probability strictly greater than the first input.]
+
+```{r}
+pbinom(7, 10, 0.5, lower.tail = FALSE)
+```
+
+Our simulation came out very close to this.
+
+Aside: we can work out how accurate our simulation might be by noting that our 1000 simulations are also like Bernoulli trials: each one gives us 8 or more heads or it doesn't, with unknown probability that is precisely the thing that we are trying to estimate. Thus:
+
+```{r}
+binom.test(54, 1000)
+```
+
+tells us, with 95% confidence, that the probability of 8 or more heads is between 0.041 and 0.070. To nail it down more precisely, use more than 1000 simulations.
+
+
+## How long is my longest suit?
+
+In the game of bridge, each player, in two partnerships of 2, receives a hand of 13 cards randomly dealt from the usual deck of 52 cards. There is then an "auction" in which the two partnerships compete for the right to name the trump suit and play the hand. Your partner cannot see your cards, and so in the bidding you have to share information about the strength and suit distribution of your hand using standard methods (you are not allowed to deceive your opponents), so that as a partnership you can decide how many tricks you can win between you.
+
+One of the considerations in the bidding is the length of your longest suit, that is, the suit you hold the most cards in. The longest suit might have only 4 cards (eg. if you have 4 spades and 3 of each of the other suits), but if you are lucky^[That is to say, out-of-this-universe lucky.] you might be dealt a hand with 13 cards all of the same suit and have a longest suit of 13 cards. Evidently something in between those is more likely, but *how* likely?
+
+For a simulation, we need to set up a deck of cards and select 13 cards from it *without* replacement (since you can't draw the same card twice in the same hand). The only thing that matters here is the suits, so we'll set up a deck with only suits and no denominations like Ace or King. (This will make the sampling without replacement look a bit odd.)
+
+```{r}
+deck <- c(rep("S", 13), rep("H", 13),
+          rep("D", 13), rep("C", 13))
+deck
+```
+
+and deal ourselves a hand of 13 cards thus:
+
+```{r}
+hand <- sample(deck, 13, replace = FALSE)
+hand
+```
+
+and then count the number of cards in each suit:
+
+```{r}
+tab <- table(hand)
+tab
+```
+
+This time the longest suit has four cards:
+
+```{r}
+max(tab)
+```
+
+Using `table` is safe here, because we don't care whether there are any suits with no cards in the hand, only about the greatest number of cards in any suit that we have cards in.^[We could use a similar approach to estimate the probability of being dealt a *void*, a suit with no cards in it, but we would have to be more careful counting. Counting the number of different suits represented in the hand and seeing whether it is less than 4 would be one way.]
+
+All of that leads us to this:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(hand = list(sample(deck, 13, replace = FALSE))) %>% 
+  mutate(suits = list(table(hand))) %>% 
+  mutate(longest = max(suits)) %>% 
+  count(longest)
+```
+
+Note: the hands, and the tables of how many cards a hand has in each suit, are more than single numbers, so they need to be wrapped in `list`.
+
+The most likely longest suit has 5 cards in it, a bit less than half the time. According to this, a  longest suit of 8 cards happens about once in 500 hands, and longer longest suits are even less likely. (To estimate these small probabilities accurately, you need a lot of simulations.)
+
+Aside: the standard way of assessing hand *strength* is via high-card points: 4 for an ace, 3 for a king, 2 for a queen and one for a jack.
