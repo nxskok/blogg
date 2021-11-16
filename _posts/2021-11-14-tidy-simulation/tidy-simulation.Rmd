@@ -9,6 +9,7 @@ date: 2021-11-14
 output:
   distill::distill_article:
     self_contained: false
+draft: true
 ---
 
 
@@ -73,9 +74,9 @@ In this case, 54 of the 1000 simulated sets of 10 coin tosses gave at least 8 he
 Some notes about the code:
 
 - I am using 1000 simulations as my "many" repeats of tossing a coin 10 times. A larger number would give a more accurate answer, but would take longer to run.^[I will need to knit the multiple simulations in this blog post before I put it up, so I am sticking with 1000, but you may be more patient than I am.]
-- working `rowwise` allows us to treat each row of the dataframe we are building as an independent entity. This makes the coding in the two `mutate`s that follow much easier to follow, because our mental model only has to work one row at a time.
+- working `rowwise` allows us to treat each row of the dataframe we are building as an independent entity. This makes the coding in the two `mutate`s that follow much easier to follow, because our mental model only has to work one row at a time.^[You can also do this with `map` from `purrr`, but I find the code more difficult to follow.]
 - `my_sample` behaves like *one* sample of 10 coin tosses, though in fact it is a whole column of samples of 10 coin tosses. It is a vector of length 10, so to get it into one cell of our dataframe, we wrap it in `list`, making the whole column a list-column.
-- Once again thinking of `my_sample` as a single sample, we then count the number of heads in it. I could use `count`, or `table`, but I don't want to get by samples with no heads or no tails. This way counts 1 for each H in the sample, then adds up the counts.^[My base R heritage sometimes shows through.]
+- Once again thinking of `my_sample` as a single sample, we then count the number of heads in it. I could use `count`, or `table`, but I don't want to get caught by samples with no heads or no tails. This way counts 1 for each H in the sample, then adds up the counts.^[My base R heritage sometimes shows through.]
 - Finally, count up the number of simulated sets of 10 coin tosses that had 8 or more heads. `count` accepts a logical condition as well as a column. (Behind the scenes it constructs a column of `TRUE` and `FALSE` first, and then counts that.)
 
 
