@@ -145,6 +145,133 @@ tibble(sim = 1:1000) %>%
 
 Note: the hands, and the tables of how many cards a hand has in each suit, are more than single numbers, so they need to be wrapped in `list`.
 
-The most likely longest suit has 5 cards in it, a bit less than half the time. According to this, a  longest suit of 8 cards happens about once in 500 hands, and longer longest suits are even less likely. (To estimate these small probabilities accurately, you need a lot of simulations.)
+The most likely longest suit has 5 cards in it, a bit less than half the time. According to this, a  longest suit of 8 cards happens about once in 500 hands, and longer longest suits are even less likely. (To estimate these small probabilities accurately, you need a lot of simulations, like, way more than 1000.)
 
-Aside: the standard way of assessing hand *strength* is via high-card points: 4 for an ace, 3 for a king, 2 for a queen and one for a jack.
+Aside: the standard way of assessing hand *strength* is via high-card points: 4 for an ace, 3 for a king, 2 for a queen and one for a jack. All the other cards count zero. To simulate the number of points you might get in a hand, build a deck with the points for each card. There are four cards of each rank, and nine ranks that are worth no points:
+
+```{r}
+deck <- c(rep(4,4), rep(3,4),
+          rep(2,4), rep(1,4), rep(0, 36))
+```
+
+The simulation process after that is a lot like before:
+
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(hand = list(sample(deck, 13, replace = FALSE))) %>% 
+  mutate(points = sum(hand)) -> d
+d
+```
+
+I stopped it there, partly to show what the dataframe looks like at this point (a hand of 13 point values, and a points total that is the sum of these) and partly because I wanted to do about three things with this, and it made sense to save what we have done thus far.
+
+First, a bar chart of how likely each number of points is:
+
+```{r}
+ggplot(d, aes(x = points)) + geom_bar()
+```
+
+If you do more simulations, you can check whether the shape is indeed smooth (I'm guessing it is). The average number of points is 10 (there are 40 points in the deck and yours is one of four hands) and the distribution is right-skewed because it is possible, though rather unlikely, to get over 20 points.
+
+In most bidding systems, having 13 points justifies opening the bidding (making the first bid in the auction if everyone has passed on their turn before you). How likely is that?
+
+```{r}
+d %>% count(points >= 13)
+```
+
+Only about a quarter of the time. 
+
+Having 20 or more points qualifies your hand for an opening bid at the 2-level.^[2 notrumps if you have no long or short suits, 2 clubs if you do, or your hand is stronger than 21 points.] How likely is that?
+
+```{r}
+d %>% count(points >= 20)
+```
+
+A bit of a rarity, less than a 2% shot.
+
+## Bootstrapping a sampling distribution
+
+To return to the messy world of actual applied statistics: there are a lot of procedures based on an assumption of the right things having normal distributions.^[Because that was easier to develop theory for.] One of the commonest questions is whether we should be using the normal-theory procedure or something else (non-parametric, maybe). Let's take an example. The data [here](http://ritsokiguess.site/datafiles/jays15-home.csv) are information about Toronto Blue Jays baseball games from the early part of the 2015 season:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/jays15-home.csv"
+jays <- read_csv(my_url)
+jays
+```
+
+There is a lot of information here, but we're going to focus on the attendances over near the right side, and in particular, we're interested in the mean attendance over all games of which these are a sample ("early-season Blue Jays games in the years between 2010 and 2019", or something like that). There are, of course, lots of reasons that attendances might vary (opposition, weather, weekend vs. weekday, etc.) that we are going to completely ignore here.
+
+The normal^[Joke. You may laugh.] way to estimate a population mean is to use the confidence interval based on the one-sample $t$-test, but before we jump into that, we should look at a graph of the attendances:
+
+```{r}
+ggplot(jays, aes(x = attendance)) + geom_histogram(bins = 6)
+```
+
+Well, that doesn't look much like a normal distribution. It's very much skewed to the right. There seem to be two^[A third school would say "do a Bayesian analysis with suitable prior and likelihood model", but that's for another discussion.] schools of thought as to what we should do now:
+
+- we have a large enough sample ($n = 25$) so that we should get enough help from the central limit theorem (also expressed as "the $t$-test is robust to non-normality") and therefore the $t$-procedure should be fine.
+- this distribution is a long way from being normal, so there is no way we should use a $t$-procedure, instead using a sign test or signed-rank test,^[There are problems with this, too, that I will go into another time.] inverted to get a confidence interval for the median attendance.
+
+Both of these have an air of handwavery about them. How do we decide between them? Well, let's think about this a little more carefully. When it comes to getting confidence limits, it all depends on the *sampling distribution of the sample mean*. If that is close enough to normal, the $t$-interval is good. But this comes from repeated sampling. You conceptualize it by imagining taking lots of samples from the same population, working out the mean of each sample, and making something like a histogram or normal quantile plot of those. But but --- we only have the one sample we have. How to think about possible sample means we might get?
+
+A way around this is to use the **bootstrap**. The idea is to think of the sample we have as a population (resembling, we hope, the population we want to make inferences about of "all possible attendances") and to take samples from our sample(!) of the same size as the sample we had. If we do this the obvious way (without replacement), we'll get back the original sample we had, every time. So what we do instead is to sample from our sample, but *with* replacement so as to get a different set of values each time, with some values missing and some values repeated. Like this:
+
+```{r}
+s <- sample(jays$attendance, replace = TRUE)
+sort(s)
+```
+
+Sorting the sample reveals that  the first two values and the next three are repeats, so there must be some values from the original sample that are missing. (This is the only reason I sorted them.)
+
+The original data had a mean of
+
+```{r}
+jays %>% summarise(mean_att = mean(attendance))
+```
+
+but the bootstrap sample has a mean of
+
+```{r}
+mean(s)
+```
+
+different; if we were to take more bootstrap samples, and find the mean of each one, we would get a sense of the sampling distribution of the sample mean. That is to say, we *simulate* the bootstrapped sampling distribution of the sample mean. Given what we've seen in the other simulations, the structure of the code below ought to come as no surprise:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(s = list(sample(jays$attendance, replace = TRUE))) %>% 
+  mutate(m = mean(s)) -> d
+d
+```
+
+In words, set up the 1000 simulations and work rowwise as before, then take (for each row) a bootstrap sample of the attendances, and then take the mean of it. I've saved the resulting dataframe so that we can look at it and then do something else with it. The column `s` containing the samples is a list-column again.
+
+Our question was whether this bootstrapped sampling distribution of the sample mean looked like a normal distribution. To see that, a normal quantile plot is the thing:
+
+```{r}
+ggplot(d, aes(sample = m)) + stat_qq() + stat_qq_line()
+```
+
+That is very close to a normal distribution, and so in fact the $t$-procedure really is fine and the first school of thought is correct (and now we have *evidence*, no hand-waving required):
+
+```{r}
+t.test(jays$attendance)
+```
+
+A 95% confidence interval for the mean attendance goes from 20500 to 29600.
+
+Another way to go is to use the bootstrapped sampling distribution directly, entirely bypassing all the normal theory, and just take the middle 95% of it:
+
+```{r}
+d %>% ungroup() %>% summarize(ci = quantile(m, c(0.025, 0.975)))
+```
+
+21000 to 29700, not that different (given the large amount of variability) from the $t$-interval. There are better ways to get the interval rather than using sample quantiles; see for example [here](https://acclab.github.io/bootstrap-confidence-intervals.html). But this will do for now.
+
+The `ungroup` in the code is there because the dataframe `d` is still `rowwise`: everything we do with `d` will still be done one row at a time. But now we want to work on the whole column `m`, so we have to undo the `rowwise` first. `rowwise` is a special case of `group_by` (a sort of group-by-rows), so you undo `rowwise` in the same way that you undo `group_by`.
+
+## Power by simulation
+
