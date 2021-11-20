@@ -4,7 +4,7 @@ description: |
   Making a lot of changes in text, all in one go
 author:
   - name: Ken Butler
-    url: http://ritsokiguess.site/blog
+    url: http://ritsokiguess.site/blogg
 date: 2019-05-12
 output:
   distill::distill_article:
