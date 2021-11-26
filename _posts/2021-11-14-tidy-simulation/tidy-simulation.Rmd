@@ -73,7 +73,7 @@ In this case, 54 of the 1000 simulated sets of 10 coin tosses gave at least 8 he
 
 Some notes about the code:
 
-- I am using 1000 simulations as my "many" repeats of tossing a coin 10 times. A larger number would give a more accurate answer, but would take longer to run.^[I will need to knit the multiple simulations in this blog post before I put it up, so I am sticking with 1000, but you may be more patient than I am.]
+- I am using 1000 simulations as my "many" repeats of tossing a coin 10 times. A larger number would give a more accurate answer, but would take longer to run.^[I will need to knit the multiple simulations in this blog post before I put it up, so I am sticking mostly with 1000, but you may be more patient than I am.]
 - working `rowwise` allows us to treat each row of the dataframe we are building as an independent entity. This makes the coding in the two `mutate`s that follow much easier to follow, because our mental model only has to work one row at a time.^[You can also do this with `map` from `purrr`, but I find the code more difficult to follow.]
 - `my_sample` behaves like *one* sample of 10 coin tosses, though in fact it is a whole column of samples of 10 coin tosses. It is a vector of length 10, so to get it into one cell of our dataframe, we wrap it in `list`, making the whole column a list-column.
 - Once again thinking of `my_sample` as a single sample, we then count the number of heads in it. I could use `count`, or `table`, but I don't want to get caught by samples with no heads or no tails. This way counts 1 for each H in the sample, then adds up the counts.^[My base R heritage sometimes shows through.]
@@ -118,7 +118,9 @@ hand <- sample(deck, 13, replace = FALSE)
 hand
 ```
 
-and then count the number of cards in each suit:
+(note, for example, that the four Hearts in this hand are actually four *different* ones of the thirteen H in `deck`, since we are sampling without replacement. I could have labelled them by which Heart they were, but that would have made counting them more difficult.)
+
+Then count the number of cards in each suit:
 
 ```{r}
 tab <- table(hand)
@@ -275,4 +277,87 @@ d %>% ungroup() %>% summarize(ci = quantile(m, c(0.025, 0.975)))
 The `ungroup` in the code is there because the dataframe `d` is still `rowwise`: everything we do with `d` will still be done one row at a time. But now we want to work on the whole column `m`, so we have to undo the `rowwise` first. `rowwise` is a special case of `group_by` (a sort of group-by-rows), so you undo `rowwise` in the same way that you undo `group_by`.
 
 ## Power by simulation
+
+R has things like `power.t.test` that will allow you to calculate the power of one- and two-sample $t$-tests for normally-distributed populations. But what if you want to find out the power of some other test, or of a $t$-test under other assumptions about the population distribution? We need to have a mechanism for simulating power.
+
+Let's start off simple with one where we can check the answer. Let's suppose that our population is normal with mean 110 and SD 30, and we have a sample of size 20. How likely are we to (correctly) reject the null hypothesis than the mean is 100, in favour of the alternative that the mean is greater than 100?
+
+The exact answer is this, using $\alpha = 0.05$:
+
+```{r}
+power.t.test(n = 20, delta = 110 - 100, sd = 30, type = "one.sample", alternative = "one.sided")
+```
+
+Simulating this gives a rather more detailed handle on what is actually going on. The idea is to draw lots of samples from *the truth*, test the (incorrect) null, and grab the P-value each time, then count how many of those P-values are less than 0.05 (or whatever your $\alpha$ is). The true population here is normal with mean 110 and SD 30, and our sample size is 20:
+
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(20, 110, 30))) %>% 
+  mutate(t_test = list(t.test(sample, mu = 100, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
+```
+
+The estimated power is 42.6%, a little bigger than but not far from the correct answer.^[I'm doing 10,000 simulations this time.]
+
+I did this in several steps. After the `rowwise`, I drew a (list-column of) samples from the true population, then I ran a one-sample $t$-test to test whether the population mean is greater than 100 (and saved all the `t.test` output), then I extracted the P-value, then I counted how many of those P-values were 0.05 or less. I laid it out this way so that you can adapt for your purposes; you could change the population distribution, or the test, and the procedure will still work.^[The part of the test output with the P-value in it might not be called `p.value` in your case. Investigate.]
+
+The usual practical reason for wanting to get power is before an experiment is run: this is the sample size you plan to use, this is what you think the (true) population is, this is the null hypothesis you would like to reject. Except that this is not quite what usually happens in practice; usually you have a target power in mind, like 0.80, and you want to know what *sample size* you need in order to achieve that power. 
+
+With `power.t.test`, this is as simple as putting in `power` and leaving out `n`:
+
+```{r}
+power.t.test(power = 0.80, delta = 110 - 100, sd = 30, type = "one.sample", alternative = "one.sided")
+```
+
+and the sample size has to be 58 (rounding up).
+
+But by simulation, `n` has to be input to the simulation and `power` is the output. So the best we can do is to try different sample sizes and see which one gets us closest to the power we are aiming for. A sample size of 20 is, we know, too small, but what about 40? One change to the previous code:
+
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(40, 110, 30))) %>% 
+  mutate(t_test = list(t.test(sample, mu = 100, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
+```
+
+This estimates the power to be 66%, not big enough, so the sample size needs to be bigger still.
+
+Another problem is that this is only an *estimate* of the power, based on "only" 10,000 simulations. It could be that the power for a sample size of 40 is higher than this. But how much higher? The `binom.test` idea from earlier gives us a confidence interval for the true power:
+
+```{r}
+binom.test(6612, 10000)
+```
+
+The power (between 0.652 and 0.670) is evidently not high enough yet, so we need a bigger sample size. 60?
+
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(60, 110, 30))) %>% 
+  mutate(t_test = list(t.test(sample, mu = 100, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
+```
+
+That looks pretty close. What does the confidence interval look like?
+
+```{r}
+binom.test(8152, 10000)
+```
+
+The 95% CI for the true power goes from 0.807 to 0.823, which is a little too high, so the sample size I need is a little under 60. Now you see the reason for doing 10,000 simulations instead of only 1000: I've nailed down the true power rather accurately. Compare this:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(60, 110, 30))) %>% 
+  mutate(t_test = list(t.test(sample, mu = 100, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
+binom.test(811, 1000)
+```
 

@@ -1604,7 +1604,8 @@ probability of success
 </div>
 <pre><code> [1] &quot;D&quot; &quot;C&quot; &quot;C&quot; &quot;D&quot; &quot;S&quot; &quot;H&quot; &quot;S&quot; &quot;S&quot; &quot;D&quot; &quot;S&quot; &quot;H&quot; &quot;H&quot; &quot;H&quot;</code></pre>
 </div>
-<p>and then count the number of cards in each suit:</p>
+<p>(note, for example, that the four Hearts in this hand are actually four <em>different</em> ones of the thirteen H in <code>deck</code>, since we are sampling without replacement. I could have labelled them by which Heart they were, but that would have made counting them more difficult.)</p>
+<p>Then count the number of cards in each suit:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>hand</span><span class='op'>)</span>
@@ -1861,11 +1862,176 @@ mean of x
 <p>21000 to 29700, not that different (given the large amount of variability) from the <span class="math inline">\(t\)</span>-interval. There are better ways to get the interval rather than using sample quantiles; see for example <a href="https://acclab.github.io/bootstrap-confidence-intervals.html">here</a>. But this will do for now.</p>
 <p>The <code>ungroup</code> in the code is there because the dataframe <code>d</code> is still <code>rowwise</code>: everything we do with <code>d</code> will still be done one row at a time. But now we want to work on the whole column <code>m</code>, so we have to undo the <code>rowwise</code> first. <code>rowwise</code> is a special case of <code>group_by</code> (a sort of group-by-rows), so you undo <code>rowwise</code> in the same way that you undo <code>group_by</code>.</p>
 <h2 id="power-by-simulation">Power by simulation</h2>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>R has things like <code>power.t.test</code> that will allow you to calculate the power of one- and two-sample <span class="math inline">\(t\)</span>-tests for normally-distributed populations. But what if you want to find out the power of some other test, or of a <span class="math inline">\(t\)</span>-test under other assumptions about the population distribution? We need to have a mechanism for simulating power.</p>
+<p>Let’s start off simple with one where we can check the answer. Let’s suppose that our population is normal with mean 110 and SD 30, and we have a sample of size 20. How likely are we to (correctly) reject the null hypothesis than the mean is 100, in favour of the alternative that the mean is greater than 100?</p>
+<p>The exact answer is this, using <span class="math inline">\(\alpha = 0.05\)</span>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/power.t.test.html'>power.t.test</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>20</span>, delta <span class='op'>=</span> <span class='fl'>110</span> <span class='op'>-</span> <span class='fl'>100</span>, sd <span class='op'>=</span> <span class='fl'>30</span>, type <span class='op'>=</span> <span class='st'>"one.sample"</span>, alternative <span class='op'>=</span> <span class='st'>"one.sided"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+     One-sample t test power calculation 
+
+              n = 20
+          delta = 10
+             sd = 30
+      sig.level = 0.05
+          power = 0.4178514
+    alternative = one.sided</code></pre>
+</div>
+<p>Simulating this gives a rather more detailed handle on what is actually going on. The idea is to draw lots of samples from <em>the truth</em>, test the (incorrect) null, and grab the P-value each time, then count how many of those P-values are less than 0.05 (or whatever your <span class="math inline">\(\alpha\)</span> is). The true population here is normal with mean 110 and SD 30, and our sample size is 20:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tibble</span><span class='op'>(</span>sim <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10000</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>rowwise</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>110</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>t_test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>sample</span>, mu <span class='op'>=</span> <span class='fl'>100</span>, alternative <span class='op'>=</span> <span class='st'>"greater"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>p_value <span class='op'>=</span> <span class='va'>t_test</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>count</span><span class='op'>(</span><span class='va'>p_value</span> <span class='op'>&lt;=</span> <span class='fl'>0.05</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 2
+# Rowwise: 
+  `p_value &lt;= 0.05`     n
+  &lt;lgl&gt;             &lt;int&gt;
+1 FALSE              5676
+2 TRUE               4324</code></pre>
+</div>
+<p>The estimated power is 42.6%, a little bigger than but not far from the correct answer.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<p>I did this in several steps. After the <code>rowwise</code>, I drew a (list-column of) samples from the true population, then I ran a one-sample <span class="math inline">\(t\)</span>-test to test whether the population mean is greater than 100 (and saved all the <code>t.test</code> output), then I extracted the P-value, then I counted how many of those P-values were 0.05 or less. I laid it out this way so that you can adapt for your purposes; you could change the population distribution, or the test, and the procedure will still work.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>The usual practical reason for wanting to get power is before an experiment is run: this is the sample size you plan to use, this is what you think the (true) population is, this is the null hypothesis you would like to reject. Except that this is not quite what usually happens in practice; usually you have a target power in mind, like 0.80, and you want to know what <em>sample size</em> you need in order to achieve that power.</p>
+<p>With <code>power.t.test</code>, this is as simple as putting in <code>power</code> and leaving out <code>n</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/power.t.test.html'>power.t.test</a></span><span class='op'>(</span>power <span class='op'>=</span> <span class='fl'>0.80</span>, delta <span class='op'>=</span> <span class='fl'>110</span> <span class='op'>-</span> <span class='fl'>100</span>, sd <span class='op'>=</span> <span class='fl'>30</span>, type <span class='op'>=</span> <span class='st'>"one.sample"</span>, alternative <span class='op'>=</span> <span class='st'>"one.sided"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+     One-sample t test power calculation 
+
+              n = 57.02048
+          delta = 10
+             sd = 30
+      sig.level = 0.05
+          power = 0.8
+    alternative = one.sided</code></pre>
+</div>
+<p>and the sample size has to be 58 (rounding up).</p>
+<p>But by simulation, <code>n</code> has to be input to the simulation and <code>power</code> is the output. So the best we can do is to try different sample sizes and see which one gets us closest to the power we are aiming for. A sample size of 20 is, we know, too small, but what about 40? One change to the previous code:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tibble</span><span class='op'>(</span>sim <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10000</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>rowwise</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>110</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>t_test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>sample</span>, mu <span class='op'>=</span> <span class='fl'>100</span>, alternative <span class='op'>=</span> <span class='st'>"greater"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>p_value <span class='op'>=</span> <span class='va'>t_test</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>count</span><span class='op'>(</span><span class='va'>p_value</span> <span class='op'>&lt;=</span> <span class='fl'>0.05</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 2
+# Rowwise: 
+  `p_value &lt;= 0.05`     n
+  &lt;lgl&gt;             &lt;int&gt;
+1 FALSE              3388
+2 TRUE               6612</code></pre>
+</div>
+<p>This estimates the power to be 66%, not big enough, so the sample size needs to be bigger still.</p>
+<p>Another problem is that this is only an <em>estimate</em> of the power, based on “only” 10,000 simulations. It could be that the power for a sample size of 40 is higher than this. But how much higher? The <code>binom.test</code> idea from earlier gives us a confidence interval for the true power:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/binom.test.html'>binom.test</a></span><span class='op'>(</span><span class='fl'>6612</span>, <span class='fl'>10000</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Exact binomial test
+
+data:  6612 and 10000
+number of successes = 6612, number of trials = 10000, p-value
+&lt; 2.2e-16
+alternative hypothesis: true probability of success is not equal to 0.5
+95 percent confidence interval:
+ 0.6518275 0.6704785
+sample estimates:
+probability of success 
+                0.6612 </code></pre>
+</div>
+<p>The power (between 0.652 and 0.670) is evidently not high enough yet, so we need a bigger sample size. 60?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tibble</span><span class='op'>(</span>sim <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10000</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>rowwise</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>110</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>t_test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>sample</span>, mu <span class='op'>=</span> <span class='fl'>100</span>, alternative <span class='op'>=</span> <span class='st'>"greater"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>p_value <span class='op'>=</span> <span class='va'>t_test</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>count</span><span class='op'>(</span><span class='va'>p_value</span> <span class='op'>&lt;=</span> <span class='fl'>0.05</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 2
+# Rowwise: 
+  `p_value &lt;= 0.05`     n
+  &lt;lgl&gt;             &lt;int&gt;
+1 FALSE              1848
+2 TRUE               8152</code></pre>
+</div>
+<p>That looks pretty close. What does the confidence interval look like?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/binom.test.html'>binom.test</a></span><span class='op'>(</span><span class='fl'>8152</span>, <span class='fl'>10000</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Exact binomial test
+
+data:  8152 and 10000
+number of successes = 8152, number of trials = 10000, p-value
+&lt; 2.2e-16
+alternative hypothesis: true probability of success is not equal to 0.5
+95 percent confidence interval:
+ 0.8074513 0.8227647
+sample estimates:
+probability of success 
+                0.8152 </code></pre>
+</div>
+<p>The 95% CI for the true power goes from 0.807 to 0.823, which is a little too high, so the sample size I need is a little under 60. Now you see the reason for doing 10,000 simulations instead of only 1000: I’ve nailed down the true power rather accurately. Compare this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tibble</span><span class='op'>(</span>sim <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>1000</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>rowwise</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>60</span>, <span class='fl'>110</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>t_test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>sample</span>, mu <span class='op'>=</span> <span class='fl'>100</span>, alternative <span class='op'>=</span> <span class='st'>"greater"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>p_value <span class='op'>=</span> <span class='va'>t_test</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>count</span><span class='op'>(</span><span class='va'>p_value</span> <span class='op'>&lt;=</span> <span class='fl'>0.05</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 2
+# Rowwise: 
+  `p_value &lt;= 0.05`     n
+  &lt;lgl&gt;             &lt;int&gt;
+1 FALSE               189
+2 TRUE                811</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/binom.test.html'>binom.test</a></span><span class='op'>(</span><span class='fl'>811</span>, <span class='fl'>1000</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Exact binomial test
+
+data:  811 and 1000
+number of successes = 811, number of trials = 1000, p-value &lt;
+2.2e-16
+alternative hypothesis: true probability of success is not equal to 0.5
+95 percent confidence interval:
+ 0.7853323 0.8348215
+sample estimates:
+probability of success 
+                 0.811 </code></pre>
+</div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>I will need to knit the multiple simulations in this blog post before I put it up, so I am sticking with 1000, but you may be more patient than I am.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1" role="doc-endnote"><p>I will need to knit the multiple simulations in this blog post before I put it up, so I am sticking mostly with 1000, but you may be more patient than I am.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2" role="doc-endnote"><p>You can also do this with <code>map</code> from <code>purrr</code>, but I find the code more difficult to follow.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3" role="doc-endnote"><p>My base R heritage sometimes shows through.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4" role="doc-endnote"><p>The 7 is because using <code>lower.tail = FALSE</code> gives a probability strictly greater than the first input.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -1876,6 +2042,8 @@ mean of x
 <li id="fn9" role="doc-endnote"><p>Joke. You may laugh.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn10" role="doc-endnote"><p>A third school would say “do a Bayesian analysis with suitable prior and likelihood model”, but that’s for another discussion.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn11" role="doc-endnote"><p>There are problems with this, too, that I will go into another time.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>I’m doing 10,000 simulations this time.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>The part of the test output with the P-value in it might not be called <code>p.value</code> in your case. Investigate.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 <!--radix_placeholder_article_footer-->
