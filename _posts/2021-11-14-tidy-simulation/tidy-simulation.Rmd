@@ -5,11 +5,10 @@ description: |
 author:
   - name: Ken Butler
     url: http://ritsokiguess.site/blog
-date: 2021-11-14
+date: 2021-11-26
 output:
   distill::distill_article:
     self_contained: false
-draft: true
 ---
 
 
@@ -22,6 +21,9 @@ library(tidyverse)
 ## Introduction
 
 To see what might happen when a process is repeated many times, we can calculate. Or we can physically re-run the process many times, and count up the results: simulation of the process.
+
+
+This can be applied to estimating probabilities, obtaining bootstrap distributions (for example when assessing normality), or estimating the power or size of tests.
 
 I want my simulations here to be reproducible, so I will set the random number seed first:
 
@@ -88,7 +90,7 @@ pbinom(7, 10, 0.5, lower.tail = FALSE)
 
 Our simulation came out very close to this.
 
-Aside: we can work out how accurate our simulation might be by noting that our 1000 simulations are also like Bernoulli trials: each one gives us 8 or more heads or it doesn't, with unknown probability that is precisely the thing that we are trying to estimate. Thus:
+Aside:^[But one that is used again later.] we can work out how accurate our simulation might be by noting that our 1000 simulations are also like Bernoulli trials: each one gives us 8 or more heads or it doesn't, with unknown probability that is precisely the thing that we are trying to estimate. Thus:
 
 ```{r}
 binom.test(54, 1000)
@@ -99,7 +101,7 @@ tells us, with 95% confidence, that the probability of 8 or more heads is betwee
 
 ## How long is my longest suit?
 
-In the game of bridge, each player, in two partnerships of 2, receives a hand of 13 cards randomly dealt from the usual deck of 52 cards. There is then an "auction" in which the two partnerships compete for the right to name the trump suit and play the hand. Your partner cannot see your cards, and so in the bidding you have to share information about the strength and suit distribution of your hand using standard methods (you are not allowed to deceive your opponents), so that as a partnership you can decide how many tricks you can win between you.
+In the game of bridge, each player, in two partnerships of 2, receives a hand of 13 cards randomly dealt from the usual deck of 52 cards. There is then an "auction" in which the two partnerships compete for the right to name the trump suit and play the hand. The bids in this auction are an undertaking to win a certain number of the 13 tricks with the named suit as trumps.^[Add six to the number in the bid to determine how many tricks the bidder and their partner are promising to win. Thus if you bid "two clubs" you are undertaking to win 8 of the 13 tricks between you with clubs as trumps.] Your partner cannot see your cards, and so in the bidding you have to share information about the strength and suit distribution of your hand using standard methods^[In order to convey information, most bids say something about hand strength and the length of the suit bid, according to a system like Standard American or ACOL (British).] (you are not allowed to deceive your opponents), so that as a partnership you can decide how many tricks you can win between you.
 
 One of the considerations in the bidding is the length of your longest suit, that is, the suit you hold the most cards in. The longest suit might have only 4 cards (eg. if you have 4 spades and 3 of each of the other suits), but if you are lucky^[That is to say, out-of-this-universe lucky.] you might be dealt a hand with 13 cards all of the same suit and have a longest suit of 13 cards. Evidently something in between those is more likely, but *how* likely?
 
@@ -186,7 +188,7 @@ d %>% count(points >= 13)
 
 Only about a quarter of the time. 
 
-Having 20 or more points qualifies your hand for an opening bid at the 2-level.^[2 notrumps if you have no long or short suits, 2 clubs if you do, or your hand is stronger than 21 points.] How likely is that?
+Having 20 or more points qualifies your hand for an opening bid at the 2-level.^[In Standard American, 2 notrumps if you have no long or short suits, 2 clubs if you do, or your hand is stronger than 21 points. In one bidding system I know of, the *lowest* bid of 1 club is reserved for really strong hands like this!] How likely is that?
 
 ```{r}
 d %>% count(points >= 20)
@@ -278,6 +280,8 @@ The `ungroup` in the code is there because the dataframe `d` is still `rowwise`:
 
 ## Power by simulation
 
+### Power of a test
+
 R has things like `power.t.test` that will allow you to calculate the power of one- and two-sample $t$-tests for normally-distributed populations. But what if you want to find out the power of some other test, or of a $t$-test under other assumptions about the population distribution? We need to have a mechanism for simulating power.
 
 Let's start off simple with one where we can check the answer. Let's suppose that our population is normal with mean 110 and SD 30, and we have a sample of size 20. How likely are we to (correctly) reject the null hypothesis than the mean is 100, in favour of the alternative that the mean is greater than 100?
@@ -360,4 +364,70 @@ tibble(sim = 1:1000) %>%
   count(p_value <= 0.05)
 binom.test(811, 1000)
 ```
+
+With this many simulations, we see that a sample size of 60 is as close as we are going to get, since 0.80 is inside this confidence interval.
+
+### Size of a test
+
+If the true mean and the hypothesized mean are the same, then the null hypothesis is actually *true* and the probability of (now incorrectly) rejecting it should be 0.05. In a situation where the test is properly calibrated, this is not very interesting:
+
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(20, 100, 30))) %>% 
+  mutate(t_test = list(t.test(sample, mu = 100, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
+binom.test(513, 10000)
+```
+
+Now the true mean and the null mean are both 100, and the population distribution is normal, so the $t$-test must be appropriate, and the "power", that is to say, the probability of a type I error, could indeed be 0.05.
+
+But what if the population distribution is not normal? Then we have the Central Limit Theorem, which says that everything should still behave well "for large samples", without actually telling us how big the sample has to be. One way to assess whether our sample is big enough, if we have data, is to estimate the bootstrap sampling distribution of the sample mean. If we don't have data, we can suggest a distributional form for the population distribution, and see how the test behaves in that case: does the test still reject 5% of the time, when the null is true?
+
+To be specific, let's suppose we're taking a sample of size 20 from the very right-skewed exponential distribution with mean 100. Does the $t$-test for the mean reject 5% of the time when the null mean is 100?^[`rexp`'s second input is the "rate", the reciprocal of the mean.]
+
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rexp(20, 1/100))) %>% 
+  mutate(t_test = list(t.test(sample, mu = 100, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
+binom.test(198, 10000)
+```
+
+Clearly it rejects too little of the time (confidence interval for type I error probability from 0.017 to 0.023). So a sample of size 20 is not big enough for the Central Limit Theorem to work in this case.
+
+Another use for simulation is to understand the sampling distribution of a test statistic when we do not have theory to guide us. Let's return to our normal population with mean 100 and SD 30. Suppose we now want to reject a mean of 100 in favour of the mean being greater than 100 if the sample *maximum* is large enough. How large should the sample maximum be?
+
+The procedure is to generate samples from the truth (in this case the null is true), find the maximum of each simulated sample, and then find the 95th percentile of the simulated maxima:
+
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(20, 100, 30))) %>% 
+  mutate(sample_max = max(sample)) %>% 
+  ungroup() %>% 
+  summarize(pp = quantile(sample_max, 0.95))
+```
+
+We should reject a mean of 100 if the sample maximum is 184 or greater.
+
+And now we can estimate the power of this test if the mean is actually 110:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(20, 110, 30))) %>% 
+  mutate(sample_max = max(sample)) %>% 
+  ungroup() %>% 
+  count(sample_max >= 184)
+```
+
+The power is now only about 13%, much less than for the test based on the mean (which was about 42%). The reason for the `ungroup` was that I wanted to count something for the *whole* dataframe, not one row at a time, so I had to undo the `rowwise`.
+
+## Final remarks
+
+There is a lot of repetitiousness here. It would almost certainly be better to abstract the ideas of the simulation away into a function (that might have inputs the true parameter(s), the null parameter, the test and the population distribution), but one of the things I wanted to get across was that these all work the same way with a few small changes, which doesn't come across quite so clearly by changing inputs to a function.
 
