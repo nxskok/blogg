@@ -7,7 +7,15 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 26 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Kommentar</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2021-12-04-kommentar</link>
+      <description>Or, Comments, in other words.</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2021-12-04-kommentar</guid>
+      <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Tidy simulation</title>
       <dc:creator>Ken Butler</dc:creator>

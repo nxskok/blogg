@@ -1,0 +1,19 @@
+---
+title: "Kommentar"
+description: |
+  Or, Comments, in other words.
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blog
+date: 2021-12-04
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+I used to have Disqus comments on my blog ([the old one](http://ritsokiguess.site/docs/)), but there are [good reasons not to do that](https://fatfrogmedia.com/delete-disqus-comments-wordpress/), among them the question of who owns the comments on your blog posts, yes, really. I looked vaguely into [utteranc.es](https://utteranc.es/), but I could never get it to work for me, so I left the comments idea aside.
+
+Then, today, I was browsing Twitter while waiting for something else, I got directed to [a blog post by Athanasia Mowinckel](https://drmowinckels.io/blog/2021-12-04-adding-giscus-to-your-blogdown-site/). Her blog is Hugo, which mine is not, but there was a link to a Twitter post by [Shannon Pileggi](https://twitter.com/PipingHotData/status/1465878389852676107) linking to [this blog post by Joel Nitta](https://www.joelnitta.com/posts/2021-11-24_using-giscus/), and following the procedure described there worked smoothly either side of dinner, and would have worked more smoothly had I actually *read* what he wrote...
+
+Anyway, feel free to comment below, as I can now say.
+

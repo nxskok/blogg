@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-12-04-kommentar/",
+    "title": "Kommentar",
+    "description": "Or, Comments, in other words.",
+    "author": [
+      {
+        "name": "Ken Butler",
+        "url": "http://ritsokiguess.site/blog"
+      }
+    ],
+    "date": "2021-12-04",
+    "categories": [],
+    "contents": "\nI used to have Disqus comments on my blog (the old one), but there are good reasons not to do that, among them the question of who owns the comments on your blog posts, yes, really. I looked vaguely into utteranc.es, but I could never get it to work for me, so I left the comments idea aside.\nThen, today, I was browsing Twitter while waiting for something else, I got directed to a blog post by Athanasia Mowinckel. Her blog is Hugo, which mine is not, but there was a link to a Twitter post by Shannon Pileggi linking to this blog post by Joel Nitta, and following the procedure described there worked smoothly either side of dinner, and would have worked more smoothly had I actually read what he wrote…\nAnyway, feel free to comment below, as I can now say.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-12-04T20:48:52-05:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-11-14-tidy-simulation/",
     "title": "Tidy simulation",
     "description": "Using rowwise to save calculation, estimate power or test size, bootstrap distributions",
