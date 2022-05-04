@@ -1,0 +1,77 @@
+---
+title: "Why the signed rank test is a waste of time"
+description: |
+  A short description of the post.
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blog
+date: 2022-05-04
+output:
+  distill::distill_article:
+    self_contained: false
+draft: true
+---
+
+# packages
+
+```{r}
+library(tidyverse)
+```
+
+
+# the one-sample t-test
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean is some value, like 10. The standard test is the one-sample $t$-test:
+
+```{r}
+x <- rnorm(n = 10, mean = 8, sd = 3)
+x
+t.test(x, mu = 10)
+```
+
+In this case, the P-value is 0.1055, so we do not reject the null hypothesis that the population mean is 10: there is no evidence (at $\alpha = 0.05$) that the population mean is different from 10.^[This is, by default, a two-sided test. Use something like `alternative = "greater"` to do a one-sided test.] In this case, we have made a type II error, because the population mean is actually 8, and so the null hypothesis is actually wrong but we failed to reject it.
+
+The theory behind the $t$-test is that the population from which the sample is taken has a normal distribution. This is assessed in practice by looking at a histogram or a normal quantile plot of the data:
+
+```{r}
+ggplot(tibble(x), aes(sample = x)) + stat_qq() + stat_qq_line()
+```
+
+With a small sample, it is hard to detect whether a deviation from normality like this indicates a non-normal population or is just randomness. (In this case, I actually generated my sample from a normal distribution, so I know the answer here is randomness.)
+
+There is another issue here, the Central Limit Theorem. This says, in words, that the sampling  distribution of the sample mean from a large sample will be approximately normal, *no matter what the population distribution is*. How close the approximation is will depend on how non-normal the population is; if the population is very non-normal (for example, very skewed or has extreme outliers), it might take a very large sample for the approximation to be of any use.
+
+Example: the chi-squared distribution is right-skewed, with one parameter, the degrees of freedom. As the degrees of freedom increases, the distribution becomes less skewed and more normal in shape.^[In the limit as degrees of freedom increases, the distribution *is* normal.]
+
+Consider the chi-squared distribution with 12 df:
+
+```{r}
+tibble(x = seq(0, 30, 0.1)) %>% 
+  mutate(y = dchisq(x, df = 12)) %>% 
+  ggplot(aes(x = x, y = y)) + geom_line()
+```
+
+This is mildly skewed. Is a sample of size 10 large enough
+
+Now consider the chi-squared distribution with 3 df, which is more skewed:
+
+```{r}
+tibble(x = seq(0, 10, 0.1)) %>% 
+  mutate(y = dchisq(x, df = 3)) %>% 
+  ggplot(aes(x = x, y = y)) + geom_line()
+```
+
+
+So, consideration of whether to use a $t$-test has two parts: how *normal* the population is (answered by asking how normal your *sample* is), and how *large* the sample is
+
+
+# the signed rank test
+
+
+
+# the sign test
+
