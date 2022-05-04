@@ -173,12 +173,17 @@ and away we go:
 tibble(sim=1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rchisq(10, 3))) %>% 
-  mutate(my_test = list(wilcox.test(my_sample, mu = med))) %>% 
+  mutate(my_test = list(wilcox.test(my_sample, mu = med, alternative = "greater"))) %>% 
   mutate(my_p = my_test$p.value) -> dd
 dd
 ```
 
 Since the null hypothesis is true, the P-values should have a uniform distribution:
+
+
+```{r}
+ggplot(dd, aes(sample = my_p)) + stat_qq(distribution = qunif) + stat_qq_line(distribution = qunif)
+```
 
 ```{r}
 ggplot(dd, aes(x = my_p)) + geom_histogram(bins = 12)
