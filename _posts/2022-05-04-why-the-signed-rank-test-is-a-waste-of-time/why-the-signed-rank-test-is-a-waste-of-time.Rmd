@@ -28,12 +28,14 @@ set.seed(457299)
 Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean is some value, like 10. The standard test is the one-sample $t$-test:
 
 ```{r}
-x <- rnorm(n = 10, mean = 8, sd = 3)
+x <- rnorm(n = 10, mean = 13, sd = 3)
 x
-t.test(x, mu = 10)
+t.test(x, mu = 15)
 ```
 
 In this case, the P-value is 0.1055, so we do not reject the null hypothesis that the population mean is 10: there is no evidence (at $\alpha = 0.05$) that the population mean is different from 10.^[This is, by default, a two-sided test. Use something like `alternative = "greater"` to do a one-sided test.] In this case, we have made a type II error, because the population mean is actually 8, and so the null hypothesis is actually wrong but we failed to reject it.
+
+We use these data again later.
 
 The theory behind the $t$-test is that the population from which the sample is taken has a normal distribution. This is assessed in practice by looking at a histogram or a normal quantile plot of the data:
 
@@ -55,7 +57,17 @@ tibble(x = seq(0, 30, 0.1)) %>%
   ggplot(aes(x = x, y = y)) + geom_line()
 ```
 
-This is mildly skewed. Is a sample of size 10 large enough
+This is mildly skewed. Is a sample of size 20 from this distribution large enough to use the $t$-test? We can simulate the sampling distribution of the sample mean, since we know what the population is, by drawing many (in this case 1000) samples from it and seeing now normal the simulated sample means look:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rchisq(n = 20, df = 12))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line()
+```
+
+This is a tiny bit skewed right (the very largest values are slightly too large and the very smallest ones not quite small enough, though the rest of the values hug the line), but I would consider this close enough to trust the $t$-test.
 
 Now consider the chi-squared distribution with 3 df, which is more skewed:
 
@@ -65,13 +77,144 @@ tibble(x = seq(0, 10, 0.1)) %>%
   ggplot(aes(x = x, y = y)) + geom_line()
 ```
 
+How normal is the sampling distribution of the sampling mean now, again with a sample of size 20?
 
-So, consideration of whether to use a $t$-test has two parts: how *normal* the population is (answered by asking how normal your *sample* is), and how *large* the sample is
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rchisq(n = 20, df = 3))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line()
+```
 
+This time, the normal quantile plot definitely strays from the line in a way that indicates a right-skewed non-normal sampling distribution of the sample mean. With the same sample size, if the population is as skewed as a chi-squared distribution with 12 degrees of freedom, the $t$-test is fine, but if it is as skewed as a chi-squared distribution with 3 degrees of freedom, the $t$-test is at best questionable.
 
-# the signed rank test
-
-
+So, consideration of whether to use a $t$-test has two parts: how *normal* the population is (answered by asking how normal your *sample* is), and how *large* the sample is. The larger the sample size is, the less the normality  matters, but it is an awkward judgement call to assess whether the non-normality in the data distribution matters enough given the sample size.
 
 # the sign test
 
+If you have decided that your sample does not have close enough to a normal distribution (given the sample size), and therefore that you should not be using the $t$-test, what do you do? Two standard options are the sign test and the signed-rank test, with the latter often being recommended over the former because of the former's lack of power. 
+These tests are both non-parametric, in that they do not depend on the data having (at least approximately) any specific distribution. 
+
+For the sign test, you count how many of your observations are above and below the null median:
+
+```{r}
+tibble(x) %>% 
+  count(x > 15)
+```
+
+The number of values (say) below the null median is the test statistic. If the null hypothesis is true, each value is independently either above or below the null median with probability 0.5, and thus the test statistic has a binomial distribution with $n$ equal to the sample size and $p = 0.5$. Hence the P-value for a two-sided test is 
+
+```{r}
+2*sum(dbinom(6:10, size = 10, prob = 0.5))
+```
+
+counting upwards from 6 because 6 is above halfway in the null distribution, and multiplying by two to get a two-sided P-value. The split of 4 values above 10 and 6 below is very close to 50--50, and so the P-value is large, much larger than for the $t$-test.
+
+The sign test does not use the data very efficiently: it only counts whether each data value is above or below the hypothesized median. Thus, if you are in a position to use the $t$-test that uses the actual data values, you should do so. 
+However, it is completely assumption-free: as long as the observations really are independent, it does not matter at all what the population distribution looks like.
+
+# the signed rank test
+
+The signed-rank test occupies a kind of middle ground between the sign test and the $t$-test.
+
+Here's how it works for our data, testing for a median^[I come back to this issue later] of 10:
+
+```{r}
+tibble(x) %>% 
+  mutate(diff = x - 15) %>% 
+  mutate(abs_diff = abs(diff)) %>% 
+  mutate(rk = rank(abs_diff)) -> d
+d
+```
+
+Subtract the hypothesized median from each data value, and then rank them smallest to largest in terms of absolute value. The smallest difference in size is 0.127, which gets rank 1, and the largest in size is $-5.23$, which gets rank 10. 
+
+The next stage is to sum up the ranks separately for the positive and negative differences:
+
+```{r}
+d %>% group_by(diff > 0) %>% 
+  summarize(sum = sum(rk))
+```
+
+There are only four positive differences, including the two smallest differences in size, so their ranks add up to only 13, compared to a sum of 42 for the negative differences. The standard procedure is to take the smaller of these as the test statistic (for a two-sided test), so the test statistic here is 13. 
+
+If the null hypothesis is true, we would expect the positive and negative differences to have ranks that add up to about the same, so the test statistic would be large (the largest it could be is 27, since the ranks 1 through 10 add up to 55 and the most even split is 28 and 27). If the null hypothesis is false, most of the big differences will be on one side, so the test statistic will be small. Here, the test statistic is at least somewhat small; the difference from the sign test is that two of the four positive differences are close to zero and have small ranks, so that even though four ranks are being summed, two of them are small.
+
+Is 13 small enough to reject the null with?
+
+```{r}
+wilcox.test(x, mu = 15)
+```
+
+The P-value is 0.1602, not small enough to reject the null median of 10.  It is a little bigger than for the $t$-test, but a lot smaller than for the sign test.
+
+A historical note: the name usually attached to the signed-rank test is [Frank Wilcoxon](https://en.wikipedia.org/wiki/Frank_Wilcoxon). He worked out the null distribution of the signed rank statistic (an exercise in combinatorics). 
+
+The R function is a bit of a confusing misnomer, because there was also a statistician called [Walter Francis Willcox](https://en.wikipedia.org/wiki/Walter_Francis_Willcox), who had nothing to do with this test.
+
+
+## assessing the signed rank test
+
+The signed-rank test seemed to behave well enough in our example, with actually normal data. But the point of mentioning the test is as something to use when the data are *not* normal. 
+
+So let's take some samples from our skewed chi-squared distribution with 3 df.
+
+This distribution has this median:
+
+```{r}
+med <- qchisq(0.5, 3)
+med
+```
+
+and away we go:
+
+```{r}
+tibble(sim=1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rchisq(10, 3))) %>% 
+  mutate(my_test = list(wilcox.test(my_sample, mu = med))) %>% 
+  mutate(my_p = my_test$p.value) -> dd
+dd
+```
+
+Since the null hypothesis is true, the P-values should have a uniform distribution:
+
+```{r}
+ggplot(dd, aes(x = my_p)) + geom_histogram(bins = 12)
+```
+
+That doesn't look very uniform. To investigate what happened, let's 
+
+```{r}
+x <- rchisq(10, 3)
+x
+```
+
+This distribution has this median:
+
+```{r}
+med <- qchisq(0.5, 3)
+med
+```
+
+
+and go through the calculations for the signed rank statistic again:
+
+```{r}
+tibble(x) %>% 
+  mutate(diff = x - med) %>% 
+  mutate(abs_diff = abs(diff)) %>% 
+  mutate(rk = rank(abs_diff)) -> d
+d
+```
+
+and the test statistic is
+
+```{r}
+d %>% 
+  group_by(diff > 0) %>% 
+  summarize(sum = sum(rk))
+```
+
+This seems like a bit of a difference in rank sums, given that the null hypothesis is actually *true*. 
