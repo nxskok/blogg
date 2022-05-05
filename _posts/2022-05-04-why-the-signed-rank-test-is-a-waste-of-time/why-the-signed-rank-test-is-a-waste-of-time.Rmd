@@ -1,7 +1,7 @@
 ---
 title: "Why the signed rank test is a waste of time"
 description: |
-  A short description of the post.
+  The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it.
 author:
   - name: Ken Butler
     url: http://ritsokiguess.site/blog
@@ -9,7 +9,6 @@ date: 2022-05-04
 output:
   distill::distill_article:
     self_contained: false
-draft: true
 ---
 
 # packages
@@ -25,7 +24,7 @@ library(tidyverse)
 set.seed(457299)
 ```
 
-Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean is some value, like 10. The standard test is the one-sample $t$-test, where here we are pretending that we have a reason to know that the mean is greater than 15 if it is not 15:
+Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean or median is some value, like 15. The standard test is the one-sample $t$-test, where here we are pretending that we have a reason to know that the mean is greater than 15 if it is not 15:
 
 ```{r}
 x <- rnorm(n = 10, mean = 16, sd = 3)
@@ -43,7 +42,7 @@ The theory behind the $t$-test is that the population from which the sample is t
 ggplot(tibble(x), aes(sample = x)) + stat_qq() + stat_qq_line()
 ```
 
-With a small sample, it is hard to detect whether a deviation from normality like this indicates a non-normal population or is just randomness. (In this case, I actually generated my sample from a normal distribution, so I know the answer here is randomness.)
+With a small sample, it is hard to detect whether a deviation from normality like this indicates a non-normal population or is just randomness.^[This is a good place to use Di Cook's idea of a "line-up", where you generate eight normal quantile plots of actual normal data, and then add your actual normal quantile plot, shuffle them around, and see whether you can pick which one is your data. If you can, your data is different from what random normals would produce.] In this case, I actually generated my sample from a normal distribution, so I know the answer here is randomness.
 
 There is another issue here, the Central Limit Theorem. This says, in words, that the sampling  distribution of the sample mean from a large sample will be approximately normal, *no matter what the population distribution is*. How close the approximation is will depend on how non-normal the population is; if the population is very non-normal (for example, very skewed or has extreme outliers), it might take a very large sample for the approximation to be of any use.
 
@@ -87,29 +86,29 @@ tibble(sim = 1:1000) %>%
   ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line()
 ```
 
-This time, the normal quantile plot definitely strays from the line in a way that indicates a right-skewed non-normal sampling distribution of the sample mean. With the same sample size, if the population is as skewed as a chi-squared distribution with 12 degrees of freedom, the $t$-test is fine, but if it is as skewed as a chi-squared distribution with 3 degrees of freedom, the $t$-test is at best questionable.
+This time, the normal quantile plot definitely strays from the line in a way that indicates a right-skewed non-normal sampling distribution of the sample mean. With this sample size, if the population is as skewed as a chi-squared distribution with 12 degrees of freedom, the $t$-test is fine, but if it is as skewed as a chi-squared distribution with 3 degrees of freedom, the $t$-test is at best questionable.
 
-So, consideration of whether to use a $t$-test has two parts: how *normal* the population is (answered by asking how normal your *sample* is), and how *large* the sample is. The larger the sample size is, the less the normality  matters, but it is an awkward judgement call to assess whether the non-normality in the data distribution matters enough given the sample size.
+So, consideration of whether to use a $t$-test has two parts: how *normal* the population is (answered by asking how normal your *sample* is), and how *large* the sample is. The larger the sample size is, the less the normality  matters, but it is an awkward judgement call to assess whether the non-normality in the data distribution matters enough given the sample size.^[When you have actual data from some unknown distribution, one way to get a sense of the sampling distribution of the sample mean is to use the bootstrap: generate a large number of samples *from the sample* with replacement, work out the mean of each one, and then see whether that distribution of sample means is close to normal. This is still a subjective call, but at least it is only one thing to assess, rather than having to combine an assessment of normality with an assessment of sample size.]
 
 # the sign test
 
 If you have decided that your sample does not have close enough to a normal distribution (given the sample size), and therefore that you should not be using the $t$-test, what do you do? Two standard options are the sign test and the signed-rank test, with the latter often being recommended over the former because of the former's lack of power. 
 These tests are both non-parametric, in that they do not depend on the data having (at least approximately) any specific distribution. 
 
-For the sign test, you count how many of your observations are above and below the null median:
+For the sign test, you count how many of your observations are above and below the null median. Here we use the same data as we used for the $t$-test:
 
 ```{r}
 tibble(x) %>% 
   count(x > 15)
 ```
 
-The number of values (say) below the null median is the test statistic. If the null hypothesis is true, each value is independently either above or below the null median with probability 0.5, and thus the test statistic has a binomial distribution with $n$ equal to the sample size and $p = 0.5$. Hence the P-value for an upper-tailed test is 
+The number of values (say) above the null median is the test statistic. If the null hypothesis is true, each value is independently either above or below the null median with probability 0.5, and thus the test statistic has a binomial distribution with $n$ equal to the sample size and $p = 0.5$. Hence the P-value for an upper-tailed test is 
 
 ```{r}
 sum(dbinom(7:10, size = 10, prob = 0.5))
 ```
 
-The split of 7 values above 15 and 3 below is close to 50--50, and so the P-value is large, much larger than for the $t$-test.
+The split of 7 values above 15 and 3 below is still fairly close^[In the sense that if you tossed a fair coin 10 times, you would not be terribly surprised to see 7 heads and 3 tails.] to 50--50, and so the P-value is large, much larger than for the $t$-test.
 
 The sign test does not use the data very efficiently: it only counts whether each data value is above or below the hypothesized median. Thus, if you are in a position to use the $t$-test that uses the actual data values, you should do so. 
 However, it is completely assumption-free: as long as the observations really are independent, it does not matter at all what the population distribution looks like.
@@ -118,7 +117,7 @@ However, it is completely assumption-free: as long as the observations really ar
 
 The signed-rank test occupies a kind of middle ground between the sign test and the $t$-test.
 
-Here's how it works for our data, testing for a median^[I come back to this issue later] of 15, against an upper-tailed alternative:
+Here's how it works for our data, testing for a median of 15, against an upper-tailed alternative:
 
 ```{r}
 tibble(x) %>% 
@@ -128,7 +127,7 @@ tibble(x) %>%
 d
 ```
 
-Subtract the hypothesized median from each data value, and then rank them smallest to largest in terms of absolute value. The smallest difference in size is 0.193, which gets rank 1, and the largest in size is $5.87$, which gets rank 10. One of the negative differences is $-2.23$, which is the fifth largest in size (has rank 6). 
+Subtract the hypothesized median from each data value, and then rank the differences from smallest to largest in terms of absolute value. The smallest difference in size is 0.193, which gets rank 1, and the largest in size is $5.87$, which gets rank 10. One of the negative differences is $-2.23$, which is the fifth largest in size (has rank 6). 
 
 The next stage is to sum up the ranks separately for the positive and negative differences:
 
@@ -137,7 +136,7 @@ d %>% group_by(diff > 0) %>%
   summarize(sum = sum(rk))
 ```
 
-There are only three negative differences, so their ranks add up to only 13, compared to a sum of 42 for the positive differences. For an upper-tailed test, the test statistic is the sum of the positive differences, which, if *large* enough, will lead to rejection of the null hypothesis.
+There are only three negative differences, so their ranks add up to only 13, compared to a sum of 42 for the positive differences.^[The three negative differences average to a rank of about 4.3, while the seven positive differences average to a rank of 6. Thus the positive differences are typically bigger in size than the negative ones are.] For an upper-tailed test, the test statistic is the sum of the positive differences, which, if *large* enough, will lead to rejection of the null hypothesis.
 
 Is 42 large enough to reject the null with?
 
@@ -182,15 +181,15 @@ Since the null hypothesis is true, the P-values should have a uniform distributi
 ggplot(dd, aes(x = my_p)) + geom_histogram(bins = 12)
 ```
 
-That doesn't look very uniform, but rather skewed to the right, with too many low values, so that the test rejects more often than it should:
+That doesn't look very uniform, but rather skewed to the right, with too many low values, so that the test rejects more often than it should:^[A 95% confidence interval for the true type I error probability is from 0.075 to 0.086, so it is definitely higher than 0.05. `prop.test` is a nice way to get this interval.]
 
 ```{r}
 dd %>% count(my_p <= 0.05)
 ```
 
-A supposed test at $\alpha = 0.05$ actually has a probability near 0.08 of making a type 1 error.  (That's why I did 10,000 simulations, in the hopes of eliminating sampling variability as a reason for it being different than 0.05.)
+A supposed test at $\alpha = 0.05$ actually has a probability near 0.08 of making a type I error.  (That's why I did 10,000 simulations, in the hopes of eliminating sampling variability as a reason for it being different than 0.05.)
 
-To investigate what happened, let's look at one random sample and see whether we can reason it out:
+To investigate what happened, let's look at one random sample and see whether we can reason it out:^[I am cheating and using one that I think makes the point clear.]
 
 ```{r}
 set.seed(457297)
@@ -223,4 +222,15 @@ This seems like a bit of a difference in rank sums, given that the null hypothes
 
 Why did this happen, and why might it happen again? The population distribution is skewed to the right, so that there will occasionally be sample values *much* larger than the null median (even if that median is correct). There can not be sample values much *smaller* than the null median, because the distribution is bunched up at the bottom. That means that the positive differences will tend to be the largest ones in size, and hence the test statistic will tend to be bigger, and the P-value smaller, than ought to be the case.
 
-The usual get-out for this is to say that the signed-rank test only applies to symmetric distributions
+# conclusions
+
+The usual get-out for the above is to say that the signed-rank test only applies to symmetric distributions. Except that, one of the principal ways that the $t$-test can fail is that the population distribution is skewed, and what we are then saying is that in that situation, we cannot use the signed-rank test either. Really, the only situation in which the signed-rank test has any value is when the population is symmetric with long tails or outliers, which seems to me a small fraction of the times when you would not want to use a $t$-test.
+
+So, the official recommendation is:
+
+- when the population distribution seems normal enough (given the sample size), use the $t$-test
+- when the population distribution is not normal enough but is apparently symmetric, use the signed-rank test
+- otherwise, use the sign test.
+
+The second of those seems a bit unlikely (or unlikely to be sure enough about in practice), so that when I teach this stuff, it's the $t$-test or the  sign test. As I have explained, the signed-rank test is only very rarely useful, and therefore, I contend, it is a waste of time to learn about it.
+

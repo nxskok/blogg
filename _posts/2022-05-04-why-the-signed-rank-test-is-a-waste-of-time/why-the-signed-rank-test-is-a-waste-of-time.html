@@ -88,7 +88,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_meta_tags-->
   <title>Why the signed rank test is a waste of time</title>
 
-  <meta property="description" itemprop="description" content="A short description of the post."/>
+  <meta property="description" itemprop="description" content="The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it."/>
 
 
   <!--  https://schema.org/Article -->
@@ -99,19 +99,19 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Why the signed rank test is a waste of time"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="A short description of the post."/>
+  <meta property="og:description" content="The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it."/>
   <meta property="og:locale" content="en_US"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Why the signed rank test is a waste of time"/>
-  <meta property="twitter:description" content="A short description of the post."/>
+  <meta property="twitter:description" content="The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it."/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","draft"]}},"value":[{"type":"character","attributes":{},"value":["Why the signed rank test is a waste of time"]},{"type":"character","attributes":{},"value":["A short description of the post.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blog"]}]}]},{"type":"character","attributes":{},"value":["2022-05-04"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"logical","attributes":{},"value":[true]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Why the signed rank test is a waste of time"]},{"type":"character","attributes":{},"value":["The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blog"]}]}]},{"type":"character","attributes":{},"value":["2022-05-04"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1458,7 +1458,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Why the signed rank test is a waste of time","description":"A short description of the post.","authors":[{"author":"Ken Butler","authorURL":"http://ritsokiguess.site/blog","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-05-04T00:00:00.000-04:00","citationText":"Butler, 2022"}
+{"title":"Why the signed rank test is a waste of time","description":"The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it.","authors":[{"author":"Ken Butler","authorURL":"http://ritsokiguess.site/blog","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-05-04T00:00:00.000-04:00","citationText":"Butler, 2022"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1471,7 +1471,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>Why the signed rank test is a waste of time</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>A short description of the post.</p></p>
+<p><p>The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it.</p></p>
 </div>
 
 <div class="d-byline">
@@ -1492,7 +1492,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
-<p>Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean is some value, like 10. The standard test is the one-sample <span class="math inline">\(t\)</span>-test, where here we are pretending that we have a reason to know that the mean is greater than 15 if it is not 15:</p>
+<p>Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean or median is some value, like 15. The standard test is the one-sample <span class="math inline">\(t\)</span>-test, where here we are pretending that we have a reason to know that the mean is greater than 15 if it is not 15:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>10</span>, mean <span class='op'>=</span> <span class='fl'>16</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
@@ -1527,9 +1527,9 @@ mean of x
 </div>
 <p><img src="why-the-signed-rank-test-is-a-waste-of-time_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
 </div>
-<p>With a small sample, it is hard to detect whether a deviation from normality like this indicates a non-normal population or is just randomness. (In this case, I actually generated my sample from a normal distribution, so I know the answer here is randomness.)</p>
+<p>With a small sample, it is hard to detect whether a deviation from normality like this indicates a non-normal population or is just randomness.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> In this case, I actually generated my sample from a normal distribution, so I know the answer here is randomness.</p>
 <p>There is another issue here, the Central Limit Theorem. This says, in words, that the sampling distribution of the sample mean from a large sample will be approximately normal, <em>no matter what the population distribution is</em>. How close the approximation is will depend on how non-normal the population is; if the population is very non-normal (for example, very skewed or has extreme outliers), it might take a very large sample for the approximation to be of any use.</p>
-<p>Example: the chi-squared distribution is right-skewed, with one parameter, the degrees of freedom. As the degrees of freedom increases, the distribution becomes less skewed and more normal in shape.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Example: the chi-squared distribution is right-skewed, with one parameter, the degrees of freedom. As the degrees of freedom increases, the distribution becomes less skewed and more normal in shape.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>Consider the chi-squared distribution with 12 df:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1575,11 +1575,11 @@ mean of x
 </div>
 <p><img src="why-the-signed-rank-test-is-a-waste-of-time_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
 </div>
-<p>This time, the normal quantile plot definitely strays from the line in a way that indicates a right-skewed non-normal sampling distribution of the sample mean. With the same sample size, if the population is as skewed as a chi-squared distribution with 12 degrees of freedom, the <span class="math inline">\(t\)</span>-test is fine, but if it is as skewed as a chi-squared distribution with 3 degrees of freedom, the <span class="math inline">\(t\)</span>-test is at best questionable.</p>
-<p>So, consideration of whether to use a <span class="math inline">\(t\)</span>-test has two parts: how <em>normal</em> the population is (answered by asking how normal your <em>sample</em> is), and how <em>large</em> the sample is. The larger the sample size is, the less the normality matters, but it is an awkward judgement call to assess whether the non-normality in the data distribution matters enough given the sample size.</p>
+<p>This time, the normal quantile plot definitely strays from the line in a way that indicates a right-skewed non-normal sampling distribution of the sample mean. With this sample size, if the population is as skewed as a chi-squared distribution with 12 degrees of freedom, the <span class="math inline">\(t\)</span>-test is fine, but if it is as skewed as a chi-squared distribution with 3 degrees of freedom, the <span class="math inline">\(t\)</span>-test is at best questionable.</p>
+<p>So, consideration of whether to use a <span class="math inline">\(t\)</span>-test has two parts: how <em>normal</em> the population is (answered by asking how normal your <em>sample</em> is), and how <em>large</em> the sample is. The larger the sample size is, the less the normality matters, but it is an awkward judgement call to assess whether the non-normality in the data distribution matters enough given the sample size.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <h1 id="the-sign-test">the sign test</h1>
 <p>If you have decided that your sample does not have close enough to a normal distribution (given the sample size), and therefore that you should not be using the <span class="math inline">\(t\)</span>-test, what do you do? Two standard options are the sign test and the signed-rank test, with the latter often being recommended over the former because of the former’s lack of power. These tests are both non-parametric, in that they do not depend on the data having (at least approximately) any specific distribution.</p>
-<p>For the sign test, you count how many of your observations are above and below the null median:</p>
+<p>For the sign test, you count how many of your observations are above and below the null median. Here we use the same data as we used for the <span class="math inline">\(t\)</span>-test:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
@@ -1592,7 +1592,7 @@ mean of x
 1 FALSE        3
 2 TRUE         7</code></pre>
 </div>
-<p>The number of values (say) below the null median is the test statistic. If the null hypothesis is true, each value is independently either above or below the null median with probability 0.5, and thus the test statistic has a binomial distribution with <span class="math inline">\(n\)</span> equal to the sample size and <span class="math inline">\(p = 0.5\)</span>. Hence the P-value for an upper-tailed test is</p>
+<p>The number of values (say) above the null median is the test statistic. If the null hypothesis is true, each value is independently either above or below the null median with probability 0.5, and thus the test statistic has a binomial distribution with <span class="math inline">\(n\)</span> equal to the sample size and <span class="math inline">\(p = 0.5\)</span>. Hence the P-value for an upper-tailed test is</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>dbinom</a></span><span class='op'>(</span><span class='fl'>7</span><span class='op'>:</span><span class='fl'>10</span>, size <span class='op'>=</span> <span class='fl'>10</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
@@ -1600,11 +1600,11 @@ mean of x
 </div>
 <pre><code>[1] 0.171875</code></pre>
 </div>
-<p>The split of 7 values above 15 and 3 below is close to 50–50, and so the P-value is large, much larger than for the <span class="math inline">\(t\)</span>-test.</p>
+<p>The split of 7 values above 15 and 3 below is still fairly close<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> to 50–50, and so the P-value is large, much larger than for the <span class="math inline">\(t\)</span>-test.</p>
 <p>The sign test does not use the data very efficiently: it only counts whether each data value is above or below the hypothesized median. Thus, if you are in a position to use the <span class="math inline">\(t\)</span>-test that uses the actual data values, you should do so. However, it is completely assumption-free: as long as the observations really are independent, it does not matter at all what the population distribution looks like.</p>
 <h1 id="the-signed-rank-test">the signed rank test</h1>
 <p>The signed-rank test occupies a kind of middle ground between the sign test and the <span class="math inline">\(t\)</span>-test.</p>
-<p>Here’s how it works for our data, testing for a median<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> of 15, against an upper-tailed alternative:</p>
+<p>Here’s how it works for our data, testing for a median of 15, against an upper-tailed alternative:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
@@ -1628,7 +1628,7 @@ mean of x
  9  16.0  1.01     1.01      2
 10  19.3  4.29     4.29      9</code></pre>
 </div>
-<p>Subtract the hypothesized median from each data value, and then rank them smallest to largest in terms of absolute value. The smallest difference in size is 0.193, which gets rank 1, and the largest in size is <span class="math inline">\(5.87\)</span>, which gets rank 10. One of the negative differences is <span class="math inline">\(-2.23\)</span>, which is the fifth largest in size (has rank 6).</p>
+<p>Subtract the hypothesized median from each data value, and then rank the differences from smallest to largest in terms of absolute value. The smallest difference in size is 0.193, which gets rank 1, and the largest in size is <span class="math inline">\(5.87\)</span>, which gets rank 10. One of the negative differences is <span class="math inline">\(-2.23\)</span>, which is the fifth largest in size (has rank 6).</p>
 <p>The next stage is to sum up the ranks separately for the positive and negative differences:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1642,7 +1642,7 @@ mean of x
 1 FALSE         13
 2 TRUE          42</code></pre>
 </div>
-<p>There are only three negative differences, so their ranks add up to only 13, compared to a sum of 42 for the positive differences. For an upper-tailed test, the test statistic is the sum of the positive differences, which, if <em>large</em> enough, will lead to rejection of the null hypothesis.</p>
+<p>There are only three negative differences, so their ranks add up to only 13, compared to a sum of 42 for the positive differences.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> For an upper-tailed test, the test statistic is the sum of the positive differences, which, if <em>large</em> enough, will lead to rejection of the null hypothesis.</p>
 <p>Is 42 large enough to reject the null with?</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1706,7 +1706,7 @@ alternative hypothesis: true location is greater than 15</code></pre>
 </div>
 <p><img src="why-the-signed-rank-test-is-a-waste-of-time_files/figure-html5/unnamed-chunk-16-1.png" width="624" /></p>
 </div>
-<p>That doesn’t look very uniform, but rather skewed to the right, with too many low values, so that the test rejects more often than it should:</p>
+<p>That doesn’t look very uniform, but rather skewed to the right, with too many low values, so that the test rejects more often than it should:<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dd</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>my_p</span> <span class='op'>&lt;=</span> <span class='fl'>0.05</span><span class='op'>)</span>
@@ -1719,8 +1719,8 @@ alternative hypothesis: true location is greater than 15</code></pre>
 1 FALSE           9194
 2 TRUE             806</code></pre>
 </div>
-<p>A supposed test at <span class="math inline">\(\alpha = 0.05\)</span> actually has a probability near 0.08 of making a type 1 error. (That’s why I did 10,000 simulations, in the hopes of eliminating sampling variability as a reason for it being different than 0.05.)</p>
-<p>To investigate what happened, let’s look at one random sample and see whether we can reason it out:</p>
+<p>A supposed test at <span class="math inline">\(\alpha = 0.05\)</span> actually has a probability near 0.08 of making a type I error. (That’s why I did 10,000 simulations, in the hopes of eliminating sampling variability as a reason for it being different than 0.05.)</p>
+<p>To investigate what happened, let’s look at one random sample and see whether we can reason it out:<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>457297</span><span class='op'>)</span>
@@ -1760,8 +1760,7 @@ alternative hypothesis: true location is greater than 15</code></pre>
  9 1.29  -1.08     1.08      3
 10 0.663 -1.70     1.70      5</code></pre>
 </div>
-<p>This one is perhaps not a typical one in that there are only two</p>
-<p>and the test statistic is</p>
+<p>There are five positive and five negative differences, exactly as we would expect. But the positive differences are the <em>four largest ones in size</em>, so that the sum of the ranks for the positive differences is quite a bit larger than the sum of the ranks for the negative differences: 36 as against 19:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>d</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
@@ -1776,12 +1775,27 @@ alternative hypothesis: true location is greater than 15</code></pre>
 2 TRUE          36</code></pre>
 </div>
 <p>This seems like a bit of a difference in rank sums, given that the null hypothesis is actually <em>true</em>.</p>
+<p>Why did this happen, and why might it happen again? The population distribution is skewed to the right, so that there will occasionally be sample values <em>much</em> larger than the null median (even if that median is correct). There can not be sample values much <em>smaller</em> than the null median, because the distribution is bunched up at the bottom. That means that the positive differences will tend to be the largest ones in size, and hence the test statistic will tend to be bigger, and the P-value smaller, than ought to be the case.</p>
+<h1 id="conclusions">conclusions</h1>
+<p>The usual get-out for the above is to say that the signed-rank test only applies to symmetric distributions. Except that, one of the principal ways that the <span class="math inline">\(t\)</span>-test can fail is that the population distribution is skewed, and what we are then saying is that in that situation, we cannot use the signed-rank test either. Really, the only situation in which the signed-rank test has any value is when the population is symmetric with long tails or outliers, which seems to me a small fraction of the times when you would not want to use a <span class="math inline">\(t\)</span>-test.</p>
+<p>So, the official recommendation is:</p>
+<ul>
+<li>when the population distribution seems normal enough (given the sample size), use the <span class="math inline">\(t\)</span>-test</li>
+<li>when the population distribution is not normal enough but is apparently symmetric, use the signed-rank test</li>
+<li>otherwise, use the sign test.</li>
+</ul>
+<p>The second of those seems a bit unlikely (or unlikely to be sure enough about in practice), so that when I teach this stuff, it’s the <span class="math inline">\(t\)</span>-test or the sign test. As I have explained, the signed-rank test is only very rarely useful, and therefore, I contend, it is a waste of time to learn about it.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>In the limit as degrees of freedom increases, the distribution <em>is</em> normal.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>I come back to this issue later<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1" role="doc-endnote"><p>This is a good place to use Di Cook’s idea of a “line-up”, where you generate eight normal quantile plots of actual normal data, and then add your actual normal quantile plot, shuffle them around, and see whether you can pick which one is your data. If you can, your data is different from what random normals would produce.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>In the limit as degrees of freedom increases, the distribution <em>is</em> normal.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>When you have actual data from some unknown distribution, one way to get a sense of the sampling distribution of the sample mean is to use the bootstrap: generate a large number of samples <em>from the sample</em> with replacement, work out the mean of each one, and then see whether that distribution of sample means is close to normal. This is still a subjective call, but at least it is only one thing to assess, rather than having to combine an assessment of normality with an assessment of sample size.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>In the sense that if you tossed a fair coin 10 times, you would not be terribly surprised to see 7 heads and 3 tails.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>The three negative differences average to a rank of about 4.3, while the seven positive differences average to a rank of 6. Thus the positive differences are typically bigger in size than the negative ones are.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>A 95% confidence interval for the true type I error probability is from 0.075 to 0.086, so it is definitely higher than 0.05. <code>prop.test</code> is a nice way to get this interval.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>I am cheating and using one that I think makes the point clear.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 <!--radix_placeholder_article_footer-->

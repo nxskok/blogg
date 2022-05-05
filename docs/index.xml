@@ -7,7 +7,16 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 04 May 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Why the signed rank test is a waste of time</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2022-05-04-why-the-signed-rank-test-is-a-waste-of-time</link>
+      <description>The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it.</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2022-05-04-why-the-signed-rank-test-is-a-waste-of-time</guid>
+      <pubDate>Wed, 04 May 2022 00:00:00 +0000</pubDate>
+      <media:content url="http://ritsokiguess.site/blogg/posts/2022-05-04-why-the-signed-rank-test-is-a-waste-of-time/why-the-signed-rank-test-is-a-waste-of-time_files/figure-html5/unnamed-chunk-4-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Kommentar</title>
       <dc:creator>Ken Butler</dc:creator>
