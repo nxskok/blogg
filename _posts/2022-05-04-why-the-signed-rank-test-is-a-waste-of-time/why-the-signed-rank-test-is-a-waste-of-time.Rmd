@@ -25,15 +25,15 @@ library(tidyverse)
 set.seed(457299)
 ```
 
-Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean is some value, like 10. The standard test is the one-sample $t$-test:
+Suppose we have one sample of independent, identically distributed observations from some population, and we want to see whether we believe the population mean is some value, like 10. The standard test is the one-sample $t$-test, where here we are pretending that we have a reason to know that the mean is greater than 15 if it is not 15:
 
 ```{r}
-x <- rnorm(n = 10, mean = 13, sd = 3)
+x <- rnorm(n = 10, mean = 16, sd = 3)
 x
-t.test(x, mu = 15)
+t.test(x, mu = 15, alternative = "greater")
 ```
 
-In this case, the P-value is 0.1055, so we do not reject the null hypothesis that the population mean is 10: there is no evidence (at $\alpha = 0.05$) that the population mean is different from 10.^[This is, by default, a two-sided test. Use something like `alternative = "greater"` to do a one-sided test.] In this case, we have made a type II error, because the population mean is actually 8, and so the null hypothesis is actually wrong but we failed to reject it.
+In this case, the P-value is 0.0542, so we do not quite reject the null hypothesis that the population mean is 15: there is no evidence (at $\alpha = 0.05$) that the population mean is greater than 15. In this case, we have made a type II error, because the population mean is actually 16, and so the null hypothesis is actually wrong but we failed to reject it.
 
 We use these data again later.
 
@@ -103,13 +103,13 @@ tibble(x) %>%
   count(x > 15)
 ```
 
-The number of values (say) below the null median is the test statistic. If the null hypothesis is true, each value is independently either above or below the null median with probability 0.5, and thus the test statistic has a binomial distribution with $n$ equal to the sample size and $p = 0.5$. Hence the P-value for a two-sided test is 
+The number of values (say) below the null median is the test statistic. If the null hypothesis is true, each value is independently either above or below the null median with probability 0.5, and thus the test statistic has a binomial distribution with $n$ equal to the sample size and $p = 0.5$. Hence the P-value for an upper-tailed test is 
 
 ```{r}
-2*sum(dbinom(6:10, size = 10, prob = 0.5))
+sum(dbinom(7:10, size = 10, prob = 0.5))
 ```
 
-counting upwards from 6 because 6 is above halfway in the null distribution, and multiplying by two to get a two-sided P-value. The split of 4 values above 10 and 6 below is very close to 50--50, and so the P-value is large, much larger than for the $t$-test.
+The split of 7 values above 15 and 3 below is close to 50--50, and so the P-value is large, much larger than for the $t$-test.
 
 The sign test does not use the data very efficiently: it only counts whether each data value is above or below the hypothesized median. Thus, if you are in a position to use the $t$-test that uses the actual data values, you should do so. 
 However, it is completely assumption-free: as long as the observations really are independent, it does not matter at all what the population distribution looks like.
@@ -118,7 +118,7 @@ However, it is completely assumption-free: as long as the observations really ar
 
 The signed-rank test occupies a kind of middle ground between the sign test and the $t$-test.
 
-Here's how it works for our data, testing for a median^[I come back to this issue later] of 10:
+Here's how it works for our data, testing for a median^[I come back to this issue later] of 15, against an upper-tailed alternative:
 
 ```{r}
 tibble(x) %>% 
@@ -128,7 +128,7 @@ tibble(x) %>%
 d
 ```
 
-Subtract the hypothesized median from each data value, and then rank them smallest to largest in terms of absolute value. The smallest difference in size is 0.127, which gets rank 1, and the largest in size is $-5.23$, which gets rank 10. 
+Subtract the hypothesized median from each data value, and then rank them smallest to largest in terms of absolute value. The smallest difference in size is 0.193, which gets rank 1, and the largest in size is $5.87$, which gets rank 10. One of the negative differences is $-2.23$, which is the fifth largest in size (has rank 6). 
 
 The next stage is to sum up the ranks separately for the positive and negative differences:
 
@@ -137,17 +137,15 @@ d %>% group_by(diff > 0) %>%
   summarize(sum = sum(rk))
 ```
 
-There are only four positive differences, including the two smallest differences in size, so their ranks add up to only 13, compared to a sum of 42 for the negative differences. The standard procedure is to take the smaller of these as the test statistic (for a two-sided test), so the test statistic here is 13. 
+There are only three negative differences, so their ranks add up to only 13, compared to a sum of 42 for the positive differences. For an upper-tailed test, the test statistic is the sum of the positive differences, which, if *large* enough, will lead to rejection of the null hypothesis.
 
-If the null hypothesis is true, we would expect the positive and negative differences to have ranks that add up to about the same, so the test statistic would be large (the largest it could be is 27, since the ranks 1 through 10 add up to 55 and the most even split is 28 and 27). If the null hypothesis is false, most of the big differences will be on one side, so the test statistic will be small. Here, the test statistic is at least somewhat small; the difference from the sign test is that two of the four positive differences are close to zero and have small ranks, so that even though four ranks are being summed, two of them are small.
-
-Is 13 small enough to reject the null with?
+Is 42 large enough to reject the null with?
 
 ```{r}
-wilcox.test(x, mu = 15)
+wilcox.test(x, mu = 15, alternative = "greater")
 ```
 
-The P-value is 0.1602, not small enough to reject the null median of 10.  It is a little bigger than for the $t$-test, but a lot smaller than for the sign test.
+The P-value is 0.0801, not small enough to reject the null median of 15 in favour of a larger value.  It is a little bigger than for the $t$-test, but smaller than for the sign test.
 
 A historical note: the name usually attached to the signed-rank test is [Frank Wilcoxon](https://en.wikipedia.org/wiki/Frank_Wilcoxon). He worked out the null distribution of the signed rank statistic (an exercise in combinatorics). 
 
@@ -167,10 +165,10 @@ med <- qchisq(0.5, 3)
 med
 ```
 
-and away we go:
+and away we go. I'll do 10,000 simulations this time:
 
-```{r}
-tibble(sim=1:1000) %>% 
+```{r,cache=TRUE}
+tibble(sim=1:10000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rchisq(10, 3))) %>% 
   mutate(my_test = list(wilcox.test(my_sample, mu = med, alternative = "greater"))) %>% 
@@ -180,29 +178,28 @@ dd
 
 Since the null hypothesis is true, the P-values should have a uniform distribution:
 
-
-```{r}
-ggplot(dd, aes(sample = my_p)) + stat_qq(distribution = qunif) + stat_qq_line(distribution = qunif)
-```
-
 ```{r}
 ggplot(dd, aes(x = my_p)) + geom_histogram(bins = 12)
 ```
 
-That doesn't look very uniform. To investigate what happened, let's 
+That doesn't look very uniform, but rather skewed to the right, with too many low values, so that the test rejects more often than it should:
+
+```{r}
+dd %>% count(my_p <= 0.05)
+```
+
+A supposed test at $\alpha = 0.05$ actually has a probability near 0.08 of making a type 1 error.  (That's why I did 10,000 simulations, in the hopes of eliminating sampling variability as a reason for it being different than 0.05.)
+
+To investigate what happened, let's look at one random sample and see whether we can reason it out:
+
+```{r}
+set.seed(457297)
+```
 
 ```{r}
 x <- rchisq(10, 3)
 x
 ```
-
-This distribution has this median:
-
-```{r}
-med <- qchisq(0.5, 3)
-med
-```
-
 
 and go through the calculations for the signed rank statistic again:
 
@@ -214,7 +211,7 @@ tibble(x) %>%
 d
 ```
 
-and the test statistic is
+There are five positive and five negative differences, exactly as we would expect. But the positive differences are the *four largest ones in size*, so that the sum of the ranks for the positive differences is quite a bit larger than the sum of the ranks for the negative differences: 36 as against 19:
 
 ```{r}
 d %>% 
@@ -223,3 +220,7 @@ d %>%
 ```
 
 This seems like a bit of a difference in rank sums, given that the null hypothesis is actually *true*. 
+
+Why did this happen, and why might it happen again? The population distribution is skewed to the right, so that there will occasionally be sample values *much* larger than the null median (even if that median is correct). There can not be sample values much *smaller* than the null median, because the distribution is bunched up at the bottom. That means that the positive differences will tend to be the largest ones in size, and hence the test statistic will tend to be bigger, and the P-value smaller, than ought to be the case.
+
+The usual get-out for this is to say that the signed-rank test only applies to symmetric distributions
