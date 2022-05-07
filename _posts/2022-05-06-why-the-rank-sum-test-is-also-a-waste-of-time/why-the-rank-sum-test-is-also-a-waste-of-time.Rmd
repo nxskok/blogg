@@ -1,0 +1,209 @@
+---
+title: "Why the rank sum test is also a waste of time"
+description: |
+  In the same way that the signed rank test is mostly a waste of time, here I argue that the rank sum test is very rarely useful, and offer a less well-known test to use instead.
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blog
+date: 2022-05-06
+output:
+  distill::distill_article:
+    self_contained: false
+draft: true
+---
+
+# Introduction
+
+In a [previous post](http://ritsokiguess.site/blogg/posts/2022-05-04-why-the-signed-rank-test-is-a-waste-of-time/), I argued that the signed rank test is a waste of time (to learn and to do) in all but unlikely cases. In this post, I argue that the same is true for the rank sum test (Mann-Whitney test, Wilcoxon two-sample rank sum test), and suggest a much-neglected test to use instead.
+
+# Packages
+
+```{r}
+library(tidyverse)
+library(smmr)
+```
+
+The package `smmr` is one that I wrote myself, and lives on Github [here](https://github.com/nxskok/smmr). It may be installed using `install_github` from package `remotes`, or using `pkg_install` from package `pak`.
+
+# The two-sample $t$-test
+
+The two-sample $t$-test is probably your first idea for comparing (means of) two independent samples from two different populations, such as one set of people who undergo some (real) treatment and a different set of people who undergo some different (eg. placebo) treatment. (If each person undergoes *both* treatments, this is matched pairs, and requires a one-sample test on the *differences* between the outcomes on each treatment for each person.)
+
+There are actually two flavours of two-sample $t$-test: 
+
+- If you took a mathematical statistics class, you most likely learned about the *pooled test*. Here, as well as the normality assumption that we talk about later, it is assumed that the two populations have the *same variance*, which makes the algebra a lot easier. (To run the test, we estimate the common variance by making a weighted average of the two sample variances.) 
+- The default used by R's `t.test` is a different test due to Welch and to Satterthwaite.^[Two independent pieces of work that came to the same answer.] This does not assume equal variances, but the test statistic (obtained by estimating each population's variance separately) does not have an exact $t$-distribution. It is assumed that the test statistic has a $t$-distribution with a different (usually fractional) degrees of freedom that Welch and Satterthwaite each give a formula for; this assumption is usually good.
+
+In practice, when both tests apply, the two tests usually give very similar P-values, and so there is no harm in only ever using the Welch-Satterthwaite test, and thus the pooled $t$-test is really only a curiosity of math stat classes. If you really want the pooled test, you have to ask `t.test` for it specifically (using `var.equal = TRUE`). If the two populations have different variances, then the pooled test can be very misleading. To illustrate, first from populations with equal variances. Before that, though, generating the random samples in long format is a bit annoying, so I define a function to do that first, with the sample sizes, population means, and population SDs as vector input (each of length 2:
+
+```{r}
+gen_sample <- function(n, mean, sd) {
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    rowwise() %>% 
+    mutate(z = list(rnorm(n, mean, sd))) %>% 
+    unnest(z) %>% 
+    select(gp, z)
+}
+```
+
+The simulated data values are called `z` and the groups are called `x` and `y` in column `gp`.
+
+Now we generate some data and run the two flavours of $t$-test on it:
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+
+```{r}
+d1 <- gen_sample(c(10, 10), c(100, 140), c(30, 30))
+t.test(z ~ gp, data = d1)
+t.test(z ~ gp, data = d1, var.equal = TRUE)
+```
+
+In this case, the P-values are almost identical. 
+
+Let's try it again, but this time group $y$ has a smaller sample and also a larger variance:
+
+```{r}
+d2 <- gen_sample(c(10, 5), c(100, 140), c(30, 60))
+t.test(z ~ gp, data = d2)
+t.test(z ~ gp, data = d2, var.equal = TRUE)
+```
+
+This time, the pooled test has a much smaller P-value, which makes us think there is a real difference between the means, even though the (correct^[Because the variances are different now.]) Welch test says that the evidence is not strong enough.
+
+If the smaller sample had come from the population with smaller variance, things would not have been so bad estimation-wise, but having the small sample be less informative about its population mean is asking for trouble.
+
+The same derivation that Welch used applies to a comparison of any number of groups, so there is also a Welch ANOVA for comparing the means of three or more groups, without assuming equal variances. Likewise, the $F$-statistic no longer has exactly an $F$ distribution, so Welch obtained an approximate denominator degrees of freedom so that the $F$-test is still good enough. R has this in `oneway.test`. Welch's ANOVA deserves to be a lot better known than it is.
+
+The two-sample $t$-tests have a normality assumption, like the one-sample $t$. Here, it is that the observations from each population have a normal distribution, independently of each other and the observations from the other population. As with a one-sample test, the Central Limit Theorem helps, and with larger sample sizes, the normality matters less. I tend to say that each sample should be close enough to normal in shape given its sample size (as you might assess with separate normal quantile plots for each sample), but this is being somewhat too stringent because the $t$ statistic for either of the two-sample tests is based on the difference between the sample means, and that will tend to be a bit more normal than either sampling distribution of the two sample means individually. You might assess this with a bootstrap distribution of the $t$-statistic (or of the difference in sample means), though this requires care to get bootstrap samples of the same size as the original ones (simply resampling rows of a long data frame will not do this).
+
+
+# The rank sum test
+
+So, what to do if the observations within each sample are not as normal as you would like? Something that is often suggested is the rank sum test, often with the names Mann and Whitney attached, and sometimes with the same name Wilcoxon that is attached to the signed rank test. I illustrate with the same data I used for the second version of the two-sample $t$:
+
+
+and then:
+
+```{r}
+wilcox.test(z ~ gp, data = d2)
+```
+
+To see where the `W = 15` came from:
+
+```{r}
+d2 %>% mutate(rk = rank(z)) %>% 
+  group_by(gp) %>% 
+  summarize(rank_sum = sum(rk),
+            n = n()) -> s1
+s1
+```
+
+The two groups are pooled together and ranked from smallest to largest, and then the ranks for each group are summed. There are only 5 observations in group `y`, so the ranks in this group are typically larger (to go with the values themselves being typically larger). To account for this, the following calculation is done:
+
+```{r}
+s1 %>% 
+  rowwise() %>% 
+  mutate(U = rank_sum - n*(n+1)/2)
+```
+
+and the smaller of the two values in `U` is the test statistic. The smaller the test statistic is, the more significant (the smallest possible value is zero). In this case, the P-value is 0.2544, not significant.
+
+Let's do another one, where the two distributions have the same mean but different variances (so that the test should fail to reject):
+
+What happens if one of the samples is more variable, even if the means and sample sizes are the same, so that the null hypothesis is still true? We should therefore reject 5% of the time still. Let's do a simulation to find out:
+
+```{r, cache=TRUE}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(gen_sample(n = c(10, 10), mean = c(100, 100), sd = c(30, 5)))) %>% 
+  mutate(my_test = list(wilcox.test(z ~ gp, data = my_sample))) %>% 
+  mutate(p_val = my_test$p.value) -> d5
+d5
+```
+
+investigate
+
+
+```{r}
+d5 %>% count(p_val <= 0.05)
+```
+
+This says: we are rejecting over 8% of the time, with a test that is supposed to reject only 5% of the time. The reason for doing 10,000 simulations is so that we can get a good sense of whether this is "really" greater than 5%:
+
+```{r}
+prop.test(824, 10000, p = 0.05)
+```
+
+The probability of incorrectly rejecting the true null is definitely not 0.05, and the confidence interval indicates that it is substantially greater than 0.05. So we should not be using the rank sum test if the two populations have different variances: in other words, the rank sum test suffers from the same problems as the pooled $t$-test.
+
+This is often stated as saying that the rank sum test is actually testing a null hypothesis of equal *distributions*, and if you reject, as you too often do here, the distributions could differ in some way other than equal means. This might be what you want (though, as this simulation shows, you do not get much power to detect unequal spreads), but in the kind of situation where you would have done a $t$-test, it most likely is not.
+
+# Mood's median test
+
+So, if the rank sum test doesn't do the job when the $t$-test doesn't, what *does*? I suggest a test that seems to be unjustly maligned called Mood's median test. It is a sort of two-sample version of the sign test, and like the sign test, it is a test for medians.^[Like the sign test, it is not very powerful when the data are actually normal, but why do you care about that?]
+
+To illustrate, let's generate some data from right-skewed chi-squared distributions: one sample with 3 df (that has mean 3) and one sample with 6 df (that has mean 6):
+
+```{r}
+tibble(df = c(3,6)) %>% 
+  rowwise() %>% 
+  mutate(z = list(rchisq(20, df))) %>% 
+  unnest(z) -> d6
+ggplot(d6, aes(x = z)) + geom_histogram(bins = 5) +
+  facet_wrap(~df, ncol = 1)
+```
+
+These do not look very normal (dissuading us from a $t$-test), and they don't seem to have the same shape of distribution (dissuading us from a rank sum test). 
+
+
+The idea behind the test is to work out the median of all the data, and then to count the number of observations above and below this grand median (much as you would for a sign test):
+
+```{r}
+med <- median(d6$z)
+med 
+table(group = d6$df, above = (d6$z > med))
+```
+
+If the two groups have the same median, about 50% of the observations in each group should be above the overall median and about 50% below. If the two groups have different medians, one of the groups will have most of its observations above the grand median, and the other one will have most of its observations below. As for the sign test, it doesn't matter how *far* above or below the grand median each observation is, just whether it *is* above or below.
+
+In the example above, knowing which group an observation is from tells you something about whether it is likely to be above or below the grand median (if the 3 df group, probably below; if the 6 df group, probably above). Hence there appears to be an *association* between group and being above or below, and you might imagine testing this with a chi-squared test for association. This is how I run the test in my `smmr` package:
+
+```{r}
+median_test(d6, z, df)
+```
+
+The P-value is definitely small enough to conclude that there *is* an association, and hence to (correctly) conclude that the two groups have different medians.
+
+A couple of technicalities:
+
+- This runs the chi-squared test *without* Yates' correction, even for 2-by-2 tables. This is to enable you to get the same result by hand-calculation, should you remember how to do that. The `chisq.test` function *does* by default use this correction for 2-by-2 tables (see the help for `chisq.test`).
+- You might have observed in this example that the row totals are fixed (each sample is of size 20, split between above and below the grand median somehow), and also the column totals are fixed (altogether 20 of the data values must be above the grand median and 20 below). This is always true, and so you might consider running Fisher's exact test here instead, which I do below. I didn't put this in my package, for a number of reasons: (i) I would have to teach my students Fisher's exact test first; (ii) depending on the level of the class, I would also have to teach the hypergeometric distribution; (iii) Mood's median test also applies to more than two groups (see below), but it is not clear to me that Fisher's exact test applies to the $k$ by 2 table you would get from $k$ groups.
+
+Fisher's exact test for the same data looks like this:
+
+```{r}
+fisher.test(table(group = d6$df, above = (d6$z > med)))
+```
+
+The P-value is bigger here, but still significant. End of technicalities.
+
+
+As the sign test does, this test counts only whether each data value is above or below something, and this is using the data inefficiently *if* the actual values are meaningful. Thus you would expect the $t$-test to be more powerful if it is valid, but this is of no concern, because in that case you would use the $t$-test. When the $t$-test is not valid, Mood's median test makes no assumptions about the data (in contrast to the rank sum test): if the two populations have the same median, about 50% of the values in each group will be above that common median, and if they don't, there will be an association between group and being above/below that the chi-squared test has a chance at finding. This is regardless of the shape of either distribution.
+
+
+# More than two groups: ANOVA revisited.
+
+You may have noticed that it doesn't really matter how many groups you have: you work out the median of all the observations and count above and below within each group, no matter how many groups there are. The null hypothesis in this case is that *all* the groups have the same median, and the alternative is "not the null". This is analogous to one-way ANOVA, where the null hypothesis is that all the groups have the same *mean*, and if rejected, there is further work to do to find which groups differ from which. You might do that with Tukey's method.
+
+You might use Mood's median test in an ANOVA-type situation where you felt that the observations within each group were not normal enough given your sample sizes. Since this test is analogous to the $F$-test, you may need a followup to decide which groups have different medians. One way to do this is to run Mood's median test on all possible pairs of groups (ignoring the data in groups other than the ones you are comparing), and then do an adjustment to the P-values like Bonferroni or Holm to account for the multiple testing.
+
+I would actually go further than this. I would begin by drawing a boxplot to assess normality and equal spreads within each group, and then:
+
+- if the data are normal enough and the spreads^[eg. as measured by the heights of the boxplot boxes, which are IQRs.] are more or less equal, do ordinary ANOVA followed by Tukey if needed.
+- if the data are normal enough but the spreads are not more or less equal, do Welch's ANOVA (see above) using `oneway.test`, following up if needed with [Games-Howell](https://aaronschlegel.me/games-howell-post-hoc-multiple-comparisons-test-python.html#:~:text=The%20Games%2DHowell%20test%20is,variances%20or%20equal%20sample%20sizes.). The Games-Howell procedure is available in package `PMCMRplus` as `gamesHowellTest`.
+- if the data are not normal enough, do Mood's median test, followed by pairwise Mood's median tests, adjusting for multiple testing.
+
+
