@@ -251,4 +251,68 @@ pairwise_median_test(InsectSprays, count, spray)
 
 though this time sprays C and D *are* significantly different, with a P-value of 0.025.
 
+# Appendix: generating samples from groups
+
+Earlier, I threw this function at you without explaining it:
+
+```{r}
+gen_sample
+```
+
+There are different ways to generate samples from different groups with possibly different means, SDs and sample sizes. This is how I like to do it. Let me take you through the process.
+
+The first step is to make a data frame with one row for each sample that will be generated. These are the inputs to the function above:
+
+```{r}
+n <- c(5, 3)
+mean <- c(20, 10)
+sd <- c(2, 1)
+tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) 
+```
+
+Evidently, in a function for public consumption, you would check that all the inputs are the same length, or you would rely on `tibble` telling you that only vectors of length 1 are recycled.^[So, for example, if both your sample sizes are the same, you could define eg `n <- 10` and it would get expanded to length 2 in the function.] The groups are for no good reason called `x` and `y`.
+
+The next two lines generate random samples, one for each group, according to the specifications, and store them each in one cell of the two-row spreadsheet:
+
+```{r}
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    rowwise() %>% 
+    mutate(z = list(rnorm(n, mean, sd))) 
+```
+
+The new column `z` is a list column, since the top cell of the column is a vector of length 5, and the bottom cell is a vector of length 3. To actually see the values they contain, we `unnest` `z`:
+
+```{r}
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    rowwise() %>% 
+    mutate(z = list(rnorm(n, mean, sd))) %>% 
+    unnest(z)
+```
+
+and, finally, the middle three columns were only used to generate the values in `z`, so they can be thrown away now by `select`ing only `gp` and `z`.
+
+The `rowwise` is necessary:
+
+```{r}
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    mutate(z = list(rnorm(n, mean, sd))) %>% 
+    unnest(z)
+```
+
+because `rnorm` is vectorized, and for the `x` sample, R will draw one sampled value from each normal distribution, and then repeat the same values for the `y` sample. This is very much *not* what we want.
+
+I used the same idea to draw my random chi-squared data later on:
+
+```{r}
+tibble(df = c(3,6)) %>% 
+  rowwise() %>% 
+  mutate(z = list(rchisq(20, df))) %>% 
+  unnest(z)
+```
+
+(twenty values from $\chi^2_3$, followed by twenty from $\chi^2_6$.)
+
+This suggests that I ought to be able to generalize my function `gen_sample`. Generalizing to any number of groups needs no extra work: the length of the input `n` determines the number of groups, and the values in `n` determine the size of each of those groups. 
+
+The interesting generalization is the distribution to sample from. The first parameter of the  functions `rnorm`, `rchisq` etc. is always the number of random values to generate, but the remaining parameters are different for each distribution. This suggests that my generalized random sample generator ought to have the name of the random sampling function as input, followed by `...` to allow any other inputs needed by that sampling function; these then get passed on. At present, this idea is still living in my head, so I think I need to write another blog post about that to make sure that it does indeed work.
 

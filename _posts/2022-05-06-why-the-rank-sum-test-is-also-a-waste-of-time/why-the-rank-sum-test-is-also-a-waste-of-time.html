@@ -1949,7 +1949,121 @@ $test
 15 E     F     0.000000963   0.0000145</code></pre>
 </div>
 <p>though this time sprays C and D <em>are</em> significantly different, with a P-value of 0.025.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h1 id="appendix-generating-samples-from-groups">Appendix: generating samples from groups</h1>
+<p>Earlier, I threw this function at you without explaining it:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>gen_sample</span>
+</code></pre>
+</div>
+<pre><code>function(n, mean, sd) {
+  tibble(gp = c(&quot;x&quot;, &quot;y&quot;), n = n, mean = mean, sd = sd) %&gt;% 
+    rowwise() %&gt;% 
+    mutate(z = list(rnorm(n, mean, sd))) %&gt;% 
+    unnest(z) %&gt;% 
+    select(gp, z)
+}
+&lt;bytecode: 0x558495feec80&gt;</code></pre>
+</div>
+<p>There are different ways to generate samples from different groups with possibly different means, SDs and sample sizes. This is how I like to do it. Let me take you through the process.</p>
+<p>The first step is to make a data frame with one row for each sample that will be generated. These are the inputs to the function above:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>sd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>gp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='va'>n</span>, mean <span class='op'>=</span> <span class='va'>mean</span>, sd <span class='op'>=</span> <span class='va'>sd</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 4
+  gp        n  mean    sd
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 x         5    20     2
+2 y         3    10     1</code></pre>
+</div>
+<p>Evidently, in a function for public consumption, you would check that all the inputs are the same length, or you would rely on <code>tibble</code> telling you that only vectors of length 1 are recycled.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> The groups are for no good reason called <code>x</code> and <code>y</code>.</p>
+<p>The next two lines generate random samples, one for each group, according to the specifications, and store them each in one cell of the two-row spreadsheet:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">  <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>gp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='va'>n</span>, mean <span class='op'>=</span> <span class='va'>mean</span>, sd <span class='op'>=</span> <span class='va'>sd</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rowwise.html'>rowwise</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 5
+# Rowwise: 
+  gp        n  mean    sd z        
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;   
+1 x         5    20     2 &lt;dbl [5]&gt;
+2 y         3    10     1 &lt;dbl [3]&gt;</code></pre>
+</div>
+<p>The new column <code>z</code> is a list column, since the top cell of the column is a vector of length 5, and the bottom cell is a vector of length 3. To actually see the values they contain, we <code>unnest</code> <code>z</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">  <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>gp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='va'>n</span>, mean <span class='op'>=</span> <span class='va'>mean</span>, sd <span class='op'>=</span> <span class='va'>sd</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rowwise.html'>rowwise</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 8 × 5
+  gp        n  mean    sd     z
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 x         5    20     2 23.1 
+2 x         5    20     2 22.2 
+3 x         5    20     2 20.6 
+4 x         5    20     2 17.0 
+5 x         5    20     2 21.1 
+6 y         3    10     1 10.7 
+7 y         3    10     1 10.1 
+8 y         3    10     1  9.25</code></pre>
+</div>
+<p>and, finally, the middle three columns were only used to generate the values in <code>z</code>, so they can be thrown away now by <code>select</code>ing only <code>gp</code> and <code>z</code>.</p>
+<p>The <code>rowwise</code> is necessary:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">  <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>gp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='va'>n</span>, mean <span class='op'>=</span> <span class='va'>mean</span>, sd <span class='op'>=</span> <span class='va'>sd</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 × 5
+  gp        n  mean    sd     z
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 x         5    20     2 15.3 
+2 x         5    20     2  9.45
+3 y         3    10     1 15.3 
+4 y         3    10     1  9.45</code></pre>
+</div>
+<p>because <code>rnorm</code> is vectorized, and for the <code>x</code> sample, R will draw one sampled value from each normal distribution, and then repeat the same values for the <code>y</code> sample. This is very much <em>not</em> what we want.</p>
+<p>I used the same idea to draw my random chi-squared data later on:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>df <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rowwise.html'>rowwise</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Chisquare.html'>rchisq</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='va'>df</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 40 × 2
+      df      z
+   &lt;dbl&gt;  &lt;dbl&gt;
+ 1     3  3.63 
+ 2     3  5.32 
+ 3     3  2.77 
+ 4     3 14.0  
+ 5     3  1.89 
+ 6     3  0.860
+ 7     3  1.55 
+ 8     3  5.57 
+ 9     3  6.85 
+10     3  4.98 
+# … with 30 more rows</code></pre>
+</div>
+<p>(twenty values from <span class="math inline">\(\chi^2_3\)</span>, followed by twenty from <span class="math inline">\(\chi^2_6\)</span>.)</p>
+<p>This suggests that I ought to be able to generalize my function <code>gen_sample</code>. Generalizing to any number of groups needs no extra work: the length of the input <code>n</code> determines the number of groups, and the values in <code>n</code> determine the size of each of those groups.</p>
+<p>The interesting generalization is the distribution to sample from. The first parameter of the functions <code>rnorm</code>, <code>rchisq</code> etc. is always the number of random values to generate, but the remaining parameters are different for each distribution. This suggests that my generalized random sample generator ought to have the name of the random sampling function as input, followed by <code>...</code> to allow any other inputs needed by that sampling function; these then get passed on. At present, this idea is still living in my head, so I think I need to write another blog post about that to make sure that it does indeed work.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
@@ -1957,6 +2071,7 @@ $test
 <li id="fn2" role="doc-endnote"><p>Because the variances are different now.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3" role="doc-endnote"><p>Like the sign test, it is not very powerful when the data are actually normal, but why do you care about that?<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4" role="doc-endnote"><p>eg. as measured by the heights of the boxplot boxes, which are IQRs.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>So, for example, if both your sample sizes are the same, you could define eg <code>n &lt;- 10</code> and it would get expanded to length 2 in the function.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 <!--radix_placeholder_article_footer-->
