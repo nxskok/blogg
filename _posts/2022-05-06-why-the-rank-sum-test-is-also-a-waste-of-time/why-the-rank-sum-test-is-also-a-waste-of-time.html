@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"NULL"}
+  {"type":"character","attributes":{},"value":["why-the-rank-sum-test-is-also-a-waste-of-time_files/anchor-4.2.2/anchor.min.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/bowser-1.9.3/bowser.min.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/distill-2.2.21/template.v2.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/figure-html5/unnamed-chunk-12-1.png","why-the-rank-sum-test-is-also-a-waste-of-time_files/figure-html5/unnamed-chunk-17-1.png","why-the-rank-sum-test-is-also-a-waste-of-time_files/header-attrs-2.13/header-attrs.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/jquery-3.6.0/jquery-3.6.0.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/jquery-3.6.0/jquery-3.6.0.min.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/jquery-3.6.0/jquery-3.6.0.min.map","why-the-rank-sum-test-is-also-a-waste-of-time_files/popper-2.6.0/popper.min.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/tippy-6.2.7/tippy-bundle.umd.min.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/tippy-6.2.7/tippy-light-border.css","why-the-rank-sum-test-is-also-a-waste-of-time_files/tippy-6.2.7/tippy.css","why-the-rank-sum-test-is-also-a-waste-of-time_files/tippy-6.2.7/tippy.umd.min.js","why-the-rank-sum-test-is-also-a-waste-of-time_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1499,7 +1499,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li>If you took a mathematical statistics class, you most likely learned about the <em>pooled test</em>. Here, as well as the normality assumption that we talk about later, it is assumed that the two populations have the <em>same variance</em>, which makes the algebra a lot easier. (To run the test, we estimate the common variance by making a weighted average of the two sample variances.)</li>
 <li>The default used by R’s <code>t.test</code> is a different test due to Welch and to Satterthwaite.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> This does not assume equal variances, but the test statistic (obtained by estimating each population’s variance separately) does not have an exact <span class="math inline">\(t\)</span>-distribution. It is assumed that the test statistic has a <span class="math inline">\(t\)</span>-distribution with a different (usually fractional) degrees of freedom that Welch and Satterthwaite each give a formula for; this assumption is usually good.</li>
 </ul>
-<p>In practice, when both tests apply, the two tests usually give very similar P-values, and so there is no harm in only ever using the Welch-Satterthwaite test, and thus the pooled <span class="math inline">\(t\)</span>-test is really only a curiosity of math stat classes. If you really want the pooled test, you have to ask <code>t.test</code> for it specifically (using <code>var.equal = TRUE</code>). If the two populations have different variances, then the pooled test can be very misleading. To illustrate, first from populations with equal variances. Before that, though, generating the random samples in long format is a bit annoying, so I define a function to do that first, with the sample sizes, population means, and population SDs as vector input (each of length 2:</p>
+<p>In practice, when both tests apply, the two tests usually give very similar P-values, and so there is no harm in only ever using the Welch-Satterthwaite test, and thus the pooled <span class="math inline">\(t\)</span>-test is really only a curiosity of math stat classes. If you really want the pooled test, you have to ask <code>t.test</code> for it specifically (using <code>var.equal = TRUE</code>). If the two populations have different variances, then the pooled test can be very misleading. I will illustrate, first from populations with equal variances. Before that, though, generating the random samples in long format is a bit annoying, so I define a function to do that first, with the sample sizes, population means, and population SDs as vector input (each of length 2:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>gen_sample</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sd</span><span class='op'>)</span> <span class='op'>{</span>
@@ -1512,14 +1512,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </code></pre>
 </div>
 </div>
-<p>The simulated data values are called <code>z</code> and the groups are called <code>x</code> and <code>y</code> in column <code>gp</code>.</p>
-<p>Now we generate some data and run the two flavours of <span class="math inline">\(t\)</span>-test on it:</p>
+<p>The simulated data values are called <code>z</code> and the groups are called <code>x</code> and <code>y</code> in column <code>gp</code>. As written, the data is always drawn from a normal distribution.</p>
+<p>Now we generate some data and run the two flavours of <span class="math inline">\(t\)</span>-test on it. This time, the means are different (so the null is actually false) but the SDs are the same:</p>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>d1</span> <span class='op'>&lt;-</span> <span class='fu'>gen_sample</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>140</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>30</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>d1</span> <span class='op'>&lt;-</span> <span class='fu'>gen_sample</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>140</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>30</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>z</span> <span class='op'>~</span> <span class='va'>gp</span>, data <span class='op'>=</span> <span class='va'>d1</span><span class='op'>)</span>
 </code></pre>
 </div>
@@ -1637,26 +1637,7 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 <p>and the smaller of the two values in <code>U</code> is the test statistic. The smaller the test statistic is, the more significant (the smallest possible value is zero). In this case, the P-value is 0.2544, not significant.</p>
 <p>Let’s do another one, where the two distributions have the same mean but different variances (so that the test should fail to reject):</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>457294</span><span class='op'>)</span>
-</code></pre>
-</div>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>d3</span> <span class='op'>&lt;-</span> <span class='fu'>gen_sample</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>20</span><span class='op'>)</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>100</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/wilcox.test.html'>wilcox.test</a></span><span class='op'>(</span><span class='va'>z</span> <span class='op'>~</span> <span class='va'>gp</span>, data <span class='op'>=</span> <span class='va'>d3</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-    Wilcoxon rank sum exact test
-
-data:  z by gp
-W = 142, p-value = 0.1207
-alternative hypothesis: true location shift is not equal to 0</code></pre>
-</div>
-<p>if one of the samples is more variable, the ranks for that sample will be more extreme, but not necessarily high or low in total. But they are more likely to be more extreme, so the test should reject <em>less</em> often overall.</p>
+<p>What happens if one of the samples is more variable, even if the means and sample sizes are the same, so that the null hypothesis is still true? We should therefore reject 5% of the time still. Let’s do a simulation to find out:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>sim <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10000</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
@@ -1669,18 +1650,18 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 <pre><code># A tibble: 10,000 × 4
 # Rowwise: 
-     sim my_sample         my_test  p_val
-   &lt;int&gt; &lt;list&gt;            &lt;list&gt;   &lt;dbl&gt;
- 1     1 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.796 
- 2     2 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.0433
- 3     3 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.218 
- 4     4 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.315 
- 5     5 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.481 
- 6     6 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.739 
- 7     7 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.143 
- 8     8 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.631 
- 9     9 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.684 
-10    10 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.218 
+     sim my_sample         my_test p_val
+   &lt;int&gt; &lt;list&gt;            &lt;list&gt;  &lt;dbl&gt;
+ 1     1 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.971
+ 2     2 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.280
+ 3     3 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.684
+ 4     4 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.579
+ 5     5 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.853
+ 6     6 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.481
+ 7     7 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.684
+ 8     8 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.190
+ 9     9 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.971
+10    10 &lt;tibble [20 × 2]&gt; &lt;htest&gt; 0.247
 # … with 9,990 more rows</code></pre>
 </div>
 <p>investigate</p>
@@ -1693,32 +1674,289 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 # Rowwise: 
   `p_val &lt;= 0.05`     n
   &lt;lgl&gt;           &lt;int&gt;
-1 FALSE            9215
-2 TRUE              785</code></pre>
+1 FALSE            9193
+2 TRUE              807</code></pre>
 </div>
+<p>This says: we are rejecting over 8% of the time, with a test that is supposed to reject only 5% of the time. The reason for doing 10,000 simulations is so that we can get a good sense of whether this is “really” greater than 5%:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test</a></span><span class='op'>(</span><span class='fl'>824</span>, <span class='fl'>1000</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test</a></span><span class='op'>(</span><span class='fl'>824</span>, <span class='fl'>10000</span>, p <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code>
     1-sample proportions test with continuity correction
 
-data:  824 out of 1000, null probability 0.5
-X-squared = 418.61, df = 1, p-value &lt; 2.2e-16
-alternative hypothesis: true p is not equal to 0.5
+data:  824 out of 10000, null probability 0.05
+X-squared = 220.32, df = 1, p-value &lt; 2.2e-16
+alternative hypothesis: true p is not equal to 0.05
 95 percent confidence interval:
- 0.7986455 0.8468224
+ 0.07712114 0.08800255
 sample estimates:
-    p 
-0.824 </code></pre>
+     p 
+0.0824 </code></pre>
 </div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>The probability of incorrectly rejecting the true null is definitely not 0.05, and the confidence interval indicates that it is substantially greater than 0.05. So we should not be using the rank sum test if the two populations have different variances: in other words, the rank sum test suffers from the same problems as the pooled <span class="math inline">\(t\)</span>-test.</p>
+<p>This is often stated as saying that the rank sum test is actually testing a null hypothesis of equal <em>distributions</em>, and if you reject, as you too often do here, the distributions could differ in some way other than equal means. This might be what you want (though, as this simulation shows, you do not get much power to detect unequal spreads), but in the kind of situation where you would have done a <span class="math inline">\(t\)</span>-test, it most likely is not.</p>
+<h1 id="moods-median-test">Mood’s median test</h1>
+<p>So, if the rank sum test doesn’t do the job when the <span class="math inline">\(t\)</span>-test doesn’t, what <em>does</em>? I suggest a test that seems to be unjustly maligned called Mood’s median test. It is a sort of two-sample version of the sign test, and like the sign test, it is a test for medians.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>To illustrate, let’s generate some data from right-skewed chi-squared distributions: one sample with 3 df (that has mean 3) and one sample with 6 df (that has mean 6):</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>df <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rowwise.html'>rowwise</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Chisquare.html'>rchisq</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='va'>df</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>d6</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>d6</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>z</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>bins <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>df</span>, ncol <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="why-the-rank-sum-test-is-also-a-waste-of-time_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<p>These do not look very normal (dissuading us from a <span class="math inline">\(t\)</span>-test), and they don’t seem to have the same shape of distribution (dissuading us from a rank sum test).</p>
+<p>The idea behind the test is to work out the median of all the data, and then to count the number of observations above and below this grand median (much as you would for a sign test):</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>med</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>d6</span><span class='op'>$</span><span class='va'>z</span><span class='op'>)</span>
+<span class='va'>med</span> 
+</code></pre>
+</div>
+<pre><code>[1] 4.012249</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span>group <span class='op'>=</span> <span class='va'>d6</span><span class='op'>$</span><span class='va'>df</span>, above <span class='op'>=</span> <span class='op'>(</span><span class='va'>d6</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>&gt;</span> <span class='va'>med</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>     above
+group FALSE TRUE
+    3    13    7
+    6     7   13</code></pre>
+</div>
+<p>If the two groups have the same median, about 50% of the observations in each group should be above the overall median and about 50% below. If the two groups have different medians, one of the groups will have most of its observations above the grand median, and the other one will have most of its observations below. As for the sign test, it doesn’t matter how <em>far</em> above or below the grand median each observation is, just whether it <em>is</em> above or below.</p>
+<p>In the example above, knowing which group an observation is from tells you something about whether it is likely to be above or below the grand median (if the 3 df group, probably below; if the 6 df group, probably above). Hence there appears to be an <em>association</em> between group and being above or below, and you might imagine testing this with a chi-squared test for association. This is how I run the test in my <code>smmr</code> package:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/smmr/man/median_test.html'>median_test</a></span><span class='op'>(</span><span class='va'>d6</span>, <span class='va'>z</span>, <span class='va'>df</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$table
+     above
+group above below
+    3     7    13
+    6    13     7
+
+$test
+       what      value
+1 statistic 3.60000000
+2        df 1.00000000
+3   P-value 0.05777957</code></pre>
+</div>
+<p>The P-value is definitely small enough to conclude that there <em>is</em> an association, and hence to (correctly) conclude that the two groups have different medians.</p>
+<p>A couple of technicalities:</p>
+<ul>
+<li>This runs the chi-squared test <em>without</em> Yates’ correction, even for 2-by-2 tables. This is to enable you to get the same result by hand-calculation, should you remember how to do that. The <code>chisq.test</code> function <em>does</em> by default use this correction for 2-by-2 tables (see the help for <code>chisq.test</code>).</li>
+<li>You might have observed in this example that the row totals are fixed (each sample is of size 20, split between above and below the grand median somehow), and also the column totals are fixed (altogether 20 of the data values must be above the grand median and 20 below). This is always true, and so you might consider running Fisher’s exact test here instead, which I do below. I didn’t put this in my package, for a number of reasons: (i) I would have to teach my students Fisher’s exact test first; (ii) depending on the level of the class, I would also have to teach the hypergeometric distribution; (iii) Mood’s median test also applies to more than two groups (see below), but it is not clear to me that Fisher’s exact test applies to the <span class="math inline">\(k\)</span> by 2 table you would get from <span class="math inline">\(k\)</span> groups.</li>
+</ul>
+<p>Fisher’s exact test for the same data looks like this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/fisher.test.html'>fisher.test</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span>group <span class='op'>=</span> <span class='va'>d6</span><span class='op'>$</span><span class='va'>df</span>, above <span class='op'>=</span> <span class='op'>(</span><span class='va'>d6</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>&gt;</span> <span class='va'>med</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Fisher&#39;s Exact Test for Count Data
+
+data:  table(group = d6$df, above = (d6$z &gt; med))
+p-value = 0.1128
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.7941209 15.4577259
+sample estimates:
+odds ratio 
+  3.336974 </code></pre>
+</div>
+<p>The P-value is bigger here, but still significant. End of technicalities.</p>
+<p>As the sign test does, this test counts only whether each data value is above or below something, and this is using the data inefficiently <em>if</em> the actual values are meaningful. Thus you would expect the <span class="math inline">\(t\)</span>-test to be more powerful if it is valid, but this is of no concern, because in that case you would use the <span class="math inline">\(t\)</span>-test. When the <span class="math inline">\(t\)</span>-test is not valid, Mood’s median test makes no assumptions about the data (in contrast to the rank sum test): if the two populations have the same median, about 50% of the values in each group will be above that common median, and if they don’t, there will be an association between group and being above/below that the chi-squared test has a chance at finding. This is regardless of the shape of either distribution.</p>
+<h1 id="more-than-two-groups-anova-revisited.">More than two groups: ANOVA revisited.</h1>
+<p>You may have noticed that it doesn’t really matter how many groups you have: you work out the median of all the observations and count above and below within each group, no matter how many groups there are. The null hypothesis in this case is that <em>all</em> the groups have the same median, and the alternative is “not the null”. This is analogous to one-way ANOVA, where the null hypothesis is that all the groups have the same <em>mean</em>, and if rejected, there is further work to do to find which groups differ from which. You might do that with Tukey’s method.</p>
+<p>You might use Mood’s median test in an ANOVA-type situation where you felt that the observations within each group were not normal enough given your sample sizes. Since this test is analogous to the <span class="math inline">\(F\)</span>-test, you may need a followup to decide which groups have different medians. One way to do this is to run Mood’s median test on all possible pairs of groups (ignoring the data in groups other than the ones you are comparing), and then do an adjustment to the P-values like Bonferroni or Holm to account for the multiple testing.</p>
+<p>I would actually go further than this. I would begin by drawing a boxplot to assess normality and equal spreads within each group, and then:</p>
+<ul>
+<li>if the data are normal enough and the spreads<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> are more or less equal, do ordinary ANOVA followed by Tukey if needed.</li>
+<li>if the data are normal enough but the spreads are not more or less equal, do Welch’s ANOVA (see above) using <code>oneway.test</code>, following up if needed with <a href="https://aaronschlegel.me/games-howell-post-hoc-multiple-comparisons-test-python.html#:~:text=The%20Games%2DHowell%20test%20is,variances%20or%20equal%20sample%20sizes.">Games-Howell</a>. The Games-Howell procedure is available in package <code>PMCMRplus</code> as <code>gamesHowellTest</code>.</li>
+<li>if the data are not normal enough, do Mood’s median test, followed by pairwise Mood’s median tests, adjusting for multiple testing.</li>
+</ul>
+<p>All of this seems to need an example. I use the <code>InsectSprays</code> data. These are counts of insects in experimental units treated with different insecticides. The fact that these are counts suggest that higher counts might be more variable:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"InsectSprays"</span><span class='op'>)</span>
+<span class='va'>InsectSprays</span>
+</code></pre>
+</div>
+<pre><code>   count spray
+1     10     A
+2      7     A
+3     20     A
+4     14     A
+5     14     A
+6     12     A
+7     10     A
+8     23     A
+9     17     A
+10    20     A
+11    14     A
+12    13     A
+13    11     B
+14    17     B
+15    21     B
+16    11     B
+17    16     B
+18    14     B
+19    17     B
+20    17     B
+21    19     B
+22    21     B
+23     7     B
+24    13     B
+25     0     C
+26     1     C
+27     7     C
+28     2     C
+29     3     C
+30     1     C
+31     2     C
+32     1     C
+33     3     C
+34     0     C
+35     1     C
+36     4     C
+37     3     D
+38     5     D
+39    12     D
+40     6     D
+41     4     D
+42     3     D
+43     5     D
+44     5     D
+45     5     D
+46     5     D
+47     2     D
+48     4     D
+49     3     E
+50     5     E
+51     3     E
+52     5     E
+53     3     E
+54     6     E
+55     1     E
+56     1     E
+57     3     E
+58     2     E
+59     6     E
+60     4     E
+61    11     F
+62     9     F
+63    15     F
+64    22     F
+65    15     F
+66    16     F
+67    13     F
+68    10     F
+69    26     F
+70    26     F
+71    24     F
+72    13     F</code></pre>
+</div>
+<p>As suggested above, we start with boxplots:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>InsectSprays</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>spray</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="why-the-rank-sum-test-is-also-a-waste-of-time_files/figure-html5/unnamed-chunk-17-1.png" width="624" /></p>
+</div>
+<p>The smaller counts (associated with sprays C, D, and E) do seem to be less variable. The normality is mostly not too bad, though there are some high outliers with sprays C and E. (There are only twelve observations for each spray.)</p>
+<p>Clearly ordinary ANOVA is out of the question, but Welch ANOVA might be OK:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/oneway.test.html'>oneway.test</a></span><span class='op'>(</span><span class='va'>count</span> <span class='op'>~</span> <span class='va'>spray</span>, data <span class='op'>=</span> <span class='va'>InsectSprays</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    One-way analysis of means (not assuming equal variances)
+
+data:  count and spray
+F = 36.065, num df = 5.000, denom df = 30.043, p-value =
+7.999e-12</code></pre>
+</div>
+<p>Strongly significant, so then:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>PMCMRplus</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/PMCMRplus/man/gamesHowellTest.html'>gamesHowellTest</a></span><span class='op'>(</span><span class='va'>count</span> <span class='op'>~</span> <span class='va'>spray</span>, data <span class='op'>=</span> <span class='va'>InsectSprays</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  A       B       C       D       E      
+B 0.99725 -       -       -       -      
+C 6.6e-06 6.7e-07 -       -       -      
+D 0.00013 1.3e-05 0.05567 -       -      
+E 3.2e-05 3.7e-06 0.44661 0.60060 -      
+F 0.92475 0.98879 3.4e-05 0.00029 0.00011</code></pre>
+</div>
+<p>A look at the boxplot suggests that the sprays divide into two sets: A, B, F (high insect count), and C, D, E (low). This is how Games-Howell comes out, though the C-D difference is almost significant.</p>
+<p>If you are bothered by the outliers, then Mood’s median test is the way to go (from <code>smmr</code>):</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/smmr/man/median_test.html'>median_test</a></span><span class='op'>(</span><span class='va'>InsectSprays</span>, <span class='va'>count</span>, <span class='va'>spray</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$table
+     above
+group above below
+    A    11     0
+    B    11     0
+    C     0    11
+    D     1    11
+    E     0    12
+    F    12     0
+
+$test
+       what        value
+1 statistic 6.533256e+01
+2        df 5.000000e+00
+3   P-value 9.561214e-13</code></pre>
+</div>
+<p>This is also strongly significant. Looking at the table of values above and below suggests the same division of the sprays into two sets:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/smmr/man/pairwise_median_test.html'>pairwise_median_test</a></span><span class='op'>(</span><span class='va'>InsectSprays</span>, <span class='va'>count</span>, <span class='va'>spray</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 15 × 4
+   g1    g2        p_value adj_p_value
+   &lt;fct&gt; &lt;fct&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+ 1 A     B     0.391         1        
+ 2 A     C     0.00000273    0.0000409
+ 3 A     D     0.0000446     0.000668 
+ 4 A     E     0.000000963   0.0000145
+ 5 A     F     0.528         1        
+ 6 B     C     0.00000273    0.0000409
+ 7 B     D     0.0000446     0.000668 
+ 8 B     E     0.000000963   0.0000145
+ 9 B     F     0.414         1        
+10 C     D     0.00165       0.0248   
+11 C     E     0.0661        0.991    
+12 C     F     0.000000963   0.0000145
+13 D     E     0.123         1        
+14 D     F     0.0000446     0.000668 
+15 E     F     0.000000963   0.0000145</code></pre>
+</div>
+<p>though this time sprays C and D <em>are</em> significantly different, with a P-value of 0.025.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Two independent pieces of work that came to the same answer.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Two independent pieces of work that came to the same answer. R uses the name Welch, SAS the name Satterthwaite.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2" role="doc-endnote"><p>Because the variances are different now.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Like the sign test, it is not very powerful when the data are actually normal, but why do you care about that?<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>eg. as measured by the heights of the boxplot boxes, which are IQRs.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 <!--radix_placeholder_article_footer-->

@@ -32,9 +32,9 @@ The two-sample $t$-test is probably your first idea for comparing (means of) two
 There are actually two flavours of two-sample $t$-test: 
 
 - If you took a mathematical statistics class, you most likely learned about the *pooled test*. Here, as well as the normality assumption that we talk about later, it is assumed that the two populations have the *same variance*, which makes the algebra a lot easier. (To run the test, we estimate the common variance by making a weighted average of the two sample variances.) 
-- The default used by R's `t.test` is a different test due to Welch and to Satterthwaite.^[Two independent pieces of work that came to the same answer.] This does not assume equal variances, but the test statistic (obtained by estimating each population's variance separately) does not have an exact $t$-distribution. It is assumed that the test statistic has a $t$-distribution with a different (usually fractional) degrees of freedom that Welch and Satterthwaite each give a formula for; this assumption is usually good.
+- The default used by R's `t.test` is a different test due to Welch and to Satterthwaite.^[Two independent pieces of work that came to the same answer. R uses the name Welch, SAS the name Satterthwaite.] This does not assume equal variances, but the test statistic (obtained by estimating each population's variance separately) does not have an exact $t$-distribution. It is assumed that the test statistic has a $t$-distribution with a different (usually fractional) degrees of freedom that Welch and Satterthwaite each give a formula for; this assumption is usually good.
 
-In practice, when both tests apply, the two tests usually give very similar P-values, and so there is no harm in only ever using the Welch-Satterthwaite test, and thus the pooled $t$-test is really only a curiosity of math stat classes. If you really want the pooled test, you have to ask `t.test` for it specifically (using `var.equal = TRUE`). If the two populations have different variances, then the pooled test can be very misleading. To illustrate, first from populations with equal variances. Before that, though, generating the random samples in long format is a bit annoying, so I define a function to do that first, with the sample sizes, population means, and population SDs as vector input (each of length 2:
+In practice, when both tests apply, the two tests usually give very similar P-values, and so there is no harm in only ever using the Welch-Satterthwaite test, and thus the pooled $t$-test is really only a curiosity of math stat classes. If you really want the pooled test, you have to ask `t.test` for it specifically (using `var.equal = TRUE`). If the two populations have different variances, then the pooled test can be very misleading. I will illustrate, first from populations with equal variances. Before that, though, generating the random samples in long format is a bit annoying, so I define a function to do that first, with the sample sizes, population means, and population SDs as vector input (each of length 2:
 
 ```{r}
 gen_sample <- function(n, mean, sd) {
@@ -46,9 +46,9 @@ gen_sample <- function(n, mean, sd) {
 }
 ```
 
-The simulated data values are called `z` and the groups are called `x` and `y` in column `gp`.
+The simulated data values are called `z` and the groups are called `x` and `y` in column `gp`. As written, the data is always drawn from a normal distribution.
 
-Now we generate some data and run the two flavours of $t$-test on it:
+Now we generate some data and run the two flavours of $t$-test on it. This time, the means are different (so the null is actually false) but the SDs are the same:
 
 ```{r, echo=FALSE}
 set.seed(457299)
@@ -56,7 +56,7 @@ set.seed(457299)
 
 
 ```{r}
-d1 <- gen_sample(c(10, 10), c(100, 140), c(30, 30))
+d1 <- gen_sample(n = c(10, 10), mean = c(100, 140), sd = c(30, 30))
 t.test(z ~ gp, data = d1)
 t.test(z ~ gp, data = d1, var.equal = TRUE)
 ```
@@ -205,5 +205,50 @@ I would actually go further than this. I would begin by drawing a boxplot to ass
 - if the data are normal enough and the spreads^[eg. as measured by the heights of the boxplot boxes, which are IQRs.] are more or less equal, do ordinary ANOVA followed by Tukey if needed.
 - if the data are normal enough but the spreads are not more or less equal, do Welch's ANOVA (see above) using `oneway.test`, following up if needed with [Games-Howell](https://aaronschlegel.me/games-howell-post-hoc-multiple-comparisons-test-python.html#:~:text=The%20Games%2DHowell%20test%20is,variances%20or%20equal%20sample%20sizes.). The Games-Howell procedure is available in package `PMCMRplus` as `gamesHowellTest`.
 - if the data are not normal enough, do Mood's median test, followed by pairwise Mood's median tests, adjusting for multiple testing.
+
+All of this seems to need an example. I use the `InsectSprays` data. These are counts of insects in experimental units treated with different insecticides. The fact that these are counts suggest that higher counts might be more variable:
+
+```{r}
+data("InsectSprays")
+InsectSprays
+```
+
+
+
+As suggested above, we start with boxplots:
+
+```{r}
+ggplot(InsectSprays, aes(x = spray, y = count)) + geom_boxplot()
+```
+
+The smaller counts (associated with sprays C, D, and E) do seem to be less variable. The normality is mostly not too bad, though there are some high outliers with sprays C and E. (There are only twelve observations for each spray.)
+
+Clearly ordinary ANOVA is out of the question, but Welch ANOVA might be OK:
+
+```{r}
+oneway.test(count ~ spray, data = InsectSprays)
+```
+
+Strongly significant, so then:
+
+```{r}
+PMCMRplus::gamesHowellTest(count ~ spray, data = InsectSprays)
+```
+
+A look at the boxplot suggests that the sprays divide into two sets: A, B, F (high insect count), and C, D, E (low). This is how Games-Howell comes out, though the C-D difference is almost significant.
+
+If you are bothered by the outliers, then Mood's median test is the way to go (from `smmr`):
+
+```{r}
+median_test(InsectSprays, count, spray)
+```
+
+This is also strongly significant. Looking at the table of values above and below suggests the same division of the sprays into two sets:
+
+```{r}
+pairwise_median_test(InsectSprays, count, spray)
+```
+
+though this time sprays C and D *are* significantly different, with a P-value of 0.025.
 
 
