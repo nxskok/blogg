@@ -150,17 +150,18 @@ This has turned the text into an `expression`, something that can be evaluated, 
 eval(pc)
 ```
 
-So now we have a strategy:
+So now we have a strategy, or so you would think:
 
 ```{r}
 tibble(code) %>% 
   rowwise() %>% 
-  mutate(expr = list(parse(text = code))) %>% 
-  mutate(z = list(eval(expr))) %>% 
-  pull(z)
+  mutate(expr = list(parse(text = code))) %>%
+  pull(expr)
 ```
 
-Oh, that didn't work. I got six Poissons, twice.
+The problem is that both things in `code` go into both `expression`s, even with `rowwise`. So this won't work.
+
+The usual thing to try next is `map` instead of `rowwise`:
 
 ```{r}
 tibble(code) %>% 
@@ -170,9 +171,97 @@ tibble(code) %>%
 ```
 That seems to have worked.
 
+So now we have the ingredients for a version of `sample_groups` based on the user writing the random-sampling code for us:
+
 ```{r}
-txt <- "rnorm(5, 10, 3)"
-eval(parse(text = txt))
+sample_groups <- function(code) {
+  tibble(code) %>% 
+    mutate(expr = map(code, ~parse(text = .))) %>% 
+    mutate(z = map(expr, ~eval(.))) %>% 
+    unnest(z) %>% 
+    select(-expr)
+}
 ```
 
+and to test:
+
+```{r}
+d <- sample_groups(code)
+d
+```
+
+and then something like
+
+```{r}
+t.test(z ~ code, data = d)
+```
+
+which is a little bit clumsy, but so it is.
+
+Using the `eval(parse(text = something))` idea is not (apparently) very well regarded. One immediate problem is that the user could put any code at all (that evaluates into a vector of numbers) into the input `code`, which seems less than secure:
+
+```{r}
+code <- c("1:3", "mtcars$mpg")
+sample_groups(code)
+```
+
+I want to get back to the user inputting the desired random sample generators as functions, and then running those functions on the rest of the input:
+
+```{r}
+n <- c(6, 3)
+dist <- c(rnorm, rpois)
+mean <- c(10, NA)
+sd <- c(3, NA)
+lambda <- c(NA, 2)
+gp <- c("x", "y")
+d <- tibble(n = n, dist = dist, mean = mean, sd = sd, lambda = lambda, gp = gp)
+d
+```
+
+Now, how to run those functions in `dist`, with the parameters shown? This is what `do.call` does:
+
+```{r}
+do.call(rnorm, list(n = 5, mean = 10, sd = 3))
+do.call(rpois, list(n = 3, lambda = 2))
+```
+so, package up those distribution parameters into a `list` first:
+
+```{r}
+pars <- list(list(n = 6, mean = 10, sd = 3), 
+             list(n = 3, lambda = 2))
+d <- tibble(dist = dist, pars = pars)
+d
+```
+
+and then
+
+```{r}
+d %>% 
+  mutate(z = map2(dist, pars, ~do.call(.x, .y))) %>% 
+  unnest(z)
+```
+
+it works!
+
+And so, we can now make our function:
+
+```{r}
+sample_groups <- function(dist, pars) {
+  nr <- length(dist)
+  tibble(dist = dist, pars = pars, gp = letters[1:nr]) %>% 
+    mutate(z = map2(dist, pars, ~do.call(.x, .y))) %>% 
+    unnest(z) %>% 
+    select(gp, z)
+}
+```
+
+and to test
+
+```{r}
+dists <- c(rnorm, rpois)
+pars <- list(list(n = 6, mean = 10, sd = 3), list(n = 3, lambda = 2))
+sample_groups(dists, pars)
+```
+
+The only weirdness is that the user has to specify a list of lists for the parameters (because `do.call` needs a list for inputs to its function). But it definitely works.
 

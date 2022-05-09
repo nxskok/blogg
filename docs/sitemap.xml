@@ -2,11 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" version="1.0">
   <url>
     <loc>http://ritsokiguess.site/blogg/about.html</loc>
-    <lastmod>2021-11-07T14:03:50-05:00</lastmod>
+    <lastmod>2022-05-04T10:18:05-04:00</lastmod>
   </url>
   <url>
     <loc>http://ritsokiguess.site/blogg/</loc>
-    <lastmod>2022-05-06T15:00:32-04:00</lastmod>
+    <lastmod>2022-05-04T10:18:05-04:00</lastmod>
+  </url>
+  <url>
+    <loc>http://ritsokiguess.site/blogg/posts/2022-05-09-random-sampling-from-groups/</loc>
+    <lastmod>2022-05-09T16:34:51-04:00</lastmod>
   </url>
   <url>
     <loc>http://ritsokiguess.site/blogg/posts/2022-05-06-why-the-rank-sum-test-is-also-a-waste-of-time/</loc>

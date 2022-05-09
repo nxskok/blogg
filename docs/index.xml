@@ -7,7 +7,174 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 06 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 May 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Random sampling from groups</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2022-05-09-random-sampling-from-groups</link>
+      <description>
+
+
+&lt;h1 id="packages"&gt;Packages&lt;/h1&gt;
+&lt;pre class="r"&gt;&lt;code&gt;library(tidyverse)&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id="introduction"&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;In a previous post, I discussed how we might sample in groups, where each group was a sample from a different population. I introduced this function:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;gen_sample &amp;lt;- function(n, mean, sd) {
+  tibble(gp = c(&amp;quot;x&amp;quot;, &amp;quot;y&amp;quot;), n = n, mean = mean, sd = sd) %&amp;gt;% 
+    rowwise() %&amp;gt;% 
+    mutate(z = list(rnorm(n, mean, sd))) %&amp;gt;% 
+    unnest(z) %&amp;gt;% 
+    select(gp, z)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;that samples from normal populations with possibly different means, SDs, and sample sizes in different groups.&lt;/p&gt;
+&lt;h1 id="explanation"&gt;Explanation&lt;/h1&gt;
+&lt;p&gt;This is (more or less) the same explanation that appeared at the end of the previous post, so feel free to skip if you have read it before.&lt;/p&gt;
+&lt;p&gt;The first step is to make a data frame with one row for each sample that will be generated. This uses the inputs to the function above, so we will make some up:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;n &amp;lt;- c(5, 3)
+mean &amp;lt;- c(20, 10)
+sd &amp;lt;- c(2, 1)
+tibble(gp = c(&amp;quot;x&amp;quot;, &amp;quot;y&amp;quot;), n = n, mean = mean, sd = sd) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# A tibble: 2 × 4
+  gp        n  mean    sd
+  &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+1 x         5    20     2
+2 y         3    10     1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Evidently, in a function for public consumption, you would check that all the inputs are the same length, or you would rely on &lt;code&gt;tibble&lt;/code&gt; telling you that only vectors of length 1 are recycled.&lt;a href="#fn1" class="footnote-ref" id="fnref1"&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt; The groups are for no good reason called &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The next two lines generate random samples, one for each group, according to the specifications, and store them each in one cell of the two-row spreadsheet:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;  tibble(gp = c(&amp;quot;x&amp;quot;, &amp;quot;y&amp;quot;), n = n, mean = mean, sd = sd) %&amp;gt;% 
+    rowwise() %&amp;gt;% 
+    mutate(z = list(rnorm(n, mean, sd))) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# A tibble: 2 × 5
+# Rowwise: 
+  gp        n  mean    sd z        
+  &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;list&amp;gt;   
+1 x         5    20     2 &amp;lt;dbl [5]&amp;gt;
+2 y         3    10     1 &amp;lt;dbl [3]&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The new column &lt;code&gt;z&lt;/code&gt; is a list column, since the top cell of the column is a vector of length 5, and the bottom cell is a vector of length 3. To actually see the values they contain, we &lt;code&gt;unnest&lt;/code&gt; &lt;code&gt;z&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;  tibble(gp = c(&amp;quot;x&amp;quot;, &amp;quot;y&amp;quot;), n = n, mean = mean, sd = sd) %&amp;gt;% 
+    rowwise() %&amp;gt;% 
+    mutate(z = list(rnorm(n, mean, sd))) %&amp;gt;% 
+    unnest(z)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# A tibble: 8 × 5
+  gp        n  mean    sd     z
+  &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+1 x         5    20     2 20.0 
+2 x         5    20     2 25.7 
+3 x         5    20     2 17.3 
+4 x         5    20     2 19.4 
+5 x         5    20     2 20.1 
+6 y         3    10     1 10.2 
+7 y         3    10     1 10.4 
+8 y         3    10     1  8.84&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and, finally, the middle three columns were only used to generate the values in &lt;code&gt;z&lt;/code&gt;, so they can be thrown away now by &lt;code&gt;select&lt;/code&gt;ing only &lt;code&gt;gp&lt;/code&gt; and &lt;code&gt;z&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;rowwise&lt;/code&gt; is necessary:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;  tibble(gp = c(&amp;quot;x&amp;quot;, &amp;quot;y&amp;quot;), n = n, mean = mean, sd = sd) %&amp;gt;% 
+    mutate(z = list(rnorm(n, mean, sd))) %&amp;gt;% 
+    unnest(z)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# A tibble: 4 × 5
+  gp        n  mean    sd     z
+  &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+1 x         5    20     2  17.0
+2 x         5    20     2  10.5
+3 y         3    10     1  17.0
+4 y         3    10     1  10.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;because &lt;code&gt;rnorm&lt;/code&gt; is vectorized, and for the &lt;code&gt;x&lt;/code&gt; sample, R will draw one sampled value from each normal distribution, and then repeat the same values for the &lt;code&gt;y&lt;/code&gt; sample. This is very much &lt;em&gt;not&lt;/em&gt; what we want.&lt;/p&gt;
+&lt;p&gt;I used the same idea to draw my random chi-squared data later on:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;tibble(df = c(2,6)) %&amp;gt;% 
+  rowwise() %&amp;gt;% 
+  mutate(z = list(rchisq(20, df))) %&amp;gt;% 
+  unnest(z)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# A tibble: 40 × 2
+      df     z
+   &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+ 1     2 0.383
+ 2     2 2.03 
+ 3     2 0.351
+ 4     2 3.38 
+ 5     2 0.245
+ 6     2 0.650
+ 7     2 0.136
+ 8     2 3.50 
+ 9     2 2.50 
+10     2 1.41 
+# … with 30 more rows&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;(twenty values from &lt;span class="math inline"&gt;\(\chi^2_2\)&lt;/span&gt;, followed by twenty from &lt;span class="math inline"&gt;\(\chi^2_6\)&lt;/span&gt;.)&lt;/p&gt;
+&lt;p&gt;This suggests that I ought to be able to generalize my function &lt;code&gt;gen_sample&lt;/code&gt;. Generalizing to any number of groups needs no extra work: the length of the input &lt;code&gt;n&lt;/code&gt; determines the number of groups, and the values in &lt;code&gt;n&lt;/code&gt; determine the size of each of those groups.&lt;/p&gt;
+&lt;p&gt;The interesting generalization is the distribution to sample from. The first parameter of the functions &lt;code&gt;rnorm&lt;/code&gt;, &lt;code&gt;rchisq&lt;/code&gt; etc. is always the number of random values to generate, but the remaining parameters are different for each distribution. This suggests that my generalized random sample generator ought to have the name of the random sampling function as input, followed by &lt;code&gt;...&lt;/code&gt; to allow any other inputs needed by that sampling function; these then get passed on.&lt;/p&gt;
+&lt;h1 id="generalizing"&gt;Generalizing&lt;/h1&gt;
+&lt;p&gt;To generalize &lt;code&gt;gen_sample&lt;/code&gt; to a new function &lt;code&gt;sample_groups&lt;/code&gt;, we need to consider how to handle different distributions. The distribution itself is not the hard part; that can be specified by having the random sample generator function for the desired distribution as an input to the new function. The problem is that each distribution has different parameters, which need to be inputs to &lt;code&gt;sample_groups&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The standard way of doing this kind of thing is to use the &lt;code&gt;...&lt;/code&gt; input to a function. If I had just one group, it would go like this:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;sample_group &amp;lt;- function(n, dist, ...) {
+  dist(n, ...)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and then&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;sample_group(5, rnorm, mean = 10, sd = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[1] 12.764773  9.262228  5.338165 10.702793 12.798930&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;or&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;sample_group(6, rpois, lambda = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[1] 1 3 2 1 2 5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The additional (named) inputs to &lt;code&gt;sample_group&lt;/code&gt; are passed on unchanged to the random sample generator, to generate respectively normal random values with mean 10 and SD 3, and Poisson random values with mean 3.&lt;a href="#fn2" class="footnote-ref" id="fnref2"&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The random sample generators are vectorized, but the obvious thing for generating two samples from different distributions does not work:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;sample_group(c(6, 3), rnorm, mean = c(10, 20), sd = c(3, 2))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[1]  9.891489 19.732371&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We appear to have one value from each distribution, not six from the first and three from the second. This, I &lt;em&gt;think&lt;/em&gt;, is what the help files say will happen.&lt;/p&gt;
+&lt;p&gt;Even if I can get this to work, it might be that I want to generate samples from different distributions. So, onto idea #2.&lt;/p&gt;
+&lt;p&gt;Let’s suppose I ask the user to write the code to generate each sample as text (a vector of pieces of text, one for each sample). Here’s how my example above would look:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;code &amp;lt;- c(&amp;quot;rnorm(5, mean = 10, sd = 3)&amp;quot;, 
+          &amp;quot;rpois(6, lambda = 2)&amp;quot;)
+code&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[1] &amp;quot;rnorm(5, mean = 10, sd = 3)&amp;quot; &amp;quot;rpois(6, lambda = 2)&amp;quot;       &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The problem is that this is text, not runnable code. One way to turn this into something useful is to &lt;code&gt;parse&lt;/code&gt; it:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;pc &amp;lt;- parse(text = code[1])
+pc&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;expression(rnorm(5, mean = 10, sd = 3))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This has turned the text into an &lt;code&gt;expression&lt;/code&gt;, something that can be evaluated, thus:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;eval(pc)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[1]  6.442787  6.539150  9.182008 11.332265 12.858192&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So now we have a strategy, or so you would think:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;tibble(code) %&amp;gt;% 
+  rowwise() %&amp;gt;% 
+  mutate(expr = list(parse(text = code))) %&amp;gt;%
+  pull(expr)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[[1]]
+expression(rnorm(5, mean = 10, sd = 3))
+
+[[2]]
+expression(rpois(6, lambda = 2))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The problem is that both things in &lt;code&gt;code&lt;/code&gt; go into both &lt;code&gt;expression&lt;/code&gt;s, even with &lt;code&gt;rowwise&lt;/code&gt;. So this won’t work.&lt;/p&gt;
+&lt;p&gt;The usual thing to try next is &lt;code&gt;map&lt;/code&gt; instead of &lt;code&gt;rowwise&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;tibble(code) %&amp;gt;% 
+  mutate(expr = map(code, ~parse(text = .))) %&amp;gt;% 
+  mutate(z = map(expr, ~eval(.))) %&amp;gt;% 
+  unnest(z)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;# A tibble: 11 × 3
+   code                        expr             z
+   &amp;lt;chr&amp;gt;                       &amp;lt;list&amp;gt;       &amp;lt;dbl&amp;gt;
+ 1 rnorm(5, mean = 10, sd = 3) &amp;lt;expression&amp;gt;  4.36
+ 2 rnorm(5, mean = 10, sd = 3) &amp;lt;expression&amp;gt;  6.50
+ 3 rnorm(5, mean = 10, sd = 3) &amp;lt;expression&amp;gt; 10.5 
+ 4 rnorm(5, mean = 10, sd = 3) &amp;lt;expression&amp;gt; 12.3 
+ 5 rnorm(5, mean = 10, sd = 3) &amp;lt;expression&amp;gt; 13.6 
+ 6 rpois(6, lambda = 2)        &amp;lt;expression&amp;gt;  1   
+ 7 rpois(6, lambda = 2)        &amp;lt;expression&amp;gt;  4   
+ 8 rpois(6, lambda = 2)        &amp;lt;expression&amp;gt;  1   
+ 9 rpois(6, lambda = 2)        &amp;lt;expression&amp;gt;  2   
+10 rpois(6, lambda = 2)        &amp;lt;expression&amp;gt;  1   
+11 rpois(6, lambda = 2)        &amp;lt;expression&amp;gt;  3   &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That seems to have worked.&lt;/p&gt;
+&lt;p&gt;So now we have the ingredients for a version of&lt;/p&gt;
+&lt;pre class="r distill-force-highlighting-css"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;div class="footnotes"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn1"&gt;&lt;p&gt;So, for example, if both your sample sizes are the same, you could define eg &lt;code&gt;n &amp;lt;- 10&lt;/code&gt; and it would get expanded to length 2 in the function.&lt;a href="#fnref1" class="footnote-back"&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id="fn2"&gt;&lt;p&gt;It may take a trip to the help files to find out what R calls these parameters.&lt;a href="#fnref2" class="footnote-back"&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description>
+      <distill:md5>8db56c03b191bdf514b6d37b8329654a</distill:md5>
+      <guid>http://ritsokiguess.site/blogg/posts/2022-05-09-random-sampling-from-groups</guid>
+      <pubDate>Mon, 09 May 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Why the rank sum test is also a waste of time</title>
       <dc:creator>Ken Butler</dc:creator>
