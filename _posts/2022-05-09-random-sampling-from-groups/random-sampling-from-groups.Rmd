@@ -1,0 +1,178 @@
+---
+title: "Random sampling from groups"
+description: |
+  A short description of the post.
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blog
+date: 2022-05-09
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+# Packages
+
+```{r}
+library(tidyverse)
+```
+
+
+# Introduction
+
+In a previous post, I discussed how we might sample in groups, where each group was a sample from a different population. I introduced this function:
+
+```{r}
+gen_sample <- function(n, mean, sd) {
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    rowwise() %>% 
+    mutate(z = list(rnorm(n, mean, sd))) %>% 
+    unnest(z) %>% 
+    select(gp, z)
+}
+```
+
+that samples from normal populations with possibly different means, SDs, and sample sizes in different groups.
+
+# Explanation
+
+This is (more or less) the same explanation that appeared at the end of the previous post, so feel free to skip if you have read it before.
+
+The first step is to make a data frame with one row for each sample that will be generated. This uses the inputs to the function above, so we will make some up:
+
+```{r}
+n <- c(5, 3)
+mean <- c(20, 10)
+sd <- c(2, 1)
+tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) 
+```
+
+Evidently, in a function for public consumption, you would check that all the inputs are the same length, or you would rely on `tibble` telling you that only vectors of length 1 are recycled.^[So, for example, if both your sample sizes are the same, you could define eg `n <- 10` and it would get expanded to length 2 in the function.] The groups are for no good reason called `x` and `y`.
+
+The next two lines generate random samples, one for each group, according to the specifications, and store them each in one cell of the two-row spreadsheet:
+
+```{r}
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    rowwise() %>% 
+    mutate(z = list(rnorm(n, mean, sd))) 
+```
+
+The new column `z` is a list column, since the top cell of the column is a vector of length 5, and the bottom cell is a vector of length 3. To actually see the values they contain, we `unnest` `z`:
+
+```{r}
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    rowwise() %>% 
+    mutate(z = list(rnorm(n, mean, sd))) %>% 
+    unnest(z)
+```
+
+and, finally, the middle three columns were only used to generate the values in `z`, so they can be thrown away now by `select`ing only `gp` and `z`.
+
+The `rowwise` is necessary:
+
+```{r}
+  tibble(gp = c("x", "y"), n = n, mean = mean, sd = sd) %>% 
+    mutate(z = list(rnorm(n, mean, sd))) %>% 
+    unnest(z)
+```
+
+because `rnorm` is vectorized, and for the `x` sample, R will draw one sampled value from each normal distribution, and then repeat the same values for the `y` sample. This is very much *not* what we want.
+
+I used the same idea to draw my random chi-squared data later on:
+
+```{r}
+tibble(df = c(2,6)) %>% 
+  rowwise() %>% 
+  mutate(z = list(rchisq(20, df))) %>% 
+  unnest(z)
+```
+
+(twenty values from $\chi^2_2$, followed by twenty from $\chi^2_6$.)
+
+This suggests that I ought to be able to generalize my function `gen_sample`. Generalizing to any number of groups needs no extra work: the length of the input `n` determines the number of groups, and the values in `n` determine the size of each of those groups. 
+
+The interesting generalization is the distribution to sample from. The first parameter of the  functions `rnorm`, `rchisq` etc. is always the number of random values to generate, but the remaining parameters are different for each distribution. This suggests that my generalized random sample generator ought to have the name of the random sampling function as input, followed by `...` to allow any other inputs needed by that sampling function; these then get passed on. 
+
+
+# Generalizing
+
+To generalize `gen_sample` to a new function `sample_groups`, we need to consider how to handle different distributions. The distribution itself is not the hard part; that can be specified by having the random sample generator function for the desired distribution as an input to the new function. The problem is that each distribution has different parameters, which need to be inputs to `sample_groups`.
+
+The standard way of doing this kind of thing is to use the `...` input to a function. If I had just one group, it would go like this:
+
+```{r}
+sample_group <- function(n, dist, ...) {
+  dist(n, ...)
+}
+```
+
+and then
+
+```{r}
+sample_group(5, rnorm, mean = 10, sd = 3)
+```
+
+or 
+
+```{r}
+sample_group(6, rpois, lambda = 3)
+```
+
+The additional (named) inputs to `sample_group` are passed on unchanged to the random sample generator, to generate respectively normal random values with mean 10 and SD 3, and Poisson random values with mean 3.^[It may take a trip to the help files to find out what R calls these parameters.]
+
+The random sample generators are vectorized, but the obvious thing for generating two samples from different distributions does not work:
+
+```{r}
+sample_group(c(6, 3), rnorm, mean = c(10, 20), sd = c(3, 2))
+```
+
+We appear to have one value from each distribution, not six from the first and three from the second. This, I *think*, is what the help files say will happen.
+
+Even if I can get this to work, it might be that I want to generate samples from different distributions. So, onto idea #2. 
+
+Let's suppose I ask the user to write the code to generate each sample as text (a vector of pieces of text, one for each sample). Here's how my example above would look:
+
+```{r}
+code <- c("rnorm(5, mean = 10, sd = 3)", 
+          "rpois(6, lambda = 2)")
+code
+```
+
+The problem is that this is text, not runnable code. One way to turn this into something useful is to `parse` it:
+
+```{r}
+pc <- parse(text = code[1])
+pc
+```
+This has turned the text into an `expression`, something that can be evaluated, thus:
+
+```{r}
+eval(pc)
+```
+
+So now we have a strategy:
+
+```{r}
+tibble(code) %>% 
+  rowwise() %>% 
+  mutate(expr = list(parse(text = code))) %>% 
+  mutate(z = list(eval(expr))) %>% 
+  pull(z)
+```
+
+Oh, that didn't work. I got six Poissons, twice.
+
+```{r}
+tibble(code) %>% 
+  mutate(expr = map(code, ~parse(text = .))) %>% 
+  mutate(z = map(expr, ~eval(.))) %>% 
+  unnest(z)
+```
+That seems to have worked.
+
+```{r}
+txt <- "rnorm(5, 10, 3)"
+eval(parse(text = txt))
+```
+
+
