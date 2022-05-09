@@ -7,7 +7,16 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 04 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 May 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Why the rank sum test is also a waste of time</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2022-05-06-why-the-rank-sum-test-is-also-a-waste-of-time</link>
+      <description>In the same way that the signed rank test is mostly a waste of time, here I argue that the rank sum test is very rarely useful, and offer a less well-known test to use instead.</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2022-05-06-why-the-rank-sum-test-is-also-a-waste-of-time</guid>
+      <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
+      <media:content url="http://ritsokiguess.site/blogg/posts/2022-05-06-why-the-rank-sum-test-is-also-a-waste-of-time/why-the-rank-sum-test-is-also-a-waste-of-time_files/figure-html5/unnamed-chunk-12-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Why the signed rank test is a waste of time</title>
       <dc:creator>Ken Butler</dc:creator>
