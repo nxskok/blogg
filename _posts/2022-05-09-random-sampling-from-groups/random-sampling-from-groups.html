@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":[]}
+  {"type":"character","attributes":{},"value":["random-sampling-from-groups_files/anchor-4.2.2/anchor.min.js","random-sampling-from-groups_files/bowser-1.9.3/bowser.min.js","random-sampling-from-groups_files/distill-2.2.21/template.v2.js","random-sampling-from-groups_files/header-attrs-2.11/header-attrs.js","random-sampling-from-groups_files/jquery-3.5.1/AUTHORS.txt","random-sampling-from-groups_files/jquery-3.5.1/jquery-1.12.4.js","random-sampling-from-groups_files/jquery-3.5.1/jquery-1.12.4.min.js","random-sampling-from-groups_files/jquery-3.5.1/jquery-1.12.4.min.map","random-sampling-from-groups_files/jquery-3.5.1/jquery-2.2.4.js","random-sampling-from-groups_files/jquery-3.5.1/jquery-2.2.4.min.js","random-sampling-from-groups_files/jquery-3.5.1/jquery-2.2.4.min.map","random-sampling-from-groups_files/jquery-3.5.1/jquery-3.5.1.js","random-sampling-from-groups_files/jquery-3.5.1/jquery-3.5.1.min.js","random-sampling-from-groups_files/jquery-3.5.1/jquery-3.5.1.min.map","random-sampling-from-groups_files/jquery-3.5.1/LICENSE.txt","random-sampling-from-groups_files/popper-2.6.0/popper.min.js","random-sampling-from-groups_files/tippy-6.2.7/tippy-bundle.umd.min.js","random-sampling-from-groups_files/tippy-6.2.7/tippy-light-border.css","random-sampling-from-groups_files/tippy-6.2.7/tippy.css","random-sampling-from-groups_files/tippy-6.2.7/tippy.umd.min.js","random-sampling-from-groups_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1549,14 +1549,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre><code># A tibble: 8 × 5
   gp        n  mean    sd     z
   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 x         5    20     2 20.5 
-2 x         5    20     2 15.2 
-3 x         5    20     2 20.1 
-4 x         5    20     2 22.5 
-5 x         5    20     2 20.1 
-6 y         3    10     1 10.1 
-7 y         3    10     1  8.62
-8 y         3    10     1 10.2 </code></pre>
+1 x         5    20     2 20.1 
+2 x         5    20     2 18.7 
+3 x         5    20     2 17.7 
+4 x         5    20     2 27.0 
+5 x         5    20     2 15.5 
+6 y         3    10     1 11.0 
+7 y         3    10     1 10.5 
+8 y         3    10     1  9.38</code></pre>
 </div>
 <p>and, finally, the middle three columns were only used to generate the values in <code>z</code>, so they can be thrown away now by <code>select</code>ing only <code>gp</code> and <code>z</code>.</p>
 <p>The <code>rowwise</code> is necessary:</p>
@@ -1570,10 +1570,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre><code># A tibble: 4 × 5
   gp        n  mean    sd     z
   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 x         5    20     2  17.1
-2 x         5    20     2  10.4
-3 y         3    10     1  17.1
-4 y         3    10     1  10.4</code></pre>
+1 x         5    20     2  18.5
+2 x         5    20     2  10.3
+3 y         3    10     1  18.5
+4 y         3    10     1  10.3</code></pre>
 </div>
 <p>because <code>rnorm</code> is vectorized, and for the <code>x</code> sample, R will draw one sampled value from each normal distribution, and then repeat the same values for the <code>y</code> sample. This is very much <em>not</em> what we want.</p>
 <p>I used the same idea to draw my random chi-squared data later on:</p>
@@ -1588,16 +1588,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre><code># A tibble: 40 × 2
       df     z
    &lt;dbl&gt; &lt;dbl&gt;
- 1     2 4.68 
- 2     2 3.40 
- 3     2 8.05 
- 4     2 3.75 
- 5     2 0.565
- 6     2 0.926
- 7     2 6.12 
- 8     2 0.364
- 9     2 0.937
-10     2 5.66 
+ 1     2 1.75 
+ 2     2 0.322
+ 3     2 1.49 
+ 4     2 4.68 
+ 5     2 0.735
+ 6     2 0.771
+ 7     2 1.49 
+ 8     2 1.59 
+ 9     2 1.52 
+10     2 2.11 
 # … with 30 more rows</code></pre>
 </div>
 <p>(twenty values from <span class="math inline">\(\chi^2_2\)</span>, followed by twenty from <span class="math inline">\(\chi^2_6\)</span>.)</p>
@@ -1620,7 +1620,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>sample_group</span><span class='op'>(</span><span class='fl'>5</span>, <span class='va'>rnorm</span>, mean <span class='op'>=</span> <span class='fl'>10</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>[1]  9.749316  2.808647 12.503789 10.622211  7.510654</code></pre>
+<pre><code>[1]  8.658549 10.374521  7.652507  9.976525 10.215639</code></pre>
 </div>
 <p>or</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -1628,7 +1628,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>sample_group</span><span class='op'>(</span><span class='fl'>6</span>, <span class='va'>rpois</span>, lambda <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>[1] 4 3 1 7 1 4</code></pre>
+<pre><code>[1] 5 1 3 5 2 3</code></pre>
 </div>
 <p>The additional (named) inputs to <code>sample_group</code> are passed on unchanged to the random sample generator, to generate respectively normal random values with mean 10 and SD 3, and Poisson random values with mean 3.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>The random sample generators are vectorized, but the obvious thing for generating two samples from different distributions does not work:</p>
@@ -1637,7 +1637,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>sample_group</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>3</span><span class='op'>)</span>, <span class='va'>rnorm</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>20</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>[1]  7.121658 22.277266</code></pre>
+<pre><code>[1] 11.12339 17.10029</code></pre>
 </div>
 <p>We appear to have one value from each distribution, not six from the first and three from the second. This, I <em>think</em>, is what the help files say will happen.</p>
 <p>Even if I can get this to work, it might be that I want to generate samples from different distributions. So, onto idea #2.</p>
@@ -1666,7 +1666,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span><span class='op'>(</span><span class='va'>pc</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code>[1] 11.608001 12.724271  7.299705 12.068735 10.846127</code></pre>
+<pre><code>[1]  7.270543 12.083803  8.747231 11.332894 10.922292</code></pre>
 </div>
 <p>So now we have a strategy, or so you would think:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -1696,21 +1696,202 @@ expression(rpois(6, lambda = 2))</code></pre>
 <pre><code># A tibble: 11 × 3
    code                        expr             z
    &lt;chr&gt;                       &lt;list&gt;       &lt;dbl&gt;
- 1 rnorm(5, mean = 10, sd = 3) &lt;expression&gt;  8.83
- 2 rnorm(5, mean = 10, sd = 3) &lt;expression&gt; 10.4 
- 3 rnorm(5, mean = 10, sd = 3) &lt;expression&gt;  8.43
- 4 rnorm(5, mean = 10, sd = 3) &lt;expression&gt;  6.86
- 5 rnorm(5, mean = 10, sd = 3) &lt;expression&gt;  9.64
- 6 rpois(6, lambda = 2)        &lt;expression&gt;  1   
- 7 rpois(6, lambda = 2)        &lt;expression&gt;  5   
- 8 rpois(6, lambda = 2)        &lt;expression&gt;  0   
+ 1 rnorm(5, mean = 10, sd = 3) &lt;expression&gt; 12.5 
+ 2 rnorm(5, mean = 10, sd = 3) &lt;expression&gt; 12.7 
+ 3 rnorm(5, mean = 10, sd = 3) &lt;expression&gt;  6.39
+ 4 rnorm(5, mean = 10, sd = 3) &lt;expression&gt; 13.8 
+ 5 rnorm(5, mean = 10, sd = 3) &lt;expression&gt; 12.0 
+ 6 rpois(6, lambda = 2)        &lt;expression&gt;  3   
+ 7 rpois(6, lambda = 2)        &lt;expression&gt;  1   
+ 8 rpois(6, lambda = 2)        &lt;expression&gt;  3   
  9 rpois(6, lambda = 2)        &lt;expression&gt;  1   
-10 rpois(6, lambda = 2)        &lt;expression&gt;  2   
-11 rpois(6, lambda = 2)        &lt;expression&gt;  2   </code></pre>
+10 rpois(6, lambda = 2)        &lt;expression&gt;  0   
+11 rpois(6, lambda = 2)        &lt;expression&gt;  4   </code></pre>
 </div>
 <p>That seems to have worked.</p>
-<p>So now we have the ingredients for a version of</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>So now we have the ingredients for a version of <code>sample_groups</code> based on the user writing the random-sampling code for us:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sample_groups</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>code</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span><span class='va'>code</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>expr <span class='op'>=</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span><span class='op'>(</span><span class='va'>code</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/parse.html'>parse</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='va'>.</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span><span class='op'>(</span><span class='va'>expr</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>expr</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<p>and to test:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'>sample_groups</span><span class='op'>(</span><span class='va'>code</span><span class='op'>)</span>
+<span class='va'>d</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 11 × 2
+   code                            z
+   &lt;chr&gt;                       &lt;dbl&gt;
+ 1 rnorm(5, mean = 10, sd = 3)  9.39
+ 2 rnorm(5, mean = 10, sd = 3) 11.8 
+ 3 rnorm(5, mean = 10, sd = 3)  7.96
+ 4 rnorm(5, mean = 10, sd = 3)  4.46
+ 5 rnorm(5, mean = 10, sd = 3) 10.6 
+ 6 rpois(6, lambda = 2)         2   
+ 7 rpois(6, lambda = 2)         3   
+ 8 rpois(6, lambda = 2)         1   
+ 9 rpois(6, lambda = 2)         1   
+10 rpois(6, lambda = 2)         0   
+11 rpois(6, lambda = 2)         2   </code></pre>
+</div>
+<p>and then something like</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>z</span> <span class='op'>~</span> <span class='va'>code</span>, data <span class='op'>=</span> <span class='va'>d</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Welch Two Sample t-test
+
+data:  z by code
+t = 5.4741, df = 4.9043, p-value = 0.002943
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  3.882558 10.834124
+sample estimates:
+mean in group rnorm(5, mean = 10, sd = 3) 
+                                 8.858341 
+       mean in group rpois(6, lambda = 2) 
+                                 1.500000 </code></pre>
+</div>
+<p>which is a little bit clumsy, but so it is.</p>
+<p>Using the <code>eval(parse(text = something))</code> idea is not (apparently) very well regarded. One immediate problem is that the user could put any code at all (that evaluates into a vector of numbers) into the input <code>code</code>, which seems less than secure:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>code</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1:3"</span>, <span class='st'>"mtcars$mpg"</span><span class='op'>)</span>
+<span class='fu'>sample_groups</span><span class='op'>(</span><span class='va'>code</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 35 × 2
+   code           z
+   &lt;chr&gt;      &lt;dbl&gt;
+ 1 1:3          1  
+ 2 1:3          2  
+ 3 1:3          3  
+ 4 mtcars$mpg  21  
+ 5 mtcars$mpg  21  
+ 6 mtcars$mpg  22.8
+ 7 mtcars$mpg  21.4
+ 8 mtcars$mpg  18.7
+ 9 mtcars$mpg  18.1
+10 mtcars$mpg  14.3
+# … with 25 more rows</code></pre>
+</div>
+<p>I want to get back to the user inputting the desired random sample generators as functions, and then running those functions on the rest of the input:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>dist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>rnorm</span>, <span class='va'>rpois</span><span class='op'>)</span>
+<span class='va'>mean</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='cn'>NA</span><span class='op'>)</span>
+<span class='va'>sd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='cn'>NA</span><span class='op'>)</span>
+<span class='va'>lambda</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>gp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>
+<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>n</span>, dist <span class='op'>=</span> <span class='va'>dist</span>, mean <span class='op'>=</span> <span class='va'>mean</span>, sd <span class='op'>=</span> <span class='va'>sd</span>, lambda <span class='op'>=</span> <span class='va'>lambda</span>, gp <span class='op'>=</span> <span class='va'>gp</span><span class='op'>)</span>
+<span class='va'>d</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 6
+      n dist    mean    sd lambda gp   
+  &lt;dbl&gt; &lt;list&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
+1     6 &lt;fn&gt;      10     3     NA x    
+2     3 &lt;fn&gt;      NA    NA      2 y    </code></pre>
+</div>
+<p>Now, how to run those functions in <code>dist</code>, with the parameters shown? This is what <code>do.call</code> does:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>rnorm</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span>, mean <span class='op'>=</span> <span class='fl'>10</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1]  2.053390  9.838068  7.994139  6.330661 11.080763</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>rpois</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>3</span>, lambda <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 1 0 1</code></pre>
+</div>
+<p>so, package up those distribution parameters into a <code>list</code> first:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>pars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>6</span>, mean <span class='op'>=</span> <span class='fl'>10</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>, 
+             <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>3</span>, lambda <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>dist <span class='op'>=</span> <span class='va'>dist</span>, pars <span class='op'>=</span> <span class='va'>pars</span><span class='op'>)</span>
+<span class='va'>d</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 × 2
+  dist   pars            
+  &lt;list&gt; &lt;list&gt;          
+1 &lt;fn&gt;   &lt;named list [3]&gt;
+2 &lt;fn&gt;   &lt;named list [2]&gt;</code></pre>
+</div>
+<p>and then</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>d</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map2.html'>map2</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='va'>pars</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.y</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 9 × 3
+  dist   pars                 z
+  &lt;list&gt; &lt;list&gt;           &lt;dbl&gt;
+1 &lt;fn&gt;   &lt;named list [3]&gt;  9.80
+2 &lt;fn&gt;   &lt;named list [3]&gt;  6.80
+3 &lt;fn&gt;   &lt;named list [3]&gt;  6.80
+4 &lt;fn&gt;   &lt;named list [3]&gt; 11.0 
+5 &lt;fn&gt;   &lt;named list [3]&gt;  9.32
+6 &lt;fn&gt;   &lt;named list [3]&gt; 12.6 
+7 &lt;fn&gt;   &lt;named list [2]&gt;  3   
+8 &lt;fn&gt;   &lt;named list [2]&gt;  6   
+9 &lt;fn&gt;   &lt;named list [2]&gt;  3   </code></pre>
+</div>
+<p>it works!</p>
+<p>And so, we can now make our function:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sample_groups</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>dist</span>, <span class='va'>pars</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>nr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dist</span><span class='op'>)</span>
+  <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>dist <span class='op'>=</span> <span class='va'>dist</span>, pars <span class='op'>=</span> <span class='va'>pars</span>, gp <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>nr</span><span class='op'>]</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='fu'><a href='https://purrr.tidyverse.org/reference/map2.html'>map2</a></span><span class='op'>(</span><span class='va'>dist</span>, <span class='va'>pars</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.y</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://tidyr.tidyverse.org/reference/nest.html'>unnest</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>gp</span>, <span class='va'>z</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<p>and to test</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dists</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>rnorm</span>, <span class='va'>rpois</span><span class='op'>)</span>
+<span class='va'>pars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>6</span>, mean <span class='op'>=</span> <span class='fl'>10</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>3</span>, lambda <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>sample_groups</span><span class='op'>(</span><span class='va'>dists</span>, <span class='va'>pars</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 9 × 2
+  gp        z
+  &lt;chr&gt; &lt;dbl&gt;
+1 a      8.83
+2 a      5.49
+3 a      6.19
+4 a     12.0 
+5 a      9.33
+6 a      2.83
+7 b      1   
+8 b      2   
+9 b      3   </code></pre>
+</div>
+<p>The only weirdness is that the user has to specify a list of lists for the parameters (because <code>do.call</code> needs a list for inputs to its function). But it definitely works.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
