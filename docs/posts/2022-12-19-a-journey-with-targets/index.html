@@ -23,6 +23,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -49,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { color: #20794d; } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -72,11 +74,11 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
-code span.sc { color: #20794d; } /* SpecialChar */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
 code span.st { color: #20794d; } /* String */
 code span.va { color: #111111; } /* Variable */
@@ -84,48 +86,49 @@ code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
+
   <!--radix_placeholder_meta_tags-->
-<title>Ken's Blog: Correcting a dataframe</title>
+<title>Ken's Blog: A journey with Targets</title>
 
-<meta property="description" itemprop="description" content="The tidyverse way."/>
+<meta property="description" itemprop="description" content="Another example of using the `targets` package"/>
 
-<link rel="canonical" href="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
+<link rel="canonical" href="http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/"/>
 
 <!--  https://schema.org/Article -->
-<meta property="article:published" itemprop="datePublished" content="2021-04-26"/>
-<meta property="article:created" itemprop="dateCreated" content="2021-04-26"/>
+<meta property="article:published" itemprop="datePublished" content="2022-12-19"/>
+<meta property="article:created" itemprop="dateCreated" content="2022-12-19"/>
 <meta name="article:author" content="Ken Butler"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="Ken&#39;s Blog: Correcting a dataframe"/>
+<meta property="og:title" content="Ken&#39;s Blog: A journey with Targets"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="The tidyverse way."/>
-<meta property="og:url" content="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
+<meta property="og:description" content="Another example of using the `targets` package"/>
+<meta property="og:url" content="http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Ken&#39;s Blog"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="Ken&#39;s Blog: Correcting a dataframe"/>
-<meta property="twitter:description" content="The tidyverse way."/>
-<meta property="twitter:url" content="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
+<meta property="twitter:title" content="Ken&#39;s Blog: A journey with Targets"/>
+<meta property="twitter:description" content="Another example of using the `targets` package"/>
+<meta property="twitter:url" content="http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/"/>
 
 <!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
-<meta name="citation_title" content="Ken&#39;s Blog: Correcting a dataframe"/>
-<meta name="citation_fulltext_html_url" content="http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"/>
-<meta name="citation_online_date" content="2021/04/26"/>
-<meta name="citation_publication_date" content="2021/04/26"/>
+<meta name="citation_title" content="Ken&#39;s Blog: A journey with Targets"/>
+<meta name="citation_fulltext_html_url" content="http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/"/>
+<meta name="citation_online_date" content="2022/12/19"/>
+<meta name="citation_publication_date" content="2022/12/19"/>
 <meta name="citation_author" content="Ken Butler"/>
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Correcting a dataframe"]},{"type":"character","attributes":{},"value":["The tidyverse way."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg"]}]}]},{"type":"character","attributes":{},"value":["04-26-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["A journey with Targets"]},{"type":"character","attributes":{},"value":["Another example of using the `targets` package"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blog"]}]}]},{"type":"character","attributes":{},"value":["2022-12-19"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["correcting-a-dataframe_files/anchor-4.2.2/anchor.min.js","correcting-a-dataframe_files/bowser-1.9.3/bowser.min.js","correcting-a-dataframe_files/distill-2.2.21/template.v2.js","correcting-a-dataframe_files/header-attrs-2.11/header-attrs.js","correcting-a-dataframe_files/htmlwidgets-1.5.4/htmlwidgets.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.min.js","correcting-a-dataframe_files/jquery-3.6.0/jquery-3.6.0.min.map","correcting-a-dataframe_files/leaflet-1.3.1/images/layers-2x.png","correcting-a-dataframe_files/leaflet-1.3.1/images/layers.png","correcting-a-dataframe_files/leaflet-1.3.1/images/marker-icon-2x.png","correcting-a-dataframe_files/leaflet-1.3.1/images/marker-icon.png","correcting-a-dataframe_files/leaflet-1.3.1/images/marker-shadow.png","correcting-a-dataframe_files/leaflet-1.3.1/leaflet.css","correcting-a-dataframe_files/leaflet-1.3.1/leaflet.js","correcting-a-dataframe_files/leaflet-binding-2.0.4.1/leaflet.js","correcting-a-dataframe_files/leafletfix-1.0.0/leafletfix.css","correcting-a-dataframe_files/popper-2.6.0/popper.min.js","correcting-a-dataframe_files/proj4-2.6.2/proj4.min.js","correcting-a-dataframe_files/Proj4Leaflet-1.0.1/proj4leaflet.js","correcting-a-dataframe_files/rstudio_leaflet-1.3.1/images/1px.png","correcting-a-dataframe_files/rstudio_leaflet-1.3.1/rstudio_leaflet.css","correcting-a-dataframe_files/tippy-6.2.7/tippy-bundle.umd.min.js","correcting-a-dataframe_files/tippy-6.2.7/tippy-light-border.css","correcting-a-dataframe_files/tippy-6.2.7/tippy.css","correcting-a-dataframe_files/tippy-6.2.7/tippy.umd.min.js","correcting-a-dataframe_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["a-journey-with-targets_files/anchor-4.2.2/anchor.min.js","a-journey-with-targets_files/bowser-1.9.3/bowser.min.js","a-journey-with-targets_files/distill-2.2.21/template.v2.js","a-journey-with-targets_files/header-attrs-2.18/header-attrs.js","a-journey-with-targets_files/jquery-3.6.0/jquery-3.6.0.js","a-journey-with-targets_files/jquery-3.6.0/jquery-3.6.0.min.js","a-journey-with-targets_files/jquery-3.6.0/jquery-3.6.0.min.map","a-journey-with-targets_files/popper-2.6.0/popper.min.js","a-journey-with-targets_files/tippy-6.2.7/tippy-bundle.umd.min.js","a-journey-with-targets_files/tippy-6.2.7/tippy-light-border.css","a-journey-with-targets_files/tippy-6.2.7/tippy.css","a-journey-with-targets_files/tippy-6.2.7/tippy.umd.min.js","a-journey-with-targets_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2088,16 +2091,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
-  <script src="../../site_libs/header-attrs-2.11/header-attrs.js"></script>
-  <script src="../../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+  <script src="../../site_libs/header-attrs-2.18/header-attrs.js"></script>
   <script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-  <link href="../../site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
-  <script src="../../site_libs/leaflet-1.3.1/leaflet.js"></script>
-  <link href="../../site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
-  <script src="../../site_libs/proj4-2.6.2/proj4.min.js"></script>
-  <script src="../../site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
-  <link href="../../site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-  <script src="../../site_libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="../../site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2150,7 +2145,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Correcting a dataframe","description":"The tidyverse way.","authors":[{"author":"Ken Butler","authorURL":"http://ritsokiguess.site/blogg","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-04-26T00:00:00.000-04:00","citationText":"Butler, 2021"}
+{"title":"A journey with Targets","description":"Another example of using the `targets` package","authors":[{"author":"Ken Butler","authorURL":"http://ritsokiguess.site/blog","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-12-19T00:00:00.000-05:00","citationText":"Butler, 2022"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2176,326 +2171,222 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Correcting a dataframe</h1>
+<h1>A journey with Targets</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>The tidyverse way.</p></p>
+<p><p>Another example of using the <code>targets</code> package</p></p>
 </div>
 
 <div class="d-byline">
-  Ken Butler <a href="http://ritsokiguess.site/blogg" class="uri">http://ritsokiguess.site/blogg</a> 
+  Ken Butler <a href="http://ritsokiguess.site/blog" class="uri">http://ritsokiguess.site/blog</a> 
   
-<br/>04-26-2021
+<br/>2022-12-19
 </div>
 
 <div class="d-article">
-<h2 id="packages">Packages</h2>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/mtennekes/tmaptools'>tmaptools</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rstudio.github.io/leaflet/'>leaflet</a></span><span class='op'>)</span>
-</code></pre>
-</div>
-</div>
 <h2 id="introduction">Introduction</h2>
-<p>So I had a dataframe today, in which I wanted to make some small corrections. Specifically, I had this one:</p>
+<p>There are lots of good reasons to adopt a workflow based around functions, and the <code>targets</code> package provides an excellent way to do that, by asking the user to express how the functions relate to one another. This solves a problem I always had when trying to express things in functions: I would end up with hundreds of little functions that I would have to keep straight, especially when something went wrong later and I would have to try to remember how my edifice of functions had actually been constructed.</p>
+<p>There are lots of good introductions to <code>targets</code>, none better than the Walkthrough in the <a href="https://books.ropensci.org/targets/">user manual</a>. Having worked through that myself, I wanted to see whether I could build a <code>targets</code> project from scratch. This is the story of that process. Thanks to <a href="https://fosstodon.org/@blasbenito">Blas Benito</a> and <a href="https://mastodon.social/@rmflight">Robert Flight</a> on Mastodon for guiding me when I got stuck.</p>
+<p>My aim was to read in some data from a website, make a graph, do an analysis, and write a report including these things, and to do this in a way that makes it easy to add a second analysis of a second dataset to the report. The second analysis I do here is (deliberately) structured in a different way to the first one, so that we can see what implications that has for the process.</p>
+<h2 id="setup">Setup</h2>
+<p>We<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> begin by installing the <code>targets</code> and <code>tarchetypes</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> packages.</p>
+<p>Next, we go down to the console and run</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_url</span> <span class='op'>&lt;-</span> <span class='st'>"http://ritsokiguess.site/datafiles/wisconsin.txt"</span>
-<span class='va'>wisc</span> <span class='op'>&lt;-</span> <span class='fu'>read_table</span><span class='op'>(</span><span class='va'>my_url</span><span class='op'>)</span>
-<span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>location</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/targets/'>targets</a></span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code># A tibble: 12 × 1
-   location     
-   &lt;chr&gt;        
- 1 Appleton     
- 2 Beloit       
- 3 Fort.Atkinson
- 4 Madison      
- 5 Marshfield   
- 6 Milwaukee    
- 7 Monroe       
- 8 Superior     
- 9 Wausau       
-10 Dubuque      
-11 St.Paul      
-12 Chicago      </code></pre>
 </div>
-<p>These are mostly, but not all, cities in Wisconsin, and I want to draw them on a map. To do that, though, I need to affix their states to them, and I thought a good starting point was to start by pretending that they were all in Wisconsin, and then correct the ones that aren’t:</p>
+<p>Most of the actual running of things happens in the console with this way of working. Next,</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>location</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"WI"</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
-<span class='va'>wisc</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/use_targets.html'>use_targets</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code># A tibble: 12 × 2
-   location      state
-   &lt;chr&gt;         &lt;chr&gt;
- 1 Appleton      WI   
- 2 Beloit        WI   
- 3 Fort.Atkinson WI   
- 4 Madison       WI   
- 5 Marshfield    WI   
- 6 Milwaukee     WI   
- 7 Monroe        WI   
- 8 Superior      WI   
- 9 Wausau        WI   
-10 Dubuque       WI   
-11 St.Paul       WI   
-12 Chicago       WI   </code></pre>
 </div>
-<p>The last three cities are in the wrong state: Dubuque is in Iowa (IA), St. Paul in Minnesota (MN), and Chicago is in Illinois (IL). I know how to fix this in base R: I write something like</p>
+<p>This creates and opens a file called <code>_targets.R</code> that will say how everything is connected together. It is the equivalent of a <code>Makefile</code> in what it does, though the way it works is a bit different from a <code>Makefile</code>. The one <code>use_targets</code> creates is a template, with places to fill in what we need.</p>
+<p>I was trying to keep things tidy, so I also created some folders at this point: <code>data</code>, where the data we read in from the website will be stored, <code>report</code>, where the files for my report will live, and <code>R</code>, where the code for our functions will live.</p>
+<p>If you are using git/github, there is one more piece of setup to do. <code>targets</code> will create some (potentially) large objects in the folder <code>_targets</code> of your project, and these don’t need to be under version control (because they can always be recreated), so we add the <code>_targets</code> folder to <code>.gitignore</code>.</p>
+<p>All of my code is <a href="https://github.com/nxskok/soapy">here</a>.</p>
+<h2 id="the-soap-data">The soap data</h2>
+<p>The standard way to run <code>targets</code> is to define functions to do everything that needs doing (which you put in one or more files in the <code>R</code> folder), and then edit <code>_targets.R</code> to say how those functions work together to create what you need.</p>
+<p>I have three functions: one to read the data from a file, one to make a scatterplot with points and lines defined by groups, and one to fit a regression model, strictly an analysis of covariance model, like this (in file <code>functions.R</code> in folder <code>R</code>):</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span><span class='op'>$</span><span class='va'>state</span><span class='op'>[</span><span class='fl'>12</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"IL"</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>read_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>filename</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='fu'>read_delim</span><span class='op'>(</span><span class='va'>filename</span>, <span class='st'>" "</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>plot_lines</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>speed</span>, y <span class='op'>=</span> <span class='va'>scrap</span>, colour <span class='op'>=</span> <span class='va'>line</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'>geom_smooth</span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>fit_model1</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>scrap</span> <span class='op'>~</span> <span class='va'>speed</span> <span class='op'>+</span> <span class='va'>line</span>, data <span class='op'>=</span> <span class='va'>x</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span></code></pre>
 </div>
 </div>
-<p>but how do you do this the Tidyverse way?</p>
-<h2 id="a-better-way">A better way</h2>
-<p>The first step is to make a small dataframe with the cities that need to be corrected, and the states they are actually in:</p>
+<p>The background is this: our data come from a factory that makes soap bars. The interest here is in how much <code>scrap</code> soap (which cannot be made into soap bars) is produced, which might depend on the <code>speed</code> at which the production is run. There are two different production <code>line</code>s, labelled <code>a</code> and <code>b</code>; the plot suggests that the <code>scrap</code>-<code>speed</code> relationship can be modelled by separate but parallel lines for each production <code>line</code>, which is what the model fits.</p>
+<p>Now we have to edit <code>_targets.R</code> to express this. Here is the top bit of mine, with comments edited out:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>corrections</span> <span class='op'>&lt;-</span> <span class='fu'>tribble</span><span class='op'>(</span>
-  <span class='op'>~</span><span class='va'>location</span>, <span class='op'>~</span><span class='va'>state</span>,
-  <span class='st'>"Dubuque"</span>, <span class='st'>"IA"</span>,
-  <span class='st'>"St.Paul"</span>, <span class='st'>"MN"</span>,
-  <span class='st'>"Chicago"</span>, <span class='st'>"IL"</span>
-<span class='op'>)</span>
-<span class='va'>corrections</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/targets/'>targets</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/tarchetypes/'>tarchetypes</a></span><span class='op'>)</span> <span class='co'># Load other packages as needed. # nolint</span></span>
+<span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_option_set.html'>tar_option_set</a></span><span class='op'>(</span></span>
+<span>  packages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tidyverse"</span><span class='op'>)</span>, <span class='co'># packages that your targets need to run</span></span>
+<span>  format <span class='op'>=</span> <span class='st'>"rds"</span> <span class='co'># default storage format</span></span>
+<span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_source.html'>tar_source</a></span><span class='op'>(</span><span class='st'>"R/functions.R"</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code># A tibble: 3 × 2
-  location state
-  &lt;chr&gt;    &lt;chr&gt;
-1 Dubuque  IA   
-2 St.Paul  MN   
-3 Chicago  IL   </code></pre>
 </div>
-<p>Note that the columns of this dataframe have the <em>same names</em> as the ones in the original dataframe <code>wisc</code>.</p>
-<p>So, I was thinking, this is a lookup table (of a sort), and so joining this to <code>wisc</code> might yield something helpful. We want to look up locations and <em>not</em> match states, since we want to have these three cities have their correct state as a possibility. So what does this do?</p>
+<p>First we have the targets script load both <code>targets</code> and <code>tarchetypes</code> that we installed earlier.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Then we add any packages that we need for the analysis to run: in this case <code>tidyverse</code>, or if you’re a stickler for efficiency, <code>readr</code> and <code>ggplot2</code>. The storage format came from <code>use_targets</code>; unless you are creating huge things in your code, the default will be fine. Finally, we load the functions that we wrote.</p>
+<p>The bottom bit of <code>_targets.R</code> is the bit that looks like a Makefile, where we say how those functions are going to be used. This is the currently relevant part of mine:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>corrections</span>, by <span class='op'>=</span> <span class='st'>"location"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code># A tibble: 12 × 3
-   location      state.x state.y
-   &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;  
- 1 Appleton      WI      &lt;NA&gt;   
- 2 Beloit        WI      &lt;NA&gt;   
- 3 Fort.Atkinson WI      &lt;NA&gt;   
- 4 Madison       WI      &lt;NA&gt;   
- 5 Marshfield    WI      &lt;NA&gt;   
- 6 Milwaukee     WI      &lt;NA&gt;   
- 7 Monroe        WI      &lt;NA&gt;   
- 8 Superior      WI      &lt;NA&gt;   
- 9 Wausau        WI      &lt;NA&gt;   
-10 Dubuque       WI      IA     
-11 St.Paul       WI      MN     
-12 Chicago       WI      IL     </code></pre>
 </div>
-<p>Now, we have <em>two</em> states for each city. The first one is always Wisconsin, and the second one is usually missing, but where the state in <code>state.y</code> has a value, <em>that</em> is the true state of the city. So, the thought process is that the actual <code>state</code> should be:</p>
+<p>Each of these create a “target”, the first thing inside <code>tar_target</code> (or <code>tar_download</code>), and anything else says how that target is made. Each <code>tar_target</code> can (and undoubtedly will) use previously made targets.</p>
+<p>I have to talk about the first one. My datafile existed on a website with the URL shown, but <code>targets</code> works with local files only. <code>tarchetypes</code> contains a number of recipes for doing jobs like this. <code>tar_download</code> creates here a target <code>file1</code> that refers to the datafile by downloading the datafile from its website to a file in <code>data</code>. <code>file1</code> refers to that file without us having to remember where the file is.</p>
+<p>So, having created a target <code>file1</code> that refers to the (downloaded and locally stored) datafile, the next three targets do this:</p>
 <ul>
-<li>if <code>state.y</code> is not missing, use that</li>
-<li>else, use the value in <code>state.x</code>.</li>
+<li>read the data in from the local file using our function <code>read_data</code> and store it as the target <code>soap</code></li>
+<li>make a scatterplot with lines of the soap data, using our function <code>plot_lines</code> and store it as <code>plot1</code></li>
+<li>fit a model, using our function <code>fit_model</code>, and store it as <code>model1</code>.</li>
 </ul>
-<p>I had an idea that there was a function that would do exactly this, only I couldn’t remember its name, so I couldn’t really search for it. My first thought was <a href="https://dplyr.tidyverse.org/reference/na_if.html"><code>na_if</code></a>. What this does is every time it sees a certain value, it replaces it with NA. This, though, is the opposite way from what I wanted. So I looked at the See Also, and saw <a href="https://tidyr.tidyverse.org/reference/replace_na.html"><code>replace_na</code></a>. This replaces NAs with a given value. Not quite right, but closer.</p>
-<p>In the See Also for <code>replace_na</code>, I saw one more thing: <a href="https://dplyr.tidyverse.org/reference/coalesce.html"><code>coalesce</code></a>, “replace NAs with values from other vectors”. Was that what I was thinking of? It was. The way it works is that you feed it several vectors, and the first one that is not missing gives its value to the result. Hence, what I needed was this:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>corrections</span>, by <span class='op'>=</span> <span class='st'>"location"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>state<span class='op'>=</span><span class='fu'>coalesce</span><span class='op'>(</span><span class='va'>state.y</span>, <span class='va'>state.x</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 12 × 4
-   location      state.x state.y state
-   &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;
- 1 Appleton      WI      &lt;NA&gt;    WI   
- 2 Beloit        WI      &lt;NA&gt;    WI   
- 3 Fort.Atkinson WI      &lt;NA&gt;    WI   
- 4 Madison       WI      &lt;NA&gt;    WI   
- 5 Marshfield    WI      &lt;NA&gt;    WI   
- 6 Milwaukee     WI      &lt;NA&gt;    WI   
- 7 Monroe        WI      &lt;NA&gt;    WI   
- 8 Superior      WI      &lt;NA&gt;    WI   
- 9 Wausau        WI      &lt;NA&gt;    WI   
-10 Dubuque       WI      IA      IA   
-11 St.Paul       WI      MN      MN   
-12 Chicago       WI      IL      IL   </code></pre>
-</div>
-<p>Where <code>state.y</code> has a value, it is used; if it’s missing, the value in <code>state.x</code> is used instead.</p>
-<h2 id="the-best-way">The best way</h2>
-<p>I was quite pleased with myself for coming up with this, but I had missed the actual best way of doing this. In SQL, there is UPDATE, and what that does is to take a table of keys to look up and some new values for other columns to replace the ones in the original table. Because <code>dplyr</code> has a lot of things in common with SQL, it is perhaps no surprise that there is a <a href="https://dplyr.tidyverse.org/reference/rows.html"><code>rows_update</code></a>, and for this job it is as simple as this:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>rows_update</span><span class='op'>(</span><span class='va'>corrections</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
-<span class='va'>wisc</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 12 × 2
-   location      state
-   &lt;chr&gt;         &lt;chr&gt;
- 1 Appleton      WI   
- 2 Beloit        WI   
- 3 Fort.Atkinson WI   
- 4 Madison       WI   
- 5 Marshfield    WI   
- 6 Milwaukee     WI   
- 7 Monroe        WI   
- 8 Superior      WI   
- 9 Wausau        WI   
-10 Dubuque       IA   
-11 St.Paul       MN   
-12 Chicago       IL   </code></pre>
-</div>
-<p>The values to look up (the “keys”) are by default in the first column, which is where they are in <code>corrections</code>. If they had not been, I would have used a <code>by</code> in the same way as with a join.</p>
-<p>Mind. Blown. (Well, my mind was, anyway.)</p>
-<h2 id="geocoding">Geocoding</h2>
-<p>I said I wanted to draw a map with these cities on it. For that, I need to look up the longitude and latitude of these places, and for <em>that</em>, I need to glue the state onto the name of each city, to make sure I don’t look up the wrong one. It is perhaps easy to forget that <code>unite</code> is the cleanest way of doing this, particularly if you don’t want the individual columns any more:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>unite</span><span class='op'>(</span><span class='va'>where</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>location</span>, <span class='va'>state</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
-<span class='va'>wisc</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 12 × 1
-   where           
-   &lt;chr&gt;           
- 1 Appleton WI     
- 2 Beloit WI       
- 3 Fort.Atkinson WI
- 4 Madison WI      
- 5 Marshfield WI   
- 6 Milwaukee WI    
- 7 Monroe WI       
- 8 Superior WI     
- 9 Wausau WI       
-10 Dubuque IA      
-11 St.Paul MN      
-12 Chicago IL      </code></pre>
-</div>
-<p>The function <code>geocode_OSM</code> from <code>tmaptools</code> will find the longitude and latitude of a place. It expects <em>one</em> place as input, not a vector of placenames, so we will work <code>rowwise</code> to geocode one at a time. (Using <code>map</code> from <code>purrr</code> is also an option.) The geocoder returns a list, which contains, buried a little deeply, the longitudes and latitudes:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>rowwise</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>ll <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/tmaptools/man/geocode_OSM.html'>geocode_OSM</a></span><span class='op'>(</span><span class='va'>where</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
-<span class='va'>wisc</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 12 × 2
-# Rowwise: 
-   where            ll              
-   &lt;chr&gt;            &lt;list&gt;          
- 1 Appleton WI      &lt;named list [3]&gt;
- 2 Beloit WI        &lt;named list [3]&gt;
- 3 Fort.Atkinson WI &lt;named list [3]&gt;
- 4 Madison WI       &lt;named list [3]&gt;
- 5 Marshfield WI    &lt;named list [3]&gt;
- 6 Milwaukee WI     &lt;named list [3]&gt;
- 7 Monroe WI        &lt;named list [3]&gt;
- 8 Superior WI      &lt;named list [3]&gt;
- 9 Wausau WI        &lt;named list [3]&gt;
-10 Dubuque IA       &lt;named list [3]&gt;
-11 St.Paul MN       &lt;named list [3]&gt;
-12 Chicago IL       &lt;named list [3]&gt;</code></pre>
-</div>
-<p>The column <code>ll</code> is a list-column, and the usual way to handle these is to <code>unnest</code>, but that isn’t quite right here:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> <span class='fu'>unnest</span><span class='op'>(</span><span class='va'>ll</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 36 × 2
-   where            ll          
-   &lt;chr&gt;            &lt;named list&gt;
- 1 Appleton WI      &lt;chr [1]&gt;   
- 2 Appleton WI      &lt;dbl [2]&gt;   
- 3 Appleton WI      &lt;bbox [4]&gt;  
- 4 Beloit WI        &lt;chr [1]&gt;   
- 5 Beloit WI        &lt;dbl [2]&gt;   
- 6 Beloit WI        &lt;bbox [4]&gt;  
- 7 Fort.Atkinson WI &lt;chr [1]&gt;   
- 8 Fort.Atkinson WI &lt;dbl [2]&gt;   
- 9 Fort.Atkinson WI &lt;bbox [4]&gt;  
-10 Madison WI       &lt;chr [1]&gt;   
-# … with 26 more rows</code></pre>
-</div>
-<p>Unnesting a list of three things produces <em>three</em> rows for each city. It would make more sense to have the unnesting go to the right and produce a new <em>column</em> for each thing in the list. The new <code>tidyr</code> has a variant called <code>unnest_wider</code> that does this:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>unnest_wider</span><span class='op'>(</span><span class='va'>ll</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 12 × 4
-   where            query            coords    bbox      
-   &lt;chr&gt;            &lt;chr&gt;            &lt;list&gt;    &lt;list&gt;    
- 1 Appleton WI      Appleton WI      &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 2 Beloit WI        Beloit WI        &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 3 Fort.Atkinson WI Fort.Atkinson WI &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 4 Madison WI       Madison WI       &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 5 Marshfield WI    Marshfield WI    &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 6 Milwaukee WI     Milwaukee WI     &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 7 Monroe WI        Monroe WI        &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 8 Superior WI      Superior WI      &lt;dbl [2]&gt; &lt;bbox [4]&gt;
- 9 Wausau WI        Wausau WI        &lt;dbl [2]&gt; &lt;bbox [4]&gt;
-10 Dubuque IA       Dubuque IA       &lt;dbl [2]&gt; &lt;bbox [4]&gt;
-11 St.Paul MN       St.Paul MN       &lt;dbl [2]&gt; &lt;bbox [4]&gt;
-12 Chicago IL       Chicago IL       &lt;dbl [2]&gt; &lt;bbox [4]&gt;</code></pre>
-</div>
-<p>The longitudes and latitudes we want are still hidden in a list-column, the one called <code>coords</code>, so with luck, if we unnest that wider as well, we should be in business:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>wisc</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>unnest_wider</span><span class='op'>(</span><span class='va'>ll</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>unnest_wider</span><span class='op'>(</span><span class='va'>coords</span><span class='op'>)</span> <span class='op'>-&gt;</span> <span class='va'>wisc</span>
-<span class='va'>wisc</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 12 × 5
-   where            query                x     y bbox      
-   &lt;chr&gt;            &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;    
- 1 Appleton WI      Appleton WI      -88.4  44.3 &lt;bbox [4]&gt;
- 2 Beloit WI        Beloit WI        -89.0  42.5 &lt;bbox [4]&gt;
- 3 Fort.Atkinson WI Fort.Atkinson WI -88.8  42.9 &lt;bbox [4]&gt;
- 4 Madison WI       Madison WI       -89.4  43.1 &lt;bbox [4]&gt;
- 5 Marshfield WI    Marshfield WI    -90.2  44.7 &lt;bbox [4]&gt;
- 6 Milwaukee WI     Milwaukee WI     -87.9  43.0 &lt;bbox [4]&gt;
- 7 Monroe WI        Monroe WI        -89.6  42.6 &lt;bbox [4]&gt;
- 8 Superior WI      Superior WI      -92.1  46.6 &lt;bbox [4]&gt;
- 9 Wausau WI        Wausau WI        -89.6  45.0 &lt;bbox [4]&gt;
-10 Dubuque IA       Dubuque IA       -90.7  42.5 &lt;bbox [4]&gt;
-11 St.Paul MN       St.Paul MN       -93.1  44.9 &lt;bbox [4]&gt;
-12 Chicago IL       Chicago IL       -87.6  41.9 &lt;bbox [4]&gt;</code></pre>
-</div>
-<p>And now we are. <code>x</code> contains the longitudes (negative for degrees west), and <code>y</code> the latitudes (positive for degrees north).</p>
-<h2 id="making-a-map-with-these-on-them">Making a map with these on them</h2>
-<p>The most enjoyable way to make a map in R is to use the <code>leaflet</code> package. Making a map is a three-step process:</p>
+<p>Having set up our pipeline, now we can think about running it. Before that, we can go to the console and type <code>tar_visnetwork()</code>. This makes a diagram showing how the bits fit together. In this case we have, left to right:</p>
 <ul>
-<li><code>leaflet()</code> with the name of the dataframe</li>
-<li><code>addTiles()</code> to get map tiles to draw the map with</li>
-<li>add some kind of markers to show where the points are. I use circle markers here; there are also markers (from <code>addMarkers</code>) that look like Google map pins. Here also you associate the longs and lats with the columns they are in in your dataframe:</li>
+<li><code>file1_url</code>: the url where the data will come from</li>
+<li><code>file1</code>, which depends on <code>file1_url</code></li>
+<li><code>soap</code>, which depends on <code>file1</code></li>
+<li><code>plot1</code>, which depends on <code>soap</code></li>
+<li><code>model1</code>, which also depends on <code>soap</code>.</li>
 </ul>
+<p>The value of looking at this diagram is to make sure that we have coded the dependency structure properly, which it seems (in this case) I have done.</p>
+<p>Also note that the targets are colour-coded according to whether they are up-to-date or outdated. At first, everything will be outdated, but later only some of it will be outdated. <code>targets</code> knows to only update what needs updating.</p>
+<p>Next, we actually run everything. This is done in the console with <code>tar_make</code>. This will update everything that needs updating, using in each case the recipe in <code>_targets.R</code>. The output to <code>tar_make()</code> tells you whether each target was “built” (updated) or “skipped” (nothing in that target had changed).
+If anything goes wrong, there will be an error message. I find the error messages not very helpful, but at least it is clear which of the targets caused the error, which at least gives a place to start looking.</p>
+<p>Once everything has run, the output from each target is stored,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> and can be inspected (in the Console) using <code>tar_read</code>. For example, <code>tar_read(soap)</code> will display the dataframe that was read in from the file, and <code>tar_read(plot1)</code> will display the scatterplot. You can do the same thing with the fitted model object <code>model1</code>, but this is probably not what you want; you would probably prefer to look at the <code>summary</code> of the model,<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> which you can do like this:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/leaflet/man/leaflet.html'>leaflet</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>wisc</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/leaflet/man/map-layers.html'>addTiles</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/pkg/leaflet/man/map-layers.html'>addCircleMarkers</a></span><span class='op'>(</span>lng <span class='op'>=</span> <span class='op'>~</span><span class='va'>x</span>, lat <span class='op'>=</span> <span class='op'>~</span><span class='va'>y</span><span class='op'>)</span> 
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span></code></pre>
 </div>
-<div id="htmlwidget-06b255cd3af9e5e691ba" style="width:624px;height:384px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-06b255cd3af9e5e691ba">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addCircleMarkers","args":[[44.2613967,42.5083272,42.9288944,43.074761,44.6688524,43.0349931,42.6018298,46.623324,44.9596017,42.5006217,44.9497487,41.8755616],[-88.4069744,-89.031784,-88.8370509,-89.3837613,-90.1717987,-87.922497,-89.6392396,-92.117435,-89.6298239,-90.6647967,-93.0931028,-87.6244212],10,null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"#03F","fillOpacity":0.2},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[41.8755616,46.623324],"lng":[-93.0931028,-87.6244212]}},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>The nice thing about Leaflet maps is that you can zoom, pan and generally move about in them. For example, you can zoom in to find out which city each circle represents.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p><code>tar_load</code> puts a copy of the target named into your workspace, and then you can do something with it as you normally would.</p>
+<h2 id="making-a-child-report">Making a child report</h2>
+<p>So far, this is very standard <code>targets</code> work: use functions to make a pipeline that you specify in <code>_targets.R</code>, and then use <code>tar_make</code> to run it. But, having gotten this to work, I wanted to add a report, and I wanted to do so flexibly, so that I could easily add a different analysis of a different dataset later. The way I like to do this is to use “child documents”: write each report as a separate <code>.Rmd</code> file, and then have a “parent” report that loads each child report.</p>
+<p>We’ll get to the parent report later. Let’s write a report about the soap data first, which will be saved in <code>soap.Rmd</code> in the <code>report</code> folder. This is a child document, so <em>it has no YAML header</em>, and we begin right away with the report header and a description of the dataset. The report structure will be simple: we display the data, display the scatterplot (and talk about it a bit), then display the regression output (and talk about that a bit).</p>
+<p>There is a standard <code>targets</code> way of making reports like these: we do all the computation in previous targets (as we have done), and then we read in what we want to display with <code>tar_read</code> or <code>tar_load</code> as we did above, instead of doing more computation to obtain a target that we already have. For this report, that means having three code chunks, the content of which we have already seen:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_read.html'>tar_read</a></span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>to display the data,</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_read.html'>tar_read</a></span><span class='op'>(</span><span class='va'>plot1</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>to display the scatterplot, and</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>to display the model output. That, together with my comments, is <code>soap.Rmd</code>.</p>
+<p>Finally, we need to add this into the pipeline, so that <code>targets</code> knows to update this part of the report if the text in it changes, or if any of <code>soap</code>, <code>plot1</code>, or <code>model1</code> changes.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> This is a so-called “file” target, and we add it to the end of <code>_targets.R</code> to make this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap_report</span>, <span class='st'>"report/soap.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p><code>targets</code> knows additionally that the soap report depends on <code>soap</code>, <code>plot1</code>, and <code>model1</code> because of the <code>tar_read</code> and <code>tar_load</code> statements in the report. (This doesn’t always show up in <code>tar_visnetwork</code>, but <code>targets</code> knows about it all the same.)</p>
+<h2 id="making-a-parent-report">Making a parent report</h2>
+<p>This is a genuine Markdown report, so it begins with a YAML header specifying the author, title, date, etc. Then follows a setup chunk with <code>knitr::opts_chunk$set(echo = FALSE)</code>: the only code in this part of the report is the <code>tar_read</code> and <code>tar_load</code> statements that the reader doesn’t need to see.</p>
+<p>Then we need to say that this report depends on <code>soap_report</code>, so that if <em>that</em> changes, the parent report needs to be updated. I come from a Makefile background, so this took some time (and help) for me to figure out, but the way you do it is, as in the child report, <code>tar_load</code>ing the target that represents the report:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>soap_report</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Then I had some preamble text.</p>
+<p>Then we load the child report itself. It seems that it should be possible to use <code>soap_report</code> directly (it contains the path to the child report), but I couldn’t get this to work, so I specified the actual path to the child report directly with <code>child = "report/soap.Rmd"</code> as a chunk option.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>The last thing to do here is to add the parent report as a target. We now have:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap_report</span>, <span class='st'>"report/soap.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_render.html'>tar_render</a></span><span class='op'>(</span><span class='va'>final_report</span>, <span class='st'>"report/report.Rmd"</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>The parent report is the thing that needs to be knitted, so we use the special target <code>tar_render</code> (from <code>tarchetypes</code>), which says to take the document stored in the second input, and knit it to create the target that is the first input. After this runs, there is a file <code>report.html</code> in <code>report</code> that is the knitted report.</p>
+<h2 id="including-the-code-in-a-report">Including the code in a report</h2>
+<p>If I were writing the report for someone else, I wouldn’t expect them to be very interested in the code that produced the plot or the model summary. But for teaching, it is very useful to show what code the output came from. The problem with the <code>targets</code>-style analysis we just did is that, by separating the computation from the reporting, the code is nowhere to be found.</p>
+<p>At the expense of good <code>targets</code> style and efficient computation, however, there is no problem including the computation in the report, so that my second child report, in <code>report/spiders.Rmd</code>, looks like any other R Notebook you might write, with code chunks and the output immediately below them, to read in the data from a website, make a boxplot and run a logistic regression. The background for this one is that a certain spider is or is not found on a beach, and the research hypothesis is that whether or not this spider is found depends somehow on the size of the grains of sand on that beach.</p>
+<p>So there is no difficulty composing this kind of report, and no need to write extra functions and make extra targets to compute its constituent pieces. The only extra thing that needs to go in <code>_targets.R</code> is this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap_report</span>, <span class='st'>"report/soap.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>spiders_report</span>, <span class='st'>"report/spiders.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_render.html'>tar_render</a></span><span class='op'>(</span><span class='va'>final_report</span>, <span class='st'>"report/report.Rmd"</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>(the second to last line, entirely analogous to the other child report). The extra stuff that goes in the parent report is to turn the display of code back on:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>knitr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/knitr/man/opts_chunk.html'>opts_chunk</a></span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>echo <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Another <code>tar_load</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>spiders_report</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>(to build the dependence of the parent report on this child one as well), and then the actual importation of the second child report with <code>child = "report/spiders.Rmd"</code> in the options of another empty code chunk.</p>
+<p>This puts all the dependencies in the right places, and so another <code>tar_make</code> will build the whole report with its two child reports on the two datasets, updating anything that needs updating.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The authorly “we”, meaning you, the reader, and I are going on this journey together. Or so the fiction has it.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This is needed for some extensions to <code>targets</code>, two of which I use here.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The reason for <code>tarchetypes</code> will become clear shortly.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In an <code>.rds</code> file in the <code>_targets</code> folder.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Or run something like <code>broom::tidy</code>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Which might be because we changed the plot-drawing function to make a different plot, for example.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Actually done Quarto-style within the chunk, using the special comment line <code>#|</code>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2510,13 +2401,13 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="appendix-bottom">
   <h3 id="citation">Citation</h3>
   <p>For attribution, please cite this work as</p>
-  <pre class="citation-appendix short">Butler (2021, April 26). Ken's Blog: Correcting a dataframe. Retrieved from http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/</pre>
+  <pre class="citation-appendix short">Butler (2022, Dec. 19). Ken's Blog: A journey with Targets. Retrieved from http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/</pre>
   <p>BibTeX citation</p>
-  <pre class="citation-appendix long">@misc{butler2021correcting,
+  <pre class="citation-appendix long">@misc{butler2022a,
   author = {Butler, Ken},
-  title = {Ken's Blog: Correcting a dataframe},
-  url = {http://ritsokiguess.site/blogg/posts/2021-11-07-correcting-a-dataframe/},
-  year = {2021}
+  title = {Ken's Blog: A journey with Targets},
+  url = {http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets/},
+  year = {2022}
 }</pre>
 </div>
 <!--/radix_placeholder_appendices-->

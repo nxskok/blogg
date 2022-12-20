@@ -1,0 +1,253 @@
+---
+title: "A journey with Targets"
+description: |
+  Another example of using the `targets` package
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blog
+date: 2022-12-19
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+## Introduction
+
+There are lots of good reasons to adopt a workflow based around functions, and the `targets` package provides an excellent way to do that, by asking the user to express how the functions relate to one another. This solves a problem I always had when trying to express things in functions: I would end up with hundreds of little functions that I would have to keep straight, especially when something went wrong later and I would have to try to remember how my edifice of functions had actually been constructed.
+
+There are lots of good introductions to `targets`, none better than the Walkthrough in the [user manual](https://books.ropensci.org/targets/). Having worked through that myself, I wanted to see whether I could build a `targets` project from scratch. This is the story of that process. Thanks to [Blas Benito](https://fosstodon.org/@blasbenito) and [Robert Flight](https://mastodon.social/@rmflight) on Mastodon for guiding me when I got stuck.
+
+My aim was to read in some data from a website, make a graph, do an analysis, and write a report including these things, and to do this in a way that makes it easy to add a second analysis of a second dataset to the report. The second analysis I do here is (deliberately) structured in a different way to the first one, so that we can see what implications that has for the process.
+
+## Setup
+
+We^[The authorly "we", meaning you, the reader, and I are going on this journey together. Or so the fiction has it.] begin by installing the `targets` and `tarchetypes`^[This is needed for some extensions to `targets`, two of which I use here.] packages.
+
+Next, we go down to the console and run
+
+```{r}
+#| eval = FALSE
+library(targets)
+```
+
+Most of the actual running of things happens in the console with this way of working. Next,
+
+```{r}
+#| eval = FALSE
+use_targets()
+```
+
+This creates and opens a file called `_targets.R` that will say how everything is connected together. It is the equivalent of a `Makefile` in what it does, though the way it works is a bit different from a `Makefile`. The one `use_targets` creates is a  template, with places to fill in what we need.
+
+I was trying to keep things tidy, so I also created some folders at this point: `data`, where the data we read in from the website will be stored, `report`, where the files for my report will live, and `R`, where the code for our functions will live.
+
+If you are using git/github, there is one more piece of setup to do. `targets` will create some (potentially) large objects in the folder `_targets` of your project, and these don't need to be under version control (because they can always be recreated), so we add the `_targets` folder to `.gitignore`. 
+
+All of my code is [here](https://github.com/nxskok/soapy).
+
+## The soap data
+
+The standard way to run `targets` is to define functions to do everything that needs doing (which you put in one or more files in the `R` folder), and then edit `_targets.R` to say how those functions work together to create what you need.
+
+I have three functions: one  to read the data from a file, one to make a scatterplot with points and lines defined by groups, and one to fit a regression model, strictly an analysis of covariance model, like this (in file `functions.R` in folder `R`):
+
+```{r}
+#| eval = FALSE
+read_data <- function(filename) {
+  read_delim(filename, " ")
+}
+
+plot_lines <- function(x) {
+  ggplot(x, aes(x = speed, y = scrap, colour = line)) +
+    geom_point() +
+    geom_smooth(method = "lm")
+}
+
+fit_model1 <- function(x) {
+  lm(scrap ~ speed + line, data = x)
+}
+```
+
+The background is this: our data come from a factory that makes soap bars. The interest here is in how much `scrap` soap (which cannot be made into soap bars) is produced, which might depend on the `speed` at which the production is run. There are two different production `line`s, labelled `a` and `b`; the plot suggests that the `scrap`-`speed` relationship can be modelled by separate but parallel lines for each production `line`, which is what the model fits. 
+
+Now we have to edit `_targets.R` to express this. Here is the top bit of mine, with comments edited out:
+
+
+```{r}
+#| eval = FALSE
+library(targets)
+library(tarchetypes) # Load other packages as needed. # nolint
+tar_option_set(
+  packages = c("tidyverse"), # packages that your targets need to run
+  format = "rds" # default storage format
+)
+tar_source("R/functions.R")
+```
+
+First we have the targets script load both `targets` and `tarchetypes` that we installed earlier.^[The reason for `tarchetypes` will become clear shortly.] Then we add any packages that we need for the analysis to run: in this case `tidyverse`, or if you're a stickler for efficiency, `readr` and `ggplot2`. The storage format came from `use_targets`; unless you are creating huge things in your code, the default will be fine. Finally, we load the functions that we wrote.
+
+The bottom bit of `_targets.R` is the bit that looks like a Makefile, where we say how those functions are going to be used. This is the currently relevant part of mine:
+
+```{r}
+#| eval = FALSE
+list(
+  tar_download(file1, "http://ritsokiguess.site/datafiles/soap.txt",
+               paths = "data/soap.txt"),
+  tar_target(soap, read_data(file1)),
+  tar_target(plot1, plot_lines(soap)),
+  tar_target(model1, fit_model1(soap))
+)
+```
+
+Each of these create a "target", the first thing inside `tar_target` (or `tar_download`), and anything else says how that target is made. Each `tar_target` can (and undoubtedly will) use previously made targets.
+
+I have to talk about the first one. My datafile existed on a website with the URL shown, but `targets` works with local files only. `tarchetypes` contains a number of recipes for doing jobs like this. `tar_download` creates here a target `file1` that refers to the datafile by downloading the datafile from its website to a file in `data`. `file1` refers to that file without us having to remember where the file is.
+
+So, having created a target `file1` that refers to the (downloaded and locally stored) datafile, the next three targets do this:
+
+- read the data in from the local file using our function `read_data` and store it as the target `soap`
+- make a scatterplot with lines of the soap data, using our function `plot_lines` and store it as `plot1`
+- fit a model, using our function `fit_model`, and store it as `model1`.
+
+Having set up our pipeline, now we can think about running it. Before that, we can go to the console and type `tar_visnetwork()`. This makes a diagram showing how the bits fit together. In this case we have, left to right:
+
+- `file1_url`: the url where the data will come from
+- `file1`, which depends on `file1_url`
+- `soap`, which depends on `file1`
+- `plot1`, which depends on `soap`
+- `model1`, which also depends on `soap`.
+
+The value of looking at this diagram is to make sure that we have coded the dependency structure properly, which it seems (in this case) I have done.
+
+Also note that the targets are colour-coded according to whether they are up-to-date or outdated. At first, everything will be outdated, but later only some of it will be outdated. `targets` knows to only update what needs updating.
+
+Next, we actually run everything. This is done in the console with `tar_make`. This will update everything that needs updating, using in each case the recipe in `_targets.R`. The output to `tar_make()` tells you whether each target was "built" (updated) or "skipped" (nothing in that target had changed).
+If anything goes wrong, there will be an error message. I find the error messages not very helpful, but at least it is clear which of the targets caused the error, which at least gives a place to start looking.
+
+Once everything has run, the output from each target is stored,^[In an `.rds` file in the `_targets` folder.] and can be inspected (in the Console) using `tar_read`. For example, `tar_read(soap)` will display the dataframe that was read in from the file, and `tar_read(plot1)` will display the scatterplot. You can do the same thing with the fitted model object `model1`, but this is probably not what you want; you would probably prefer to look at the `summary` of the model,^[Or run something like `broom::tidy`.] which you can do like this:
+
+```{r}
+#| eval = FALSE
+tar_load(model1)
+summary(model1)
+```
+
+`tar_load` puts a copy of the target named into your workspace, and then you can do something with it as you normally would.
+
+## Making a child report
+
+So far, this is very standard `targets` work: use functions to make a pipeline that you specify in `_targets.R`, and then use `tar_make` to run it. But, having gotten this to work, I wanted to add a report, and I wanted to do so flexibly, so that I could easily add a different analysis of a different dataset later. The way I like to do this is to use "child documents": write each report as a separate `.Rmd` file, and then have a "parent" report that loads each child report.
+
+We'll get to the parent report later. Let's write a report about the soap data first, which will be saved in `soap.Rmd` in the `report` folder. This is a child document, so *it has no YAML header*, and we begin right away with the report header and a description of the dataset. The report structure will be simple: we display the data, display the scatterplot (and talk about it a bit), then display the regression output (and talk about that a bit).
+
+There is a standard `targets` way of making reports like these: we do all the computation in previous targets (as we have done), and then we read in what we want to display with `tar_read` or `tar_load` as we did above, instead of doing more computation to obtain a target that we already have. For this report, that means having three code chunks, the content of which we have already seen:
+
+```{r}
+#| eval = FALSE
+tar_read(soap)
+```
+
+to display the data,
+
+```{r}
+#| eval = FALSE
+tar_read(plot1)
+```
+
+to display the scatterplot, and
+
+```{r}
+#| eval = FALSE
+tar_load(model1)
+summary(model1)
+```
+
+to display the model output. That, together with my comments, is `soap.Rmd`.
+
+Finally, we need to add this into the pipeline, so that `targets` knows to update this part of the report if the text in it changes, or if any of `soap`, `plot1`, or `model1` changes.^[Which might be because we changed the plot-drawing function to make a different plot, for example.] This is a so-called "file" target, and we add it to the end of `_targets.R` to make this:
+
+```{r}
+#| eval = FALSE
+list(
+  tar_download(file1, "http://ritsokiguess.site/datafiles/soap.txt",
+               paths = "data/soap.txt"),
+  tar_target(soap, read_data(file1)),
+  tar_target(plot1, plot_lines(soap)),
+  tar_target(model1, fit_model1(soap)),
+  tar_target(soap_report, "report/soap.Rmd", format = "file")
+)
+```
+
+`targets` knows additionally that the soap report depends on `soap`, `plot1`, and `model1` because of the `tar_read` and `tar_load` statements in the report. (This doesn't always show up in `tar_visnetwork`, but `targets` knows about it all the same.)
+
+## Making a parent report
+
+This is a genuine Markdown report, so it begins with a YAML header specifying the author, title, date, etc. Then follows a setup chunk with `knitr::opts_chunk$set(echo = FALSE)`: the only code in this part of the report is the `tar_read` and `tar_load` statements that the reader doesn't need to see.
+
+Then we need to say that this report depends on `soap_report`, so that if *that* changes, the parent report needs to be updated. I come from a Makefile background, so this took some time (and help) for me to figure out, but the way you do it is, as in the child report, `tar_load`ing the target that represents the report:
+
+```{r}
+#| eval = FALSE
+tar_load(soap_report)
+```
+
+Then I had some preamble text.
+
+Then we load the child report itself. It seems that it should be possible to use `soap_report` directly (it contains the path to the child report), but I couldn't get this to work, so I specified the actual path to the child report directly with `child = "report/soap.Rmd"` as a chunk option.^[Actually done Quarto-style within the chunk, using the special comment line `#|`.]
+
+The last thing to do here is to add the parent report as a target. We now have:
+
+```{r}
+#| eval = FALSE
+list(
+  tar_download(file1, "http://ritsokiguess.site/datafiles/soap.txt",
+               paths = "data/soap.txt"),
+  tar_target(soap, read_data(file1)),
+  tar_target(plot1, plot_lines(soap)),
+  tar_target(model1, fit_model1(soap)),
+  tar_target(soap_report, "report/soap.Rmd", format = "file"),
+  tar_render(final_report, "report/report.Rmd")
+)
+```
+
+The parent report is the thing that needs to be knitted, so we use the special target `tar_render` (from `tarchetypes`), which says to take the document stored in the second input, and knit it to create the target that is the first input. After this runs, there is a file `report.html` in `report` that is the knitted report.
+
+## Including the code in a report
+
+If I were writing the report for someone else, I wouldn't expect them to be very interested  in the code that produced the plot or the model summary. But for teaching, it is very useful to show what code the output came from. The problem with the `targets`-style analysis we just did is that, by separating the computation from the reporting, the code is nowhere to be found.
+
+At the expense of good `targets` style and efficient computation, however, there is no problem including the computation in the report, so that my second child report, in `report/spiders.Rmd`, looks like any other R Notebook you might write, with code chunks and the output immediately below them, to read in the data from a website, make a boxplot and run a logistic regression. The background for this one is that a certain spider is or is not found on a beach, and the research hypothesis is that whether or not this spider is found depends somehow on the size of the grains of sand on that beach.
+
+So there is no difficulty composing this kind of report, and no need to write extra functions and make extra targets to compute its constituent pieces. The only extra thing that needs to go in `_targets.R` is this:
+
+```{r}
+#| eval = FALSE
+list(
+  tar_download(file1, "http://ritsokiguess.site/datafiles/soap.txt",
+               paths = "data/soap.txt"),
+  tar_target(soap, read_data(file1)),
+  tar_target(plot1, plot_lines(soap)),
+  tar_target(model1, fit_model1(soap)),
+  tar_target(soap_report, "report/soap.Rmd", format = "file"),
+  tar_target(spiders_report, "report/spiders.Rmd", format = "file"),
+  tar_render(final_report, "report/report.Rmd")
+)
+```
+
+(the second to last line, entirely analogous to the other child report). The extra stuff that goes in the parent report is to turn the display of code back on:
+
+```{r}
+#| eval = FALSE
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Another `tar_load`:
+
+```{r}
+#| eval = FALSE
+tar_load(spiders_report)
+```
+
+(to build the dependence of the parent report on this child one as well), and then the actual importation of the second child report with `child = "report/spiders.Rmd"` in the options of another empty code chunk.
+
+This puts all the dependencies in the right places, and so another `tar_make` will build the whole report with its two child reports on the two datasets, updating anything that needs updating. 

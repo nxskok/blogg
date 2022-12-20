@@ -7,7 +7,15 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 09 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 19 Dec 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>A journey with Targets</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets</link>
+      <description>Another example of using the `targets` package</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2022-12-19-a-journey-with-targets</guid>
+      <pubDate>Mon, 19 Dec 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Random sampling from groups</title>
       <dc:creator>Ken Butler</dc:creator>

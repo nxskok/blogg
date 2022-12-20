@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
   <meta name="generator" content="distill" />
-  <link rel="alternate" type="application/rss+xml" href="http://ritsokiguess.site/blogg/index.xml" />
 
   <style type="text/css">
   /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
@@ -89,635 +88,39 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>Ken's Blog</title>
+  <title>A journey with Targets</title>
+
+  <meta property="description" itemprop="description" content="Another example of using the `targets` package"/>
 
 
-
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2022-12-19"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-12-19"/>
+  <meta name="article:author" content="Ken Butler"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Ken&#39;s Blog"/>
+  <meta property="og:title" content="A journey with Targets"/>
   <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Another example of using the `targets` package"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="Ken&#39;s Blog"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Ken&#39;s Blog"/>
+  <meta property="twitter:title" content="A journey with Targets"/>
+  <meta property="twitter:description" content="Another example of using the `targets` package"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","site","listing"]}},"value":[{"type":"character","attributes":{},"value":["Ken's Blog"]},{"type":"character","attributes":{},"value":["distill::distill_website"]},{"type":"character","attributes":{},"value":["posts"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["A journey with Targets"]},{"type":"character","attributes":{},"value":["Another example of using the `targets` package\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]},{"type":"character","attributes":{},"value":["http://ritsokiguess.site/blog"]}]}]},{"type":"character","attributes":{},"value":["2022-12-19"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["a-journey-with-targets_files/anchor-4.2.2/anchor.min.js","a-journey-with-targets_files/bowser-1.9.3/bowser.min.js","a-journey-with-targets_files/distill-2.2.21/template.v2.js","a-journey-with-targets_files/header-attrs-2.18/header-attrs.js","a-journey-with-targets_files/jquery-3.6.0/jquery-3.6.0.js","a-journey-with-targets_files/jquery-3.6.0/jquery-3.6.0.min.js","a-journey-with-targets_files/jquery-3.6.0/jquery-3.6.0.min.map","a-journey-with-targets_files/popper-2.6.0/popper.min.js","a-journey-with-targets_files/tippy-6.2.7/tippy-bundle.umd.min.js","a-journey-with-targets_files/tippy-6.2.7/tippy-light-border.css","a-journey-with-targets_files/tippy-6.2.7/tippy.css","a-journey-with-targets_files/tippy-6.2.7/tippy.umd.min.js","a-journey-with-targets_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
   <!--radix_placeholder_navigation_in_header-->
-  <meta name="distill:offset" content=""/>
-
-  <script type="application/javascript">
-
-    window.headroom_prevent_pin = false;
-
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-
-      // initialize headroom for banner
-      var header = $('header').get(0);
-      var headerHeight = header.offsetHeight;
-      var headroom = new Headroom(header, {
-        tolerance: 5,
-        onPin : function() {
-          if (window.headroom_prevent_pin) {
-            window.headroom_prevent_pin = false;
-            headroom.unpin();
-          }
-        }
-      });
-      headroom.init();
-      if(window.location.hash)
-        headroom.unpin();
-      $(header).addClass('headroom--transition');
-
-      // offset scroll location for banner on hash change
-      // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
-      window.addEventListener("hashchange", function(event) {
-        window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
-      });
-
-      // responsive menu
-      $('.distill-site-header').each(function(i, val) {
-        var topnav = $(this);
-        var toggle = topnav.find('.nav-toggle');
-        toggle.on('click', function() {
-          topnav.toggleClass('responsive');
-        });
-      });
-
-      // nav dropdowns
-      $('.nav-dropbtn').click(function(e) {
-        $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
-        $(this).parent().siblings('.nav-dropdown')
-           .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $("body").click(function(e){
-        $('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $(".nav-dropdown").click(function(e){
-        e.stopPropagation();
-      });
-    });
-  </script>
-
-  <style type="text/css">
-
-  /* Theme (user-documented overrideables for nav appearance) */
-
-  .distill-site-nav {
-    color: rgba(255, 255, 255, 0.8);
-    background-color: #0F2E3D;
-    font-size: 15px;
-    font-weight: 300;
-  }
-
-  .distill-site-nav a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .distill-site-nav a:hover {
-    color: white;
-  }
-
-  @media print {
-    .distill-site-nav {
-      display: none;
-    }
-  }
-
-  .distill-site-header {
-
-  }
-
-  .distill-site-footer {
-
-  }
-
-
-  /* Site Header */
-
-  .distill-site-header {
-    width: 100%;
-    box-sizing: border-box;
-    z-index: 3;
-  }
-
-  .distill-site-header .nav-left {
-    display: inline-block;
-    margin-left: 8px;
-  }
-
-  @media screen and (max-width: 768px) {
-    .distill-site-header .nav-left {
-      margin-left: 0;
-    }
-  }
-
-
-  .distill-site-header .nav-right {
-    float: right;
-    margin-right: 8px;
-  }
-
-  .distill-site-header a,
-  .distill-site-header .title {
-    display: inline-block;
-    text-align: center;
-    padding: 14px 10px 14px 10px;
-  }
-
-  .distill-site-header .title {
-    font-size: 18px;
-    min-width: 150px;
-  }
-
-  .distill-site-header .logo {
-    padding: 0;
-  }
-
-  .distill-site-header .logo img {
-    display: none;
-    max-height: 20px;
-    width: auto;
-    margin-bottom: -4px;
-  }
-
-  .distill-site-header .nav-image img {
-    max-height: 18px;
-    width: auto;
-    display: inline-block;
-    margin-bottom: -3px;
-  }
-
-
-
-  @media screen and (min-width: 1000px) {
-    .distill-site-header .logo img {
-      display: inline-block;
-    }
-    .distill-site-header .nav-left {
-      margin-left: 20px;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 20px;
-    }
-    .distill-site-header .title {
-      padding-left: 12px;
-    }
-  }
-
-
-  .distill-site-header .nav-toggle {
-    display: none;
-  }
-
-  .nav-dropdown {
-    display: inline-block;
-    position: relative;
-  }
-
-  .nav-dropdown .nav-dropbtn {
-    border: none;
-    outline: none;
-    color: rgba(255, 255, 255, 0.8);
-    padding: 16px 10px;
-    background-color: transparent;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    margin: 0;
-    margin-top: 1px;
-    z-index: 2;
-  }
-
-  .nav-dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 200px;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-    z-index: 1;
-    margin-top: 2px;
-    white-space: nowrap;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-
-  .nav-dropdown-content hr {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-dropdown-active {
-    display: block;
-  }
-
-  .nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
-    color: black;
-    padding: 6px 24px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-  }
-
-  .nav-dropdown-content .nav-dropdown-header {
-    display: block;
-    padding: 5px 24px;
-    padding-bottom: 0;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: #999999;
-    white-space: nowrap;
-  }
-
-  .nav-dropdown:hover .nav-dropbtn {
-    color: white;
-  }
-
-  .nav-dropdown-content a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
-  .nav-right .nav-dropdown-content {
-    margin-left: -45%;
-    right: 0;
-  }
-
-  @media screen and (max-width: 768px) {
-    .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
-    .distill-site-header a.nav-toggle {
-      float: right;
-      display: block;
-    }
-    .distill-site-header .title {
-      margin-left: 0;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 0;
-    }
-    .distill-site-header {
-      overflow: hidden;
-    }
-    .nav-right .nav-dropdown-content {
-      margin-left: 0;
-    }
-  }
-
-
-  @media screen and (max-width: 768px) {
-    .distill-site-header.responsive {position: relative; min-height: 500px; }
-    .distill-site-header.responsive a.nav-toggle {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-    .distill-site-header.responsive a,
-    .distill-site-header.responsive .nav-dropdown {
-      display: block;
-      text-align: left;
-    }
-    .distill-site-header.responsive .nav-left,
-    .distill-site-header.responsive .nav-right {
-      width: 100%;
-    }
-    .distill-site-header.responsive .nav-dropdown {float: none;}
-    .distill-site-header.responsive .nav-dropdown-content {position: relative;}
-    .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
-      display: block;
-      width: 100%;
-      text-align: left;
-    }
-  }
-
-  /* Site Footer */
-
-  .distill-site-footer {
-    width: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-    z-index: 3;
-    margin-top: 30px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    text-align: center;
-  }
-
-  /* Headroom */
-
-  d-title {
-    padding-top: 6rem;
-  }
-
-  @media print {
-    d-title {
-      padding-top: 4rem;
-    }
-  }
-
-  .headroom {
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .headroom--transition {
-    transition: all .4s ease-in-out;
-  }
-
-  .headroom--unpinned {
-    top: -100px;
-  }
-
-  .headroom--pinned {
-    top: 0;
-  }
-
-  /* adjust viewport for navbar height */
-  /* helps vertically center bootstrap (non-distill) content */
-  .min-vh-100 {
-    min-height: calc(100vh - 100px) !important;
-  }
-
-  </style>
-
-  <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-  <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
-  <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
-  <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
-  <script src="site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
-  <script src="site_libs/fuse-6.4.1/fuse.min.js"></script>
-
-  <script type="application/javascript">
-
-  function getMeta(metaName) {
-    var metas = document.getElementsByTagName('meta');
-    for (let i = 0; i < metas.length; i++) {
-      if (metas[i].getAttribute('name') === metaName) {
-        return metas[i].getAttribute('content');
-      }
-    }
-    return '';
-  }
-
-  function offsetURL(url) {
-    var offset = getMeta('distill:offset');
-    return offset ? offset + '/' + url : url;
-  }
-
-  function createFuseIndex() {
-
-    // create fuse index
-    var options = {
-      keys: [
-        { name: 'title', weight: 20 },
-        { name: 'categories', weight: 15 },
-        { name: 'description', weight: 10 },
-        { name: 'contents', weight: 5 },
-      ],
-      ignoreLocation: true,
-      threshold: 0
-    };
-    var fuse = new window.Fuse([], options);
-
-    // fetch the main search.json
-    return fetch(offsetURL('search.json'))
-      .then(function(response) {
-        if (response.status == 200) {
-          return response.json().then(function(json) {
-            // index main articles
-            json.articles.forEach(function(article) {
-              fuse.add(article);
-            });
-            // download collections and index their articles
-            return Promise.all(json.collections.map(function(collection) {
-              return fetch(offsetURL(collection)).then(function(response) {
-                if (response.status === 200) {
-                  return response.json().then(function(articles) {
-                    articles.forEach(function(article) {
-                      fuse.add(article);
-                    });
-                  })
-                } else {
-                  return Promise.reject(
-                    new Error('Unexpected status from search index request: ' +
-                              response.status)
-                  );
-                }
-              });
-            })).then(function() {
-              return fuse;
-            });
-          });
-
-        } else {
-          return Promise.reject(
-            new Error('Unexpected status from search index request: ' +
-                        response.status)
-          );
-        }
-      });
-  }
-
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-
-    // get search element (bail if we don't have one)
-    var searchEl = window.document.getElementById('distill-search');
-    if (!searchEl)
-      return;
-
-    createFuseIndex()
-      .then(function(fuse) {
-
-        // make search box visible
-        searchEl.classList.remove('hidden');
-
-        // initialize autocomplete
-        var options = {
-          autoselect: true,
-          hint: false,
-          minLength: 2,
-        };
-        window.autocomplete(searchEl, options, [{
-          source: function(query, callback) {
-            const searchOptions = {
-              isCaseSensitive: false,
-              shouldSort: true,
-              minMatchCharLength: 2,
-              limit: 10,
-            };
-            var results = fuse.search(query, searchOptions);
-            callback(results
-              .map(function(result) { return result.item; })
-            );
-          },
-          templates: {
-            suggestion: function(suggestion) {
-              var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
-                ? `<img src="${offsetURL(suggestion.preview)}"</img>`
-                : '';
-              var html = `
-                <div class="search-item">
-                  <h3>${suggestion.title}</h3>
-                  <div class="search-item-description">
-                    ${suggestion.description || ''}
-                  </div>
-                  <div class="search-item-preview">
-                    ${img}
-                  </div>
-                </div>
-              `;
-              return html;
-            }
-          }
-        }]).on('autocomplete:selected', function(event, suggestion) {
-          window.location.href = offsetURL(suggestion.path);
-        });
-        // remove inline display style on autocompleter (we want to
-        // manage responsive display via css)
-        $('.algolia-autocomplete').css("display", "");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-
-  });
-
-  </script>
-
-  <style type="text/css">
-
-  .nav-search {
-    font-size: x-small;
-  }
-
-  /* Algolioa Autocomplete */
-
-  .algolia-autocomplete {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: sub;
-    background-color: white;
-    color: black;
-    padding: 6px;
-    padding-top: 8px;
-    padding-bottom: 0;
-    border-radius: 6px;
-    border: 1px #0F2E3D solid;
-    width: 180px;
-  }
-
-
-  @media screen and (max-width: 768px) {
-    .distill-site-nav .algolia-autocomplete {
-      display: none;
-      visibility: hidden;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete {
-      display: inline-block;
-      visibility: visible;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
-      margin-left: 0;
-      width: 400px;
-      max-height: 400px;
-    }
-  }
-
-  .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
-    width: 90%;
-    outline: none;
-    border: none;
-  }
-
-  .algolia-autocomplete .aa-hint {
-    color: #999;
-  }
-  .algolia-autocomplete .aa-dropdown-menu {
-    width: 550px;
-    max-height: 70vh;
-    overflow-x: visible;
-    overflow-y: scroll;
-    padding: 5px;
-    margin-top: 3px;
-    margin-left: -150px;
-    background-color: #fff;
-    border-radius: 5px;
-    border: 1px solid #999;
-    border-top: none;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
-    cursor: pointer;
-    padding: 5px 4px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
-    border-bottom: none;
-    margin-bottom: 2px;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
-    overflow: hidden;
-    font-size: 0.8em;
-    line-height: 1.4em;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
-    font-size: 1rem;
-    margin-block-start: 0;
-    margin-block-end: 5px;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
-    display: inline-block;
-    overflow: hidden;
-    height: 2.8em;
-    width: 80%;
-    margin-right: 4%;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
-    display: inline-block;
-    width: 15%;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
-    height: 3em;
-    width: auto;
-    display: none;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
-    display: initial;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
-    background-color: #eee;
-  }
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
-    font-weight: bold;
-    font-style: normal;
-  }
-
-  </style>
-
-
   <!--/radix_placeholder_navigation_in_header-->
   <!--radix_placeholder_distill-->
 
@@ -2072,525 +1475,253 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
-  <script src="site_libs/popper-2.6.0/popper.min.js"></script>
-  <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
-  <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
-  <script src="site_libs/tippy-6.2.7/tippy.umd.min.js"></script>
-  <script src="site_libs/anchor-4.2.2/anchor.min.js"></script>
-  <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
-  <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
-  <script src="site_libs/distill-2.2.21/template.v2.js"></script>
+  <script src="a-journey-with-targets_files/header-attrs-2.18/header-attrs.js"></script>
+  <script src="a-journey-with-targets_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="a-journey-with-targets_files/popper-2.6.0/popper.min.js"></script>
+  <link href="a-journey-with-targets_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="a-journey-with-targets_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="a-journey-with-targets_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="a-journey-with-targets_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="a-journey-with-targets_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="a-journey-with-targets_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="a-journey-with-targets_files/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
-  <script>
-     document.addEventListener("DOMContentLoaded", function () {
-       if (!/posts/.test(location.pathname)) {
-         return;
-       }
-
-       var script = document.createElement("script");
-       script.src = "https://giscus.app/client.js";
-       script.setAttribute("data-repo", "nxskok/blogg");
-       script.setAttribute("data-repo-id", "R_kgDOGV3goQ");
-       script.setAttribute("data-category", "Announcements");
-       script.setAttribute("data-category-id", "DIC_kwDOGV3goc4CAJw8");
-       script.setAttribute("data-mapping", "pathname");
-       script.setAttribute("data-reactions-enabled", "1");
-       script.setAttribute("data-emit-metadata", "0");
-       script.setAttribute("data-theme", "light");
-       script.setAttribute("data-lang", "en");
-
-       /* wait for article to load, append script to article element */
-       var observer = new MutationObserver(function (mutations, observer) {
-         var article = document.querySelector("d-article");
-         if (article) {
-           observer.disconnect();
-           /* HACK: article scroll */
-           article.setAttribute("style", "overflow-y: hidden");
-           article.appendChild(script);
-         }
-       });
-
-       observer.observe(document.body, { childList: true });
-     });
-   </script>
-   
   <!--/radix_placeholder_site_in_header-->
 
 
 </head>
 
-<body class="layout-listing">
+<body>
 
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Ken's Blog","authors":[]}
+{"title":"A journey with Targets","description":"Another example of using the `targets` package","authors":[{"author":"Ken Butler","authorURL":"http://ritsokiguess.site/blog","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-12-19T00:00:00.000-05:00","citationText":"Butler, 2022"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
 <!--radix_placeholder_navigation_before_body-->
-<header class="header header--fixed" role="banner">
-<nav class="distill-site-nav distill-site-header">
-<div class="nav-left">
-<a href="index.html" class="title">Ken's Blog</a>
-<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
-</div>
-<div class="nav-right">
-<a href="http://ritsokiguess.site/home/">Home</a>
-<a href="about.html">About</a>
-<a href="index.xml">
-<i class="fa fa-rss" aria-hidden="true"></i>
-</a>
-<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
-</div>
-</nav>
-</header>
 <!--/radix_placeholder_navigation_before_body-->
 <!--radix_placeholder_site_before_body-->
 <!--/radix_placeholder_site_before_body-->
-<!--radix_placeholder_article_listing-->
-
-
-<script type="application/javascript">
-
-function init_posts_list() {
-
-  function load_image(img) {
-    var src = $(img).attr('data-src');
-    if (src) {
-      $(img).attr('src', src);
-      $(img).on("load", function() {
-        img.removeAttribute('data-src');
-      });
-    }
-  }
-
-  function set_posts_visible(posts, visible) {
-    if (visible) {
-
-      // show bottom border by default
-      $(posts).removeClass('post-preview-last');
-
-      // apply limits if need be
-      var max_posts = 25;
-      var apply_limits = $('.posts-container').hasClass('posts-apply-limit');
-      if (apply_limits && posts.length > max_posts) {
-        posts = $(posts).slice(0, max_posts);
-      } else {
-        $('.posts-more a').addClass('hidden');
-      }
-
-      // apply last style
-      $(posts.slice(-1)[0]).addClass('post-preview-last');
-
-      $(posts).removeClass('hidden');
-      $(posts).find('img[data-src]').each(function(i, img) {
-        load_image(img);
-      });
-    } else {
-      $(posts).addClass('hidden');
-    }
-  }
-
-  function apply_hash_filter() {
-
-    // clear active state
-    $('.categories .active').removeClass('active');
-
-    // mark all posts invisible to start
-    set_posts_visible($('.posts-list').children('a'), false);
-
-    // if we have a hash filter
-    if (window.location.hash && window.location.hash.startsWith("#category:")) {
-
-      // mark posts that match the category visible
-      var page_category = window.location.hash.replace(/^#category:/, "");
-      page_category = decodeURIComponent(page_category)
-      var posts = $('.post-metadata').map(function(idx, script) {
-        var metadata = $.parseJSON($(script).html());
-        var post = null;
-        $.each(metadata.categories, function(idx, category) {
-          category = category.replace(/ /g,"_");
-          if ((page_category || '').toLowerCase() === "articles" || category === page_category) {
-            post = $(script).parent().get();
-            return false;
-          }
-        });
-        return post;
-      });
-      set_posts_visible(posts, true);
-
-      // mark the hash active
-      $('.categories li>a[href="' + decodeURIComponent(window.location.hash) + '"]').addClass('active');
-
-      // update the list_caption
-      var list_caption = $('.posts-list-caption');
-      var caption = (page_category || '').toLowerCase() === "articles"
-        ? list_caption.attr('data-caption')
-        : ('Category: ' + page_category.replace(/_/g," "));
-      list_caption.text(caption);
-
-    } else {
-
-      // no hash filter, make all posts visible (subject to max display)
-      set_posts_visible($('.posts-list').children(), true);
-
-      // reset list caption
-      var list_caption = $('.posts-list-caption');
-      list_caption.text(list_caption.attr('data-caption'));
-
-
-    }
-  }
-
-  // more articles
-  function apply_post_limits(apply) {
-    if (apply) {
-      $('.posts-container').addClass('posts-apply-limit');
-      $('.posts-more a').removeClass('hidden');
-    } else {
-      $('.posts-container').removeClass('posts-apply-limit');
-      $('.posts-more a').addClass('hidden');
-    }
-  }
-
-  // click handling for tags
-  $('.dt-tag').click(function(ev) {
-    window.location.hash = '#category:' + $(this).text().replace(/ /g, "_");
-    return false;
-  })
-
-  // hash filter handling
-  apply_hash_filter();
-  $(window).on('hashchange',function() {
-    apply_post_limits(true);
-    apply_hash_filter();
-  });
-
-  // more articles link
-  $('.posts-more a').click(function(e) {
-    e.preventDefault();
-    apply_post_limits(false);
-    apply_hash_filter();
-    return false;
-  });
-
-}
-
-</script>
-
-
-
-<div class="posts-container posts-apply-limit l-page">
-<div class="posts-list">
-<h1 class="posts-list-caption" data-caption="Ken&#39;s Blog">Ken's Blog</h1>
-<a href="posts/2022-12-19-a-journey-with-targets/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Dec. 19, 2022</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>A journey with Targets</h2>
-<div class="dt-tags"></div>
-<p>Another example of using the `targets` package</p>
-</div>
-</a>
-<a href="posts/2022-05-09-random-sampling-from-groups/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">May 9, 2022</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Random sampling from groups</h2>
-<div class="dt-tags"></div>
-<p>How to draw random samples from several populations (that might have different distributions)</p>
-</div>
-</a>
-<a href="posts/2022-05-06-why-the-rank-sum-test-is-also-a-waste-of-time/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">May 6, 2022</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/2022-05-06-why-the-rank-sum-test-is-also-a-waste-of-time/why-the-rank-sum-test-is-also-a-waste-of-time_files/figure-html5/unnamed-chunk-12-1.png"/>
-</div>
-<div class="description">
-<h2>Why the rank sum test is also a waste of time</h2>
-<div class="dt-tags"></div>
-<p>In the same way that the signed rank test is mostly a waste of time, here I argue that the rank sum test is very rarely useful, and offer a less well-known test to use instead.</p>
-</div>
-</a>
-<a href="posts/2022-05-04-why-the-signed-rank-test-is-a-waste-of-time/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">May 4, 2022</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/2022-05-04-why-the-signed-rank-test-is-a-waste-of-time/why-the-signed-rank-test-is-a-waste-of-time_files/figure-html5/unnamed-chunk-4-1.png"/>
-</div>
-<div class="description">
-<h2>Why the signed rank test is a waste of time</h2>
-<div class="dt-tags"></div>
-<p>The signed rank test is only rarely useful, and, as we see, even more rarely useful in the kind of situation where we might think of using it.</p>
-</div>
-</a>
-<a href="posts/2021-12-04-kommentar/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Dec. 4, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Kommentar</h2>
-<div class="dt-tags"></div>
-<p>Or, Comments, in other words.</p>
-</div>
-</a>
-<a href="posts/2021-11-14-tidy-simulation/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Nov. 26, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/2021-11-14-tidy-simulation/tidy-simulation_files/figure-html5/unnamed-chunk-15-1.png"/>
-</div>
-<div class="description">
-<h2>Tidy simulation</h2>
-<div class="dt-tags"></div>
-<p>Using rowwise to save calculation, estimate power or test size, bootstrap distributions</p>
-</div>
-</a>
-<a href="posts/2021-11-07-welcome/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Nov. 7, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Welcome</h2>
-<div class="dt-tags"></div>
-<p>The new home of my blog</p>
-</div>
-</a>
-<a href="posts/2021-11-07-density-plots/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Oct. 16, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/2021-11-07-density-plots/density-plots_files/figure-html5/unnamed-chunk-12-1.png"/>
-</div>
-<div class="description">
-<h2>Density plots</h2>
-<div class="dt-tags"></div>
-<p>An alternative to histograms and boxplots</p>
-</div>
-</a>
-<a href="posts/2021-11-07-correcting-a-dataframe/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">April 26, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Correcting a dataframe</h2>
-<div class="dt-tags"></div>
-<p>The tidyverse way.</p>
-</div>
-</a>
-<a href="posts/2021-11-07-sampling-locations-in-a-city/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Oct. 10, 2020</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/2021-11-07-sampling-locations-in-a-city/Screenshot_2020-10-10_12-40-39.png"/>
-</div>
-<div class="description">
-<h2>Sampling locations in a city</h2>
-<div class="dt-tags"></div>
-<p>with the aim of getting an aerial map of that location.</p>
-</div>
-</a>
-<a href="posts/2020-07-09-another-tidying-problem/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">July 9, 2020</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/2020-07-09-another-tidying-problem/another-tidying-problem_files/figure-html5/unnamed-chunk-12-1.png"/>
-</div>
-<div class="description">
-<h2>Another tidying problem</h2>
-<div class="dt-tags"></div>
-<p>that ends up with a matched pairs test after tidying.</p>
-</div>
-</a>
-<a href="posts/2020-03-14-understanding-the-result-of-a-chi-square-test/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">March 14, 2020</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Understanding the result of a chi-square test</h2>
-<div class="dt-tags"></div>
-<p>Going beyond the chi-square statistic and its P-value</p>
-</div>
-</a>
-<a href="posts/2021-11-08-two-header-rows-and-other-spreadsheets/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Dec. 1, 2019</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/2021-11-08-two-header-rows-and-other-spreadsheets/two-header-rows-and-other-spreadsheets_files/figure-html5/unnamed-chunk-9-1.png"/>
-</div>
-<div class="description">
-<h2>Two header rows and other spreadsheets</h2>
-<div class="dt-tags"></div>
-<p>Tidying data arranged in odd ways</p>
-</div>
-</a>
-<a href="posts/2019-07-13-un-counting/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">July 13, 2019</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Un-counting</h2>
-<div class="dt-tags"></div>
-<p>Why you would want to do the opposite of counting</p>
-</div>
-</a>
-<a href="posts/2021-11-12-some-things-i-learned-today/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">May 22, 2019</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Some things I learned today</h2>
-<div class="dt-tags"></div>
-<p>Stan files; R Markdown figures in LaTeX; Beamer in R Markdown; Build All and makefiles</p>
-</div>
-</a>
-<a href="posts/2021-11-19-changing-a-lot-of-things-in-a-lot-of-places/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">May 12, 2019</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Changing a lot of things in a lot of places</h2>
-<div class="dt-tags"></div>
-<p>Making a lot of changes in text, all in one go</p>
-</div>
-</a>
-<a href="posts/2021-11-19-distance-between-clusters/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">April 23, 2019</div>
-<div class="dt-authors">
-<div class="dt-author">Ken Butler</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/2021-11-19-distance-between-clusters/distance-between-clusters_files/figure-html5/unnamed-chunk-2-1.png"/>
-</div>
-<div class="description">
-<h2>Distance between clusters</h2>
-<div class="dt-tags"></div>
-<p>How far apart are two *clusters* of objects, when all I have are distances between objects?</p>
-</div>
-</a>
-</div>
-<div class="posts-more">
-<a href="#">More articles &raquo;</a>
-</div>
-</div>
-<!--/radix_placeholder_article_listing-->
 
 <div class="d-title">
-<h1>Ken’s Blog</h1>
+<h1>A journey with Targets</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-
+<p><p>Another example of using the <code>targets</code> package</p></p>
 </div>
 
+<div class="d-byline">
+  Ken Butler <a href="http://ritsokiguess.site/blog" class="uri">http://ritsokiguess.site/blog</a> 
+  
+<br/>2022-12-19
+</div>
 
 <div class="d-article">
+<h2 id="introduction">Introduction</h2>
+<p>There are lots of good reasons to adopt a workflow based around functions, and the <code>targets</code> package provides an excellent way to do that, by asking the user to express how the functions relate to one another. This solves a problem I always had when trying to express things in functions: I would end up with hundreds of little functions that I would have to keep straight, especially when something went wrong later and I would have to try to remember how my edifice of functions had actually been constructed.</p>
+<p>There are lots of good introductions to <code>targets</code>, none better than the Walkthrough in the <a href="https://books.ropensci.org/targets/">user manual</a>. Having worked through that myself, I wanted to see whether I could build a <code>targets</code> project from scratch. This is the story of that process. Thanks to <a href="https://fosstodon.org/@blasbenito">Blas Benito</a> and <a href="https://mastodon.social/@rmflight">Robert Flight</a> on Mastodon for guiding me when I got stuck.</p>
+<p>My aim was to read in some data from a website, make a graph, do an analysis, and write a report including these things, and to do this in a way that makes it easy to add a second analysis of a second dataset to the report. The second analysis I do here is (deliberately) structured in a different way to the first one, so that we can see what implications that has for the process.</p>
+<h2 id="setup">Setup</h2>
+<p>We<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> begin by installing the <code>targets</code> and <code>tarchetypes</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> packages.</p>
+<p>Next, we go down to the console and run</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/targets/'>targets</a></span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Most of the actual running of things happens in the console with this way of working. Next,</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/use_targets.html'>use_targets</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>This creates and opens a file called <code>_targets.R</code> that will say how everything is connected together. It is the equivalent of a <code>Makefile</code> in what it does, though the way it works is a bit different from a <code>Makefile</code>. The one <code>use_targets</code> creates is a template, with places to fill in what we need.</p>
+<p>I was trying to keep things tidy, so I also created some folders at this point: <code>data</code>, where the data we read in from the website will be stored, <code>report</code>, where the files for my report will live, and <code>R</code>, where the code for our functions will live.</p>
+<p>If you are using git/github, there is one more piece of setup to do. <code>targets</code> will create some (potentially) large objects in the folder <code>_targets</code> of your project, and these don’t need to be under version control (because they can always be recreated), so we add the <code>_targets</code> folder to <code>.gitignore</code>.</p>
+<p>All of my code is <a href="https://github.com/nxskok/soapy">here</a>.</p>
+<h2 id="the-soap-data">The soap data</h2>
+<p>The standard way to run <code>targets</code> is to define functions to do everything that needs doing (which you put in one or more files in the <code>R</code> folder), and then edit <code>_targets.R</code> to say how those functions work together to create what you need.</p>
+<p>I have three functions: one to read the data from a file, one to make a scatterplot with points and lines defined by groups, and one to fit a regression model, strictly an analysis of covariance model, like this (in file <code>functions.R</code> in folder <code>R</code>):</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>read_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>filename</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='fu'>read_delim</span><span class='op'>(</span><span class='va'>filename</span>, <span class='st'>" "</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>plot_lines</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>speed</span>, y <span class='op'>=</span> <span class='va'>scrap</span>, colour <span class='op'>=</span> <span class='va'>line</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>    <span class='fu'>geom_smooth</span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>fit_model1</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>scrap</span> <span class='op'>~</span> <span class='va'>speed</span> <span class='op'>+</span> <span class='va'>line</span>, data <span class='op'>=</span> <span class='va'>x</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span></code></pre>
+</div>
+</div>
+<p>The background is this: our data come from a factory that makes soap bars. The interest here is in how much <code>scrap</code> soap (which cannot be made into soap bars) is produced, which might depend on the <code>speed</code> at which the production is run. There are two different production <code>line</code>s, labelled <code>a</code> and <code>b</code>; the plot suggests that the <code>scrap</code>-<code>speed</code> relationship can be modelled by separate but parallel lines for each production <code>line</code>, which is what the model fits.</p>
+<p>Now we have to edit <code>_targets.R</code> to express this. Here is the top bit of mine, with comments edited out:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/targets/'>targets</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/tarchetypes/'>tarchetypes</a></span><span class='op'>)</span> <span class='co'># Load other packages as needed. # nolint</span></span>
+<span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_option_set.html'>tar_option_set</a></span><span class='op'>(</span></span>
+<span>  packages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tidyverse"</span><span class='op'>)</span>, <span class='co'># packages that your targets need to run</span></span>
+<span>  format <span class='op'>=</span> <span class='st'>"rds"</span> <span class='co'># default storage format</span></span>
+<span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_source.html'>tar_source</a></span><span class='op'>(</span><span class='st'>"R/functions.R"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>First we have the targets script load both <code>targets</code> and <code>tarchetypes</code> that we installed earlier.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Then we add any packages that we need for the analysis to run: in this case <code>tidyverse</code>, or if you’re a stickler for efficiency, <code>readr</code> and <code>ggplot2</code>. The storage format came from <code>use_targets</code>; unless you are creating huge things in your code, the default will be fine. Finally, we load the functions that we wrote.</p>
+<p>The bottom bit of <code>_targets.R</code> is the bit that looks like a Makefile, where we say how those functions are going to be used. This is the currently relevant part of mine:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Each of these create a “target”, the first thing inside <code>tar_target</code> (or <code>tar_download</code>), and anything else says how that target is made. Each <code>tar_target</code> can (and undoubtedly will) use previously made targets.</p>
+<p>I have to talk about the first one. My datafile existed on a website with the URL shown, but <code>targets</code> works with local files only. <code>tarchetypes</code> contains a number of recipes for doing jobs like this. <code>tar_download</code> creates here a target <code>file1</code> that refers to the datafile by downloading the datafile from its website to a file in <code>data</code>. <code>file1</code> refers to that file without us having to remember where the file is.</p>
+<p>So, having created a target <code>file1</code> that refers to the (downloaded and locally stored) datafile, the next three targets do this:</p>
+<ul>
+<li>read the data in from the local file using our function <code>read_data</code> and store it as the target <code>soap</code></li>
+<li>make a scatterplot with lines of the soap data, using our function <code>plot_lines</code> and store it as <code>plot1</code></li>
+<li>fit a model, using our function <code>fit_model</code>, and store it as <code>model1</code>.</li>
+</ul>
+<p>Having set up our pipeline, now we can think about running it. Before that, we can go to the console and type <code>tar_visnetwork()</code>. This makes a diagram showing how the bits fit together. In this case we have, left to right:</p>
+<ul>
+<li><code>file1_url</code>: the url where the data will come from</li>
+<li><code>file1</code>, which depends on <code>file1_url</code></li>
+<li><code>soap</code>, which depends on <code>file1</code></li>
+<li><code>plot1</code>, which depends on <code>soap</code></li>
+<li><code>model1</code>, which also depends on <code>soap</code>.</li>
+</ul>
+<p>The value of looking at this diagram is to make sure that we have coded the dependency structure properly, which it seems (in this case) I have done.</p>
+<p>Also note that the targets are colour-coded according to whether they are up-to-date or outdated. At first, everything will be outdated, but later only some of it will be outdated. <code>targets</code> knows to only update what needs updating.</p>
+<p>Next, we actually run everything. This is done in the console with <code>tar_make</code>. This will update everything that needs updating, using in each case the recipe in <code>_targets.R</code>. The output to <code>tar_make()</code> tells you whether each target was “built” (updated) or “skipped” (nothing in that target had changed).
+If anything goes wrong, there will be an error message. I find the error messages not very helpful, but at least it is clear which of the targets caused the error, which at least gives a place to start looking.</p>
+<p>Once everything has run, the output from each target is stored,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> and can be inspected (in the Console) using <code>tar_read</code>. For example, <code>tar_read(soap)</code> will display the dataframe that was read in from the file, and <code>tar_read(plot1)</code> will display the scatterplot. You can do the same thing with the fitted model object <code>model1</code>, but this is probably not what you want; you would probably prefer to look at the <code>summary</code> of the model,<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> which you can do like this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p><code>tar_load</code> puts a copy of the target named into your workspace, and then you can do something with it as you normally would.</p>
+<h2 id="making-a-child-report">Making a child report</h2>
+<p>So far, this is very standard <code>targets</code> work: use functions to make a pipeline that you specify in <code>_targets.R</code>, and then use <code>tar_make</code> to run it. But, having gotten this to work, I wanted to add a report, and I wanted to do so flexibly, so that I could easily add a different analysis of a different dataset later. The way I like to do this is to use “child documents”: write each report as a separate <code>.Rmd</code> file, and then have a “parent” report that loads each child report.</p>
+<p>We’ll get to the parent report later. Let’s write a report about the soap data first, which will be saved in <code>soap.Rmd</code> in the <code>report</code> folder. This is a child document, so <em>it has no YAML header</em>, and we begin right away with the report header and a description of the dataset. The report structure will be simple: we display the data, display the scatterplot (and talk about it a bit), then display the regression output (and talk about that a bit).</p>
+<p>There is a standard <code>targets</code> way of making reports like these: we do all the computation in previous targets (as we have done), and then we read in what we want to display with <code>tar_read</code> or <code>tar_load</code> as we did above, instead of doing more computation to obtain a target that we already have. For this report, that means having three code chunks, the content of which we have already seen:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_read.html'>tar_read</a></span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>to display the data,</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_read.html'>tar_read</a></span><span class='op'>(</span><span class='va'>plot1</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>to display the scatterplot, and</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model1</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>to display the model output. That, together with my comments, is <code>soap.Rmd</code>.</p>
+<p>Finally, we need to add this into the pipeline, so that <code>targets</code> knows to update this part of the report if the text in it changes, or if any of <code>soap</code>, <code>plot1</code>, or <code>model1</code> changes.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> This is a so-called “file” target, and we add it to the end of <code>_targets.R</code> to make this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap_report</span>, <span class='st'>"report/soap.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p><code>targets</code> knows additionally that the soap report depends on <code>soap</code>, <code>plot1</code>, and <code>model1</code> because of the <code>tar_read</code> and <code>tar_load</code> statements in the report. (This doesn’t always show up in <code>tar_visnetwork</code>, but <code>targets</code> knows about it all the same.)</p>
+<h2 id="making-a-parent-report">Making a parent report</h2>
+<p>This is a genuine Markdown report, so it begins with a YAML header specifying the author, title, date, etc. Then follows a setup chunk with <code>knitr::opts_chunk$set(echo = FALSE)</code>: the only code in this part of the report is the <code>tar_read</code> and <code>tar_load</code> statements that the reader doesn’t need to see.</p>
+<p>Then we need to say that this report depends on <code>soap_report</code>, so that if <em>that</em> changes, the parent report needs to be updated. I come from a Makefile background, so this took some time (and help) for me to figure out, but the way you do it is, as in the child report, <code>tar_load</code>ing the target that represents the report:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>soap_report</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Then I had some preamble text.</p>
+<p>Then we load the child report itself. It seems that it should be possible to use <code>soap_report</code> directly (it contains the path to the child report), but I couldn’t get this to work, so I specified the actual path to the child report directly with <code>child = "report/soap.Rmd"</code> as a chunk option.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>The last thing to do here is to add the parent report as a target. We now have:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap_report</span>, <span class='st'>"report/soap.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_render.html'>tar_render</a></span><span class='op'>(</span><span class='va'>final_report</span>, <span class='st'>"report/report.Rmd"</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>The parent report is the thing that needs to be knitted, so we use the special target <code>tar_render</code> (from <code>tarchetypes</code>), which says to take the document stored in the second input, and knit it to create the target that is the first input. After this runs, there is a file <code>report.html</code> in <code>report</code> that is the knitted report.</p>
+<h2 id="including-the-code-in-a-report">Including the code in a report</h2>
+<p>If I were writing the report for someone else, I wouldn’t expect them to be very interested in the code that produced the plot or the model summary. But for teaching, it is very useful to show what code the output came from. The problem with the <code>targets</code>-style analysis we just did is that, by separating the computation from the reporting, the code is nowhere to be found.</p>
+<p>At the expense of good <code>targets</code> style and efficient computation, however, there is no problem including the computation in the report, so that my second child report, in <code>report/spiders.Rmd</code>, looks like any other R Notebook you might write, with code chunks and the output immediately below them, to read in the data from a website, make a boxplot and run a logistic regression. The background for this one is that a certain spider is or is not found on a beach, and the research hypothesis is that whether or not this spider is found depends somehow on the size of the grains of sand on that beach.</p>
+<p>So there is no difficulty composing this kind of report, and no need to write extra functions and make extra targets to compute its constituent pieces. The only extra thing that needs to go in <code>_targets.R</code> is this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_download.html'>tar_download</a></span><span class='op'>(</span><span class='va'>file1</span>, <span class='st'>"http://ritsokiguess.site/datafiles/soap.txt"</span>,</span>
+<span>               paths <span class='op'>=</span> <span class='st'>"data/soap.txt"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap</span>, <span class='fu'>read_data</span><span class='op'>(</span><span class='va'>file1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>plot1</span>, <span class='fu'>plot_lines</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>model1</span>, <span class='fu'>fit_model1</span><span class='op'>(</span><span class='va'>soap</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>soap_report</span>, <span class='st'>"report/soap.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_target.html'>tar_target</a></span><span class='op'>(</span><span class='va'>spiders_report</span>, <span class='st'>"report/spiders.Rmd"</span>, format <span class='op'>=</span> <span class='st'>"file"</span><span class='op'>)</span>,</span>
+<span>  <span class='fu'><a href='https://docs.ropensci.org/tarchetypes/reference/tar_render.html'>tar_render</a></span><span class='op'>(</span><span class='va'>final_report</span>, <span class='st'>"report/report.Rmd"</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>(the second to last line, entirely analogous to the other child report). The extra stuff that goes in the parent report is to turn the display of code back on:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>knitr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/knitr/man/opts_chunk.html'>opts_chunk</a></span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>echo <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Another <code>tar_load</code>:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://docs.ropensci.org/targets/reference/tar_load.html'>tar_load</a></span><span class='op'>(</span><span class='va'>spiders_report</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>(to build the dependence of the parent report on this child one as well), and then the actual importation of the second child report with <code>child = "report/spiders.Rmd"</code> in the options of another empty code chunk.</p>
+<p>This puts all the dependencies in the right places, and so another <code>tar_make</code> will build the whole report with its two child reports on the two datasets, updating anything that needs updating.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The authorly “we”, meaning you, the reader, and I are going on this journey together. Or so the fiction has it.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This is needed for some extensions to <code>targets</code>, two of which I use here.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The reason for <code>tarchetypes</code> will become clear shortly.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In an <code>.rds</code> file in the <code>_targets</code> folder.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Or run something like <code>broom::tidy</code>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Which might be because we changed the plot-drawing function to make a different plot, for example.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Actually done Quarto-style within the chunk, using the special comment line <code>#|</code>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
