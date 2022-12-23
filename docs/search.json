@@ -6,14 +6,14 @@
       "description": "Some additional details about the blog",
       "author": [],
       "contents": "\nI will eventually put something here.\n\n\n\n",
-      "last_modified": "2022-12-20T13:31:04-05:00"
+      "last_modified": "2022-12-23T16:18:33-05:00"
     },
     {
       "path": "index.html",
       "title": "Ken's Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-12-20T13:31:05-05:00"
+      "last_modified": "2022-12-23T16:18:34-05:00"
     }
   ],
   "collections": ["posts/posts.json"]

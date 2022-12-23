@@ -7,7 +7,15 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 19 Dec 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 23 Dec 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Looking in on Purrr 1.0</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2022-12-23-looking-in-on-purrr-10</link>
+      <description>A brief look at some of what's new in Purrr 1.0</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2022-12-23-looking-in-on-purrr-10</guid>
+      <pubDate>Fri, 23 Dec 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>A journey with Targets</title>
       <dc:creator>Ken Butler</dc:creator>

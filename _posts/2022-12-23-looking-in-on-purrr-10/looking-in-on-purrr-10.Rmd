@@ -1,0 +1,354 @@
+---
+title: "Looking in on Purrr 1.0"
+description: |
+  A brief look at some of what's new in Purrr 1.0
+author:
+  - name: Ken Butler
+    url: http://ritsokiguess.site/blog
+date: 2022-12-23
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+## Packages
+
+
+```{r}
+library(tidyverse) # for purrr, the magrittr pipe, and crossing from tidyr
+```
+
+
+## Square roots (and logs) with `map`
+
+### Introduction
+
+The square root function is vectorized:
+
+```{r}
+sqrt(1:10)
+```
+
+so let's make ourselves work harder by defining one that is not:
+
+```{r}
+sqrt1 <- function(x) sqrt(x[1])
+sqrt1(1:10)
+```
+
+How can we use `sqrt1` to calculate the square roots of all of the numbers 1 through 10? This is what `map` and friends from `purrr` are for.
+
+There now three ways to use `map`.
+
+### Method 1: the original way
+
+```{r}
+1:10 %>% map_dbl(sqrt1)
+```
+
+I never liked this because the thing I was for-eaching over had to be the first input of the function, and then you have to add arguments after the first one separately. For example, if you want base 10 logs^[R's `log` function has two arguments: the number whose log you want, and then the base of the log, which defaults to $e$.] of a bunch of numbers:^[Ignoring the fact that `log` is vectorized.]
+
+```{r}
+1:10 %>% map_dbl(log, 10)
+```
+
+These examples use `map_dbl` because `sqrt1` and `log` return a decimal number or `dbl`.
+
+This approach would be awkward if you wanted to compute, let's say, the log of 10 to different bases:
+
+```{r}
+log_base <- function(x) log(10, x)
+base <- c(2, exp(1), 10) # the second one is e
+base %>% map_dbl(log_base)
+```
+
+I had to define a helper function with the thing to be for-eached over as its first argument.
+
+Historically, this notation comes from the `apply` family of functions. In this case:
+
+```{r}
+sapply(1:10, log, 10)
+```
+
+
+### Method 2: lambda functions
+
+Second, the way I came to prefer (which I will now have to unlearn, see below) is this:
+
+```{r}
+1:10 %>% map_dbl(~sqrt1(.))
+```
+
+I would read this to myself in English as "for each thing in 1 through 10, work out the square root of it", where `~` was read as "work out" and `.` (or `.x` if you prefer) was read as "it". 
+
+You can also create a new column of a dataframe this way:
+
+```{r}
+tibble(x = 1:10) %>% 
+  mutate(root = map_dbl(x, ~sqrt1(.)))
+```
+
+This is a little odd, for learners,
+because the thing inside the `sqrt1` is crying out to be called `x`. I still think this is all right: "for each thing in `x`, work out the square root of it", in the same way that you would use `i` as a loop index in a for loop.
+
+The log examples both work more smoothly this way:
+
+```{r}
+1:10 %>% map_dbl(~log(., 10))
+```
+
+and 
+
+```{r}
+base
+base %>% map_dbl(~log(10, .))
+```
+
+without the need to handle additional inputs specially, and without the requirement to have the "it" be the first input to the function. The call to the function looks exactly the same as it does when you call it outside a `map`, which makes it easier to learn.
+
+### Method 3: anonymous functions
+
+A third way of specifying what to "work out" is to use the new (to R 4.0) concept of an "anonymous function": a function, typically a one-liner, defined inline without a name. This is how it goes:
+
+```{r}
+1:10 %>% map_dbl(\(x) sqrt1(x))
+```
+
+This one, to my mind, is not any clearer than the "work out" notation with a squiggle, though you can still cast your eyes over it and read "for each thing in 1 through 10, work out the square root of it" with a bit of practice. 
+
+This notation wins where the input things have names:^[The logic here seems to require the vector to have a *singular* name.]
+
+```{r}
+number <- 1:10
+map_dbl(number, \(number) sqrt1(number))
+```
+
+
+And thus also in defining new columns of a dataframe:
+
+```{r}
+tibble(x = 1:10) %>% 
+  mutate(root = map_dbl(x, \(x) sqrt1(x)))
+```
+
+The clarity comes from the ability to use the name of the input column also as the name of the input to the anonymous function, so that everything joins up: "for each thing in `x`, work out the square root of that `x`".^[The input to the anonymous function could be called anything, but it seems like a waste to not use the same name as the column being for-eached over.]
+
+This also works if you are for-eaching over two columns, for example working out logs of different numbers to different bases:
+
+```{r}
+x <- 2:4
+base
+```
+
+`crossing` (from `tidyr`) makes a dataframe out of all combinations of its inputs, and so:
+
+```{r}
+crossing(x, base) %>% 
+  mutate(log_of = map2_dbl(x, base, \(x, base) log(x, base)))
+```
+
+
+This doesn't only apply to making dataframe columns, but again works nicely any time
+the input things have names:
+
+```{r}
+u <- 1:5
+v <- 11:15
+map2_dbl(u, v, \(u, v) sqrt1(u+v))
+```
+
+## Collatz
+
+When I am teaching this stuff, I say that if the thing you are working out is complicated, write a function to do that first, and *then* worry about for-eaching it. For example, imagine you want a function that takes an integer as input, and the output is:
+
+- if the input is even, half the input
+- if the input is odd, three times the input plus one
+
+This is a bit long to put in the anonymous function of a `map`, so  we'll define a function `hotpo` to do it first:^[`%/%` is integer division, discarding the remainder, and `%%` is the remainder itself. We need to be careful with the division because, for example, `4 / 2` is actually a *decimal* number, what we old FORTRAN programmers used to write as `2.0` or `2.`.]
+
+```{r}
+#| error = TRUE
+hotpo <- function(x) {
+  stopifnot(x == round(x)) # error out if input is not an integer
+  if (x %% 2 == 0) {
+    ans <- x %/% 2
+  } else {
+    ans <- 3 * x + 1
+  }
+  ans
+}
+hotpo(4)
+hotpo(3)
+hotpo(5.6)
+```
+
+So now, we can use a `map` to work out `hotpo` of each of the numbers 1 through 6:
+
+```{r}
+first <- 1:6
+map_int(first, hotpo)
+```
+
+or 
+
+```{r}
+map_int(first, ~hotpo(.))
+```
+
+or 
+
+```{r}
+map_int(first, \(first) hotpo(first))
+```
+
+where we call our function in the anonymous function. The answer is the same any of these ways, and you can reasonably argue that the last one is the clearest because the inputs to the `map_int` and the function have the same name.
+
+This one is `map_int` because `hotpo` returns an integer.
+
+This function is actually more than a random function defined on integers; it is part of an open problem in number theory called the [Collatz conjecture](https://www.quantamagazine.org/why-mathematicians-still-cant-solve-the-collatz-conjecture-20200922/). The idea is if you do this:
+
+```{r}
+10
+hotpo(10)
+hotpo(hotpo(10))
+hotpo(hotpo(hotpo(10)))
+hotpo(hotpo(hotpo(hotpo(10))))
+hotpo(hotpo(hotpo(hotpo(hotpo(10)))))
+hotpo(hotpo(hotpo(hotpo(hotpo(hotpo(10))))))
+```
+
+you obtain a sequence of integers. If you ever get to 1, you'll go back to 4, 2, 1, and loop forever, so we'll say the sequence ends if it gets to 1. The Collatz conjecture says that, no matter where you start, you will *always* get to 1.^[Spoiler: nobody has been able to prove that this is always true, but every starting point that has been tried gets to 1.]
+
+Let's assume that we *are* going to get to 1, and write a function to generate the whole sequence. The two key ingredients are: the `hotpo` function we wrote, and a `while` loop to keep going until we do get to 1:
+
+```{r}
+hotpo_seq <- function(x) {
+  ans <- x
+  while(x != 1) {
+    x <- hotpo(x)
+    ans <- c(ans, x)
+  }
+  ans
+}
+```
+
+and test it:
+
+```{r}
+hotpo_seq(10)
+```
+
+the same short ride that we had above, and a rather longer one:
+
+```{r}
+hotpo_seq(27)
+```
+
+Now, let's suppose that we want to make a dataframe with the sequences for the starting points 1 through 10. The sequence is a vector rather than an integer, so that we need to do this with `map`:^[Using plain `map` means that its output will be a `list`, and in a dataframe will result in the new column being a list-column with something more than a single number stored in each cell.]
+
+```{r}
+tibble(start = 1:10) %>% 
+  mutate(sequence = map(start, \(start) hotpo_seq(start)))
+```
+
+and we have made a list-column. You can see by the lengths of the vectors in the list-column how long each sequence is.^[I am a little bothered by most of them being `dbl` rather than `int`.] We might want to make explicit how long each sequence is, and how high it goes:
+
+```{r}
+tibble(start = 1:10) %>% 
+  mutate(sequence = map(start, \(start) hotpo_seq(start))) %>% 
+  mutate(seq_len = map_int(sequence, \(sequence) length(sequence))) %>% 
+  mutate(seq_max = map_int(sequence, \(sequence) max(sequence))) -> seq_info
+seq_info
+```
+
+To verify for a starting point of 7:
+
+```{r}
+q <- hotpo_seq(7)
+q
+length(q)
+```
+
+This does indeed have a length of 17 and goes up as high as 52 before coming back down to 1.
+
+
+## Keeping and discarding by name
+
+We don't have to make a dataframe of these (though that, these days, is usually my preferred way of working). We can instead put the sequences in a `list`. This one is a "named list", with each sequence paired with its starting point (its "name"):
+
+```{r}
+seq_list <- seq_info$sequence
+names(seq_list) <- seq_info$start
+seq_list
+```
+
+If these were in a dataframe as above, a `filter` would pick out the sequences for particular starting points. As an example, we will pick out the sequences for odd-numbered starting points. 
+Here, this allows us to learn about the new `keep_at` and `discard_at`. 
+There is already `keep` and `discard`,^[I must be having flashbacks of SAS, because I expected the opposite of "keep" to be "drop".] for selecting by value, but the new ones allow selecting by name.
+
+There are different ways to use `keep_at`, but one is to write a function that accepts a name and returns `TRUE` if that is one of the names you want to keep. Mine is below. The names are text, so I convert the name to an integer and then test it for oddness as we did in `hotpo`:
+
+keep the sequences for odd-numbered starting points
+
+```{r}
+is_odd <- function(x) {
+  x <- as.integer(x)
+  x %% 2 == 1
+}
+is_odd(3)
+is_odd(4)
+```
+
+and now I keep the sequences that have odd starting points thus:
+
+```{r}
+seq_list %>% 
+  keep_at(\(x) is_odd(x))
+```
+
+
+`discard_at` selects the ones for which the helper function is `FALSE`, which in this case will give us the even-numbered starting points:
+
+```{r}
+seq_list %>% 
+  discard_at(\(x) is_odd(x))
+```
+
+## Final thoughts
+
+I have long been a devotee of the lambda-function notation with a `map`:
+
+```{r}
+x <- 1:5
+map_dbl(x, ~sqrt1(.))
+```
+
+but I have always had vague misgivings about teaching this, because it is not immediately obvious why the thing inside `sqrt1` is not also `x`. The reason, of course, is the same as this in Python:
+
+```{python}
+x = ['a', 'b', 'c']
+for i in x:
+  print(i)
+```
+
+where `i` stands for "the element of `x` that I am currently looking at", but it takes a bit of thinking for the learner to get to that point.
+
+Using the anonymous function approach makes things a bit clearer:
+
+```{r}
+x <- 1:5
+map_dbl(x, \(x) sqrt1(x))
+```
+
+where `x` appears *three* times in the `map`, first as the vector of values of which we want the square roots, and then as the input to `sqrt1`, so that everything appears to line up. 
+
+But there is some sleight of hand here: the meaning of `x` actually changes as you go along! The first `x` is a vector, but the second and third `x` values are *numbers*, elements of the vector `x`. Maybe this is all right, because we are used to treating vectors elementwise in R:
+
+```{r}
+tibble(x = 1:5) %>% 
+  mutate(root = sqrt(x))
+```
+
+Functions like `sqrt` are vectorized, so the `mutate` really means something like "take the elements of `x` one at a time and take the square root of each one, gluing the result back together into a vector". So, in the grand scheme of things, I am sold on the (new) anonymous function way of running `map`, and I think I will be using this rather than the lambda-function way of doing things in the future.
+
+Now, if you'll excuse me, I now have to attend to all the times I've used `map` in my lecture notes!
