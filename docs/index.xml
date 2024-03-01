@@ -7,7 +7,16 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 23 Dec 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Honestly Significant Differences</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2024-02-29-honestly-significant-differences</link>
+      <description>Where Tukey's multiple comparisons method comes from</description>
+      <guid>http://ritsokiguess.site/blogg/posts/2024-02-29-honestly-significant-differences</guid>
+      <pubDate>Thu, 29 Feb 2024 00:00:00 +0000</pubDate>
+      <media:content url="http://ritsokiguess.site/blogg/posts/2024-02-29-honestly-significant-differences/honestly-significant-differences_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Looking in on Purrr 1.0</title>
       <dc:creator>Ken Butler</dc:creator>
