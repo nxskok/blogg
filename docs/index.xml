@@ -7,7 +7,350 @@
     <description>Ken's Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Thu, 29 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 02 Nov 2024 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Targets for assignments and worksheets</title>
+      <dc:creator>Ken Butler</dc:creator>
+      <link>http://ritsokiguess.site/blogg/posts/2024-11-02-assignments-worksheets-and-targets</link>
+      <description>
+
+
+&lt;h2 id="introduction"&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;In my teaching, I create worksheets and assignments for my students.
+These contain a number of questions based on a small number (usually two
+or three) scenarios. I like each scenario and its associated questions
+to live in a separate Quarto file (for ease of moving to another
+worksheet or assignment later, in case I don’t get as far in class as I
+had anticipated). I also want the worksheets to be available with and
+without solutions. (My students see a worksheet without solutions at
+their tutorial, and they get to try it with a TA available for help.
+After the tutorials are all done for the week, I post the solutions so
+that the students can see how they did).&lt;/p&gt;
+&lt;p&gt;This means that I need to navigate several things:&lt;/p&gt;
+&lt;ol style="list-style-type: decimal"&gt;
+&lt;li&gt;creating a scenario and its questions&lt;/li&gt;
+&lt;li&gt;figuring out how to set up the solutions so that they can be
+rendered or not&lt;/li&gt;
+&lt;li&gt;setting up a worksheet with several scenarios and their questions
+and solutions&lt;/li&gt;
+&lt;li&gt;creating two versions of the rendered document, one with solutions
+and one without&lt;/li&gt;
+&lt;li&gt;making all this happen in Targets, respecting the dependency of each
+worksheet on its constituent scenario files (and maybe datafiles as
+well, if they are likely to change).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Let’s take these in turn. I’m going to create a baby worksheet called
+Worksheet 99 which has two scenarios with a couple of questions each,
+using one familiar and one possibly unfamiliar dataset.&lt;/p&gt;
+&lt;h2 id="two-scenarios"&gt;Two scenarios&lt;/h2&gt;
+&lt;p&gt;The first scenario is based on the infamous &lt;code&gt;mtcars&lt;/code&gt;
+dataset. I put this in the file &lt;code&gt;motor-trend.qmd&lt;/code&gt;, which
+looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Motor Trend cars
+
+In 1974, the *Motor Trend* magazine collected data on fuel consumption
+and other features of 32 different makes of car. The data are available
+in the built-in dataset `mtcars`. The variables of interest to us are:
+
+- `mpg`: fuel consumption in miles per US gallon
+- `cyl`: number of cylinders in the engine
+- `wt`: weight of car, in thousands of pounds.
+
+(@) Make a suitable plot of fuel consumption against weight.
+
+(@) Modify your plot to distinguish cars with different numbers of cylinders by colour.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is not a self-contained Quarto file: it’s Quarto all right, but
+it’s designed to be included in another file (which it will be, later).
+In the Quarto documentation, they recommend giving a file like this a
+name with an underscore on the front, to make sure it doesn’t get
+rendered by accident (if, for example, the folder is a Quarto project
+and you render the whole folder). I’m going to control things with
+Targets, however, so I’m not going to worry about that.&lt;/p&gt;
+&lt;p&gt;The other notable feature here is how I label the two questions: the
+&lt;code&gt;(@)&lt;/code&gt; on the front, which will auto-number them from 1
+upwards in the final worksheet.&lt;a href="#fn1" class="footnote-ref"
+id="fnref1"&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The second scenario is based on some data on making soap, which lives
+in &lt;code&gt;soapy.qmd&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## Making soap
+
+A factory makes soap. There are two production lines, `a` and `b`. 
+These can be run at different speeds; running the production line faster
+produces more soap, but it also produces more scrap (soap that cannot be
+sold). Does the amount of scrap differ by production line? Answer the
+questions below to find out. The data is in
+&amp;lt;https://ritsokiguess.site/datafiles/soap.txt&amp;gt;.
+
+(@) Read in and display some of the data.
+
+(@) Make a suitable plot of the scrap produced and the production line. How do the production lines compare?
+
+(@) Do you get a different story if you include speed in your plot?
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is structured the same way as the first file, and will have
+three numbered questions when it is rendered.&lt;/p&gt;
+&lt;h2 id="adding-the-solutions"&gt;Adding the solutions&lt;/h2&gt;
+&lt;p&gt;This, I have to admit, I stole more or less wholesale from &lt;a
+href="https://nrennie.rbind.io/blog/r-tutorial-worksheets-quarto/"&gt;Nicola
+Rennie&lt;/a&gt;, whose blog post you would do well to read. There are two key
+ideas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a
+href="https://quarto.org/docs/computations/parameters.html#knitr"&gt;Parameterised
+documents&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+href="https://quarto.org/docs/authoring/conditional.html"&gt;Conditional
+content&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the YAML header of a Quarto document, you can have a section
+called &lt;code&gt;params&lt;/code&gt; which supplies some default values for
+parameters. The example in the Quarto documentation is this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+params:
+  alpha: 0.1
+  ratio: 0.1
+---
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;which sets default values for the parameters &lt;code&gt;alpha&lt;/code&gt; and
+&lt;code&gt;ratio&lt;/code&gt;. You access them in the Quarto document through R
+like this, in an R code block:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;params$alpha&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can supply different values by running &lt;code&gt;quarto render&lt;/code&gt;
+with the &lt;code&gt;-P&lt;/code&gt; option, like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;quarto render myfile.qmd -P alpha:0.2 -P ratio:0.3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and then 0.2 and 0.3 will get passed down into your document.&lt;/p&gt;
+&lt;p&gt;Wait, you say, &lt;em&gt;what&lt;/em&gt; YAML block? Neither of our files even
+&lt;em&gt;have&lt;/em&gt; a YAML block. Well, when we get around to making the
+worksheet itself out of our two scenarios, we’ll have a proper “main”
+Quarto document that includes our two files, and not only will
+&lt;em&gt;that&lt;/em&gt; have a YAML header with default parameter values in it,
+but also they will get passed down into our “child” documents with the
+scenarios in. The parameter we will use will be called
+&lt;code&gt;hide_answers&lt;/code&gt; and will be either &lt;code&gt;true&lt;/code&gt; or
+&lt;code&gt;false&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;All right, now to conditional content. Here’s how you hide some
+content if you are creating an HTML document (from the Quarto docs):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;::: {.content-hidden when-format=&amp;quot;html&amp;quot;}
+
+Will not appear in HTML.
+
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;:::&lt;/code&gt; marks the beginning and end of a so-called “div
+block”. Inside the &lt;code&gt;{}&lt;/code&gt; on the top line is a class that the
+text has (being hidden) and an optional condition when it should be
+hidden (when the document format is HTML).&lt;/p&gt;
+&lt;p&gt;That’s all fine and wonderful, but we want to make our content hidden
+when &lt;em&gt;something in R&lt;/em&gt; is true (namely,
+&lt;code&gt;params$hide_answers&lt;/code&gt; is TRUE). The way around this is to use
+inline R code to produce the top and bottom lines of our div block:&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://ritsokiguess.site/blogg//posts/2024-11-02-assignments-worksheets-and-targets/Screenshot%20from%202024-11-02%2000-52-36.png" /&gt;&lt;/p&gt;
+&lt;p&gt;at the top, and&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://ritsokiguess.site/blogg//posts/2024-11-02-assignments-worksheets-and-targets/Screenshot%20from%202024-11-02%2000-54-27.png" /&gt;&lt;/p&gt;
+&lt;p&gt;at the bottom. The way this works is if
+&lt;code&gt;params$hide_answers&lt;/code&gt; is TRUE, these lines create a div block
+with the content-hidden class (that is, the text between these two lines
+is hidden), but if &lt;code&gt;params$hide_answers&lt;/code&gt; is FALSE, no div
+block is created at all, and the text between these two lines is
+displayed.&lt;/p&gt;
+&lt;p&gt;Now we have the machinery to add some optionally-displayable text,
+that is to say, solutions, to our problems. What you do is to add the
+code that optionally starts the div block at the &lt;em&gt;start&lt;/em&gt; of a
+solution, and the code that optionally ends it at the end. Thus, for
+example, the Motor Trend question file with solutions&lt;a href="#fn2"
+class="footnote-ref" id="fnref2"&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt; looks like this:&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://ritsokiguess.site/blogg//posts/2024-11-02-assignments-worksheets-and-targets/Screenshot%20from%202024-11-02%2000-49-51.png" /&gt;&lt;/p&gt;
+&lt;p&gt;This process for adding solutions to a file of questions really ought
+to be called Renniefication.&lt;/p&gt;
+&lt;h2 id="making-a-worksheet"&gt;Making a worksheet&lt;/h2&gt;
+&lt;p&gt;Now that we have scenarios, questions and solutions, we can put
+together our Worksheet 99. This is how it goes together, with some
+comments below:&lt;/p&gt;
+&lt;p&gt;&lt;img src="http://ritsokiguess.site/blogg//posts/2024-11-02-assignments-worksheets-and-targets/Screenshot%20from%202024-11-02%2021-21-14.png" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In the YAML block at the top:
+&lt;ul&gt;
+&lt;li&gt;I include &lt;code&gt;df-print: paged&lt;/code&gt; to make dataframes (in the
+solutions) display nicely, and, as a pre-emptive strike,
+&lt;code&gt;embed_resources: true&lt;/code&gt; to make sure my output HTML doesn’t
+lose any of its graphs if the file gets moved around.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;This&lt;/em&gt; is where my &lt;code&gt;params&lt;/code&gt; block goes. I have one
+parameter here, the &lt;code&gt;hide_answers&lt;/code&gt; that I mentioned earlier,
+which I have set to &lt;code&gt;true&lt;/code&gt; here.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;In the diminutive body of this document, I have space for overall
+instructions, and loading of any packages the worksheet might need.&lt;/li&gt;
+&lt;li&gt;The separate scenario files are loaded using the
+&lt;code&gt;include&lt;/code&gt; Quarto “shortcode”. I think this is the cleanest
+way to do it, but you could also use R Markdown style “child documents”
+here. This works as if the file contents have been literally copied and
+pasted where the &lt;code&gt;include&lt;/code&gt; is, and has the effect that the
+parameters (that is, the value of &lt;code&gt;hide_answers&lt;/code&gt;) are passed
+down into the included files. When I refer to
+&lt;code&gt;params$hide_answers&lt;/code&gt; inside &lt;code&gt;motor-trend.qmd&lt;/code&gt; (as
+I did above), it uses the right value and correctly includes or excludes
+the solutions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is, you might say, the end of the story. You render this file
+once with &lt;code&gt;hide_answers: true&lt;/code&gt; to make a worksheet to give to
+your students, and later you change &lt;code&gt;true&lt;/code&gt; to
+&lt;code&gt;false&lt;/code&gt; to make the solutions for them.&lt;/p&gt;
+&lt;p&gt;However, there is more human intervention here than you might like.
+Both the question document and the solutions document will be called
+&lt;code&gt;worksheet_99.html&lt;/code&gt;, and you’ll have to remember (or look) to
+find out whether it currently contains questions or solutions. It would
+be nice to make &lt;em&gt;two&lt;/em&gt; html files, one with just the questions and
+the other with solutions as well, each with different names like
+&lt;code&gt;worksheet_99_q.html&lt;/code&gt; and
+&lt;code&gt;worksheet_99_a.html&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The other thing is how to keep everything up to date. If you change
+either of the included files, you want to be able to re-render
+&lt;code&gt;worksheet_99.qmd&lt;/code&gt; without having to remember to do so.
+Veteran Fortran programmers like me would solve this with a Makefile.
+The R way to do this is to use the &lt;code&gt;targets&lt;/code&gt; package, which
+we discuss shortly.&lt;/p&gt;
+&lt;h2 id="rendering-with-parameters"&gt;Rendering with parameters&lt;/h2&gt;
+&lt;p&gt;One way to supply parameter values is to put them in
+&lt;code&gt;params&lt;/code&gt; in the YAML block. But you can also supply them on
+the command line if you render that way, like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;quarto render worksheet_99.qmd -P hide_answers:true&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This puts the questions without solutions into
+&lt;code&gt;worksheet_99.html&lt;/code&gt;. But we can go one step further and set
+the name of the output file, like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;quarto render worksheet_99.qmd -P hide_answers:true -o worksheet_99_q.html&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then, to make an HTML file with the solutions as well, you change
+&lt;code&gt;hide_answers:true&lt;/code&gt; to &lt;code&gt;hide_answers:false&lt;/code&gt; and
+change the &lt;code&gt;-o&lt;/code&gt; part to
+&lt;code&gt;-o worksheet_99_a.html&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;There is enough repetitive stuff here that I wrote a function to do
+it:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;renderify &amp;lt;- function(fname, ...) {
+  ans &amp;lt;- SplitPath(fname)
+  qq &amp;lt;- str_c(ans$filename, &amp;quot;_q.html&amp;quot;)
+  aa &amp;lt;- str_c(ans$filename, &amp;quot;_a.html&amp;quot;)
+  cmd &amp;lt;- str_c(&amp;quot;quarto render &amp;quot;, ans$fullfilename)
+  cmd1 &amp;lt;- str_c(cmd, &amp;quot; -P hide_answers:true -o &amp;quot;, qq)
+  cmd2 &amp;lt;- str_c(cmd, &amp;quot; -P hide_answers:false -o &amp;quot;, aa)
+  olddir &amp;lt;- setwd(ans$dirname)
+  system(cmd1)
+  system(cmd2)
+  setwd(olddir)
+  fname
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I wrote this just &lt;em&gt;before&lt;/em&gt; reading &lt;a
+href="https://blog.djnavarro.net/posts/2024-10-06_fs/"&gt;Danielle
+Navarro’s excellent blog post&lt;/a&gt; on the &lt;code&gt;fs&lt;/code&gt; package, and
+now I realize that this would have been a great reason to learn about
+that package. I had, however, gotten this working using
+&lt;code&gt;SplitPath&lt;/code&gt; from the &lt;code&gt;DescTools&lt;/code&gt; package, so this
+is what you get. Also, I realize, now that I look at the code, that it
+would have benefitted greatly from using &lt;code&gt;glue::glue&lt;/code&gt; rather
+than &lt;code&gt;str_c&lt;/code&gt; from &lt;code&gt;stringr&lt;/code&gt;.&lt;a href="#fn3"
+class="footnote-ref" id="fnref3"&gt;&lt;sup&gt;3&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Girt af.&lt;/p&gt;
+&lt;p&gt;Anyway: the function takes as input a filename (of a
+&lt;code&gt;.qmd&lt;/code&gt; file) and:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;splits the input filename up into folder, base filename, and
+extension.&lt;/li&gt;
+&lt;li&gt;constructs two output filenames by gluing &lt;code&gt;_q.html&lt;/code&gt; and
+&lt;code&gt;_a.html&lt;/code&gt; onto the end of the base filename&lt;/li&gt;
+&lt;li&gt;constructs the common part of the &lt;code&gt;quarto render&lt;/code&gt;
+command. &lt;code&gt;fullfilename&lt;/code&gt; is the base filename plus its
+extension but &lt;em&gt;not&lt;/em&gt; including its folder. This is important for
+reasons we see in a moment.&lt;/li&gt;
+&lt;li&gt;constructs the full &lt;code&gt;quarto render&lt;/code&gt; commands using the
+&lt;code&gt;-P&lt;/code&gt; and &lt;code&gt;-o&lt;/code&gt; options we saw above.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So now I run &lt;code&gt;cmd1&lt;/code&gt; and &lt;code&gt;cmd2&lt;/code&gt; that I so
+laboriously constructed, right? Not so fast. When you run
+&lt;code&gt;quarto render&lt;/code&gt; from the command line, the file you’re
+rendering has to be in the &lt;em&gt;same folder&lt;/em&gt; that you currently are.
+This is not usually the case for me: my project has worksheets and
+assignments in a subfolder &lt;code&gt;assignments&lt;/code&gt;, and when I am
+running &lt;code&gt;targets&lt;/code&gt; that is all controlled from the main
+project folder. So, very carefully, I change to the subfolder the
+&lt;code&gt;.qmd&lt;/code&gt; is in (saving my previous folder to go back to later),
+&lt;em&gt;then&lt;/em&gt; run my commands, &lt;em&gt;then&lt;/em&gt; go back to the folder I was
+in.&lt;/p&gt;
+&lt;p&gt;I hope in this way I am safe from &lt;a
+href="https://github.com/jennybc/here_here"&gt;having my computer set on
+fire&lt;/a&gt;, although I could undoubtedly stand to learn about the
+&lt;code&gt;here&lt;/code&gt; package too.&lt;/p&gt;
+&lt;h2 id="doing-this-in-targets"&gt;Doing this in &lt;code&gt;targets&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;The (very brief) idea behind &lt;code&gt;targets&lt;/code&gt; is that certain of
+your files (like documents) depend on certain other things (included
+files, here, or functions or datasets in general). The &lt;a
+href="https://books.ropensci.org/targets/walkthrough.html"&gt;Targets
+book&lt;/a&gt; has a great intro walkthrough. What you do is to create
+“targets”, and then have functions that express how targets depend on
+each other. The definition of the targets lives in a file
+&lt;code&gt;_targets.R&lt;/code&gt; in the project folder. Here is the relevant bit
+of that:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;worksheet99 &amp;lt;- list(
+  tar_target(worksheet_99_file, &amp;quot;assignments/worksheet_99.qmd&amp;quot;, format = &amp;quot;file&amp;quot;),
+  tar_target(motor_trend, &amp;quot;assignments/motor-trend.qmd&amp;quot;, format = &amp;quot;file&amp;quot;),
+  tar_target(soapy, &amp;quot;assignments/soapy.qmd&amp;quot;, format = &amp;quot;file&amp;quot;),
+  tar_target(worksheet_99, renderify(&amp;quot;assignments/worksheet_99.qmd&amp;quot;,
+                                      worksheet_99_file,
+                                      motor_trend,
+                                      soapy))
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;My function &lt;code&gt;renderify&lt;/code&gt; is in a file
+&lt;code&gt;R/functions.R&lt;/code&gt; which has been &lt;code&gt;source&lt;/code&gt;d earlier
+in &lt;code&gt;_targets.R&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;First, I create targets for each of my three files: the two question
+files, and the main worksheet file. Inside &lt;code&gt;tar_target&lt;/code&gt;, the
+first thing is the name of the target you’re making, the second is where
+the file lives, and the third thing is &lt;code&gt;format = "file"&lt;/code&gt;.
+Then, the last target is a function call. As we have seen,
+&lt;code&gt;renderify&lt;/code&gt; creates the two output files for the worksheet,
+but also serves the double duty of enforcing the dependency of the final
+worksheet on the targets made from the other three files. Targets knows
+this because those other three targets are also input to
+&lt;code&gt;renderify&lt;/code&gt;, so if any of those three targets have changed
+(meaning, any of the files from which those targets are made), the whole
+worksheet will be re-rendered. The relevant part of
+&lt;code&gt;targets::tar_visnetwork&lt;/code&gt; shows this: target
+&lt;code&gt;worksheet_99&lt;/code&gt; depends on targets
+&lt;code&gt;worksheet_99_file&lt;/code&gt;, &lt;code&gt;motor_trend&lt;/code&gt;, and
+&lt;code&gt;soapy&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The project from which the above was taken has targets for a whole
+bunch of worksheets, assignments, tests etc. If you look at
+&lt;code&gt;targets&lt;/code&gt; examples, you will usually see, at the end of the
+file, a &lt;code&gt;list()&lt;/code&gt; that defines every single one of the
+targets. But for me, this was getting out of hand, so I defined and
+saved a separate &lt;code&gt;list()&lt;/code&gt; for each worksheet or assignment,
+and then at the end of my &lt;code&gt;_targets.R&lt;/code&gt;, I glue them all
+together into one list with some code like this:&lt;/p&gt;
+&lt;p&gt;Now, I can run &lt;code&gt;targets::tar_make()&lt;/code&gt; and my worksheet will
+be re-rendered (twice, to get the two output files) if and only if any
+of the files making it up have changed.&lt;/p&gt;
+&lt;p&gt;You might be thinking that &lt;code&gt;renderify&lt;/code&gt; doesn’t
+&lt;em&gt;need&lt;/em&gt; those other inputs, and you would be quite right: the only
+thing the function uses is the filename that is the first input. I used
+&lt;code&gt;...&lt;/code&gt; in my function code to allow arbitrary many other
+inputs, and these are used &lt;em&gt;only&lt;/em&gt; to create the dependency, so
+that Targets knows what depends on what. This is the cleanest way I
+could think of.&lt;/p&gt;
+&lt;pre class="r distill-force-highlighting-css"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;div class="footnotes footnotes-end-of-document"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn1"&gt;&lt;p&gt;I would actually prefer to have these questions numbered
+1(a) and 1(b), but I haven’t figured out how to control this numbering
+in the way you can in LaTeX.&lt;a href="#fnref1"
+class="footnote-back"&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id="fn2"&gt;&lt;p&gt;Much briefer than my usual solutions, it has to be
+said.&lt;a href="#fnref2" class="footnote-back"&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li id="fn3"&gt;&lt;p&gt;Which is really just &lt;code&gt;paste0&lt;/code&gt;.&lt;a
+href="#fnref3" class="footnote-back"&gt;↩︎&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description>
+      <distill:md5>72329ea6c6ddaaf6f1e7e63f25f5cfcd</distill:md5>
+      <guid>http://ritsokiguess.site/blogg/posts/2024-11-02-assignments-worksheets-and-targets</guid>
+      <pubDate>Sat, 02 Nov 2024 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Honestly Significant Differences</title>
       <dc:creator>Ken Butler</dc:creator>
