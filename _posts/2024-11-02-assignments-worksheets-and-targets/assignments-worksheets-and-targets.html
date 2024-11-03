@@ -94,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; }
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2024-11-02" />
-  <meta property="article:created" itemprop="dateCreated" content="2024-11-02" />
+  <meta property="article:published" itemprop="datePublished" content="2024-11-03" />
+  <meta property="article:created" itemprop="dateCreated" content="2024-11-03" />
   <meta name="article:author" content="Ken Butler" />
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -113,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; }
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Targets for assignments and worksheets"]},{"type":"character","attributes":{},"value":["Creating assignments and worksheets in Quarto and rendering them using Targets\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]}]}]},{"type":"character","attributes":{},"value":["2024-11-02"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Targets for assignments and worksheets"]},{"type":"character","attributes":{},"value":["Creating assignments and worksheets in Quarto and rendering them using Targets\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Ken Butler"]}]}]},{"type":"character","attributes":{},"value":["2024-11-03"]},{"type":"character","attributes":{},"value":["distill::distill_article"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2361,7 +2361,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Targets for assignments and worksheets","description":"Creating assignments and worksheets in Quarto and rendering them using Targets","authors":[{"author":"Ken Butler","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2024-11-02T00:00:00.000-04:00","citationText":"Butler, 2024"}
+{"title":"Targets for assignments and worksheets","description":"Creating assignments and worksheets in Quarto and rendering them using Targets","authors":[{"author":"Ken Butler","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2024-11-03T00:00:00.000-04:00","citationText":"Butler, 2024"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2381,7 +2381,7 @@ distill-header .nav a {
 <div class="d-byline">
   Ken Butler  
   
-<br />2024-11-02
+<br />2024-11-03
 </div>
 
 <div class="d-article">
@@ -2531,6 +2531,12 @@ Will not appear in HTML.
 </div>
 <p>Now, I can run <code>targets::tar_make()</code> and my worksheet will be re-rendered (twice, to get the two output files) if and only if any of the files making it up have changed.</p>
 <p>You might be thinking that <code>renderify</code> doesn’t <em>need</em> those other inputs, and you would be quite right: the only thing the function uses is the filename that is the first input. I used <code>...</code> in my function code to allow arbitrary many other inputs, and these are used <em>only</em> to create the dependency, so that Targets knows what depends on what. This is the cleanest way I could think of.</p>
+<h2 id="results">Results</h2>
+<p>So maybe now you want to see the result of all of this:</p>
+<ul>
+<li><a href="https://ritsokiguess.site/datafiles/worksheet_99_q.html">questions file</a></li>
+<li><a href="https://ritsokiguess.site/datafiles/worksheet_99_a.html">solutions file</a></li>
+</ul>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />

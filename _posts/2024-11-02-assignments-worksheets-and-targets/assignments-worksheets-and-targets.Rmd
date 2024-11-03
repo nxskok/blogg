@@ -243,3 +243,9 @@ Now, I can run `targets::tar_make()` and my worksheet will be re-rendered (twice
 
 You might be thinking that `renderify` doesn't *need* those other inputs, and you would be quite right: the only thing the function uses is the filename that is the first input. I used `...` in my function code to allow arbitrary many other inputs, and these are used *only* to create the dependency, so that Targets knows what depends on what. This is the cleanest way I could think of.
 
+## Results
+
+So maybe now you want to see the result of all of this:
+
+- [questions file](https://ritsokiguess.site/datafiles/worksheet_99_q.html)
+- [solutions file](https://ritsokiguess.site/datafiles/worksheet_99_a.html)
