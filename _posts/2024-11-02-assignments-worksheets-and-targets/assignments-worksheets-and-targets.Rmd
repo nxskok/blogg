@@ -230,10 +230,7 @@ First, I create targets for each of my three files: the two question files, and 
 
 The project from which the above was taken has targets for a whole bunch of worksheets, assignments, tests etc. If you look at `targets` examples, you will usually see, at the end of the file, a `list()` that defines every single one of the targets. But for me, this was getting out of hand, so I defined and saved a separate `list()` for each worksheet or assignment, and then at the end of my `_targets.R`, I glue them all together into one list with some code like this:
 
-```{r}
-#| eval: false
-#| error: true
-
+```
 c(worksheet1, worksheet2, worksheet3, worksheet4, 
   worksheet5, worksheet6, worksheet7, worksheet8, 
   worksheet9, worksheet99)

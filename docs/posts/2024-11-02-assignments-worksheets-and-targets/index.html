@@ -3366,9 +3366,9 @@ Will not appear in HTML.
 <p>My function <code>renderify</code> is in a file <code>R/functions.R</code> which has been <code>source</code>d earlier in <code>_targets.R</code>.</p>
 <p>First, I create targets for each of my three files: the two question files, and the main worksheet file. Inside <code>tar_target</code>, the first thing is the name of the target you’re making, the second is where the file lives, and the third thing is <code>format = &quot;file&quot;</code>. Then, the last target is a function call. As we have seen, <code>renderify</code> creates the two output files for the worksheet, but also serves the double duty of enforcing the dependency of the final worksheet on the targets made from the other three files. Targets knows this because those other three targets are also input to <code>renderify</code>, so if any of those three targets have changed (meaning, any of the files from which those targets are made), the whole worksheet will be re-rendered. The relevant part of <code>targets::tar_visnetwork</code> shows this: target <code>worksheet_99</code> depends on targets <code>worksheet_99_file</code>, <code>motor_trend</code>, and <code>soapy</code>.</p>
 <p>The project from which the above was taken has targets for a whole bunch of worksheets, assignments, tests etc. If you look at <code>targets</code> examples, you will usually see, at the end of the file, a <code>list()</code> that defines every single one of the targets. But for me, this was getting out of hand, so I defined and saved a separate <code>list()</code> for each worksheet or assignment, and then at the end of my <code>_targets.R</code>, I glue them all together into one list with some code like this:</p>
-<div class="layout-chunk" data-layout="l-body">
-
-</div>
+<pre><code>c(worksheet1, worksheet2, worksheet3, worksheet4, 
+  worksheet5, worksheet6, worksheet7, worksheet8, 
+  worksheet9, worksheet99)</code></pre>
 <p>Now, I can run <code>targets::tar_make()</code> and my worksheet will be re-rendered (twice, to get the two output files) if and only if any of the files making it up have changed.</p>
 <p>You might be thinking that <code>renderify</code> doesn’t <em>need</em> those other inputs, and you would be quite right: the only thing the function uses is the filename that is the first input. I used <code>...</code> in my function code to allow arbitrary many other inputs, and these are used <em>only</em> to create the dependency, so that Targets knows what depends on what. This is the cleanest way I could think of.</p>
 <h2 id="results">Results</h2>
@@ -3377,7 +3377,7 @@ Will not appear in HTML.
 <li><a href="https://ritsokiguess.site/datafiles/worksheet_99_q.html">questions file</a></li>
 <li><a href="https://ritsokiguess.site/datafiles/worksheet_99_a.html">solutions file</a></li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
